@@ -1,14 +1,23 @@
+import styled, { css } from 'styled-components';
 import Header from "../header/header"
 import Footer from "../footer/footer"
-import styles from './layout.module.css'
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default function Layout({ children }) {
   return (
     <>
       <Header></Header>
-      <div className={styles.container}>
+      <Wrapper>
         <main>{children}</main>
-      </div>
+      </Wrapper>
       <Footer></Footer>
     </>
     )

@@ -5,11 +5,16 @@ import Header from './header';
 export default {
   title: 'Header',
   component: Header,
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
 };
 
-const Template = (args) => <Header  />;
+const Template = (args) => <Header {...args} />;
 
-export const Primary = Template.bind({});
+export const Logged_Out = Template.bind({});
+Logged_Out.args = {
+  user: false,
+};
+
+export const Logged_In = Template.bind({});
+Logged_In.args = {
+  user: true,
+};

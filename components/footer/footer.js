@@ -24,7 +24,7 @@ export default function Footer() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Powered by Adam Horne
+        Created by Adam Horne
       </Link>
     </Wrapper>
     )

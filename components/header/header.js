@@ -47,16 +47,16 @@ const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
         </Logo> */}
         <Title className="title">🍴 Too Much Munch</Title>
       </div>
-      <div>
+      {/* <div>
         {user ? (
           <Button size="small" onClick={onLogout} label="Log out" />
         ) : (
           <div className="multiButtons">
-            <Button size="small" onClick={onLogin} label="Log in" />
-            <Button primary size="small" onClick={onCreateAccount} label="Sign up" />
+        <Button size="small" onClick={onLogin} label="Log in" />
+        <Button primary size="small" onClick={onCreateAccount} label="Sign up" />
           </div>
         )}
-      </div>
+      </div> */}
     </Wrapper>
   </header>
 );

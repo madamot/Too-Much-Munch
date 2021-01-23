@@ -1,11 +1,36 @@
+import styled, { css } from 'styled-components';
 import Button from '../Button/Button';
-import './header.module.css';
+// import './header.module.css';
+
+const Wrapper = styled.div`
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const Logo = styled.svg`
+  display: inline-block;
+  vertical-align: top;
+`;
+
+const Title = styled.h1`
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1;
+  margin: 6px 0 6px 10px;
+  display: inline-block;
+  vertical-align: top;
+`;
+
 
 const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
   <header>
-    <div className="wrapper">
+    <Wrapper>
       <div>
-        <svg className="logo" width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <Logo width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
           <g fill="none" fillRule="evenodd">
             <path
               d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z"
@@ -20,8 +45,8 @@ const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
               fill="#91BAF8"
             />
           </g>
-        </svg>
-        <h1 className="title">Acme</h1>
+        </Logo>
+        <Title className="title">Acme</Title>
       </div>
       <div>
         {user ? (
@@ -33,7 +58,7 @@ const Header = ({ user, onLogin, onLogout, onCreateAccount }) => (
           </div>
         )}
       </div>
-    </div>
+    </Wrapper>
   </header>
 );
 

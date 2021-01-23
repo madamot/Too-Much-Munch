@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import Button from '../Button/Button';
-// import './header.module.css';
 
 const Wrapper = styled.div`
   font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;

@@ -11,8 +11,10 @@ const Template = (args) => <Header {...args} />;
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {
-  user: {},
+  user: true,
 };
 
 export const LoggedOut = Template.bind({});
-LoggedOut.args = {};
+LoggedOut.args = {
+  user: false,
+};

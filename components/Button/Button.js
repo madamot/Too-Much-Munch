@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
-// import styles from './button.module.css';
 
 
 const Clicker = styled.button`
@@ -11,6 +10,7 @@ const Clicker = styled.button`
   cursor: pointer;
   display: inline-block;
   line-height: 1;
+  margin-left: 5px;
   background: ${props => props.primary ? "#1ea7fd" : "transparent"};
   box-shadow: ${props => props.primary ? "none" : "rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset"};
   color: ${props => props.primary ? "white" : "#333"};

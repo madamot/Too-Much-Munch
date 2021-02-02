@@ -5,6 +5,7 @@ const App = ({ Component, pageProps }) => {
   let url = "";
   if (typeof window !== "undefined") {
     url = window.location.href;
+    console.log(url);
   }
   return (
    <Auth0Provider

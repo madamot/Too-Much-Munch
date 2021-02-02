@@ -31,7 +31,11 @@ const Title = styled.h1`
 
 const Header = () => {
   const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
-
+  let url = "";
+  if (typeof window !== "undefined") {
+    url = window.location.href;
+    console.log(url);
+  }
   return (
     <header>
       <Wrapper>
@@ -62,7 +66,7 @@ const Header = () => {
           {!isLoading && (
             isAuthenticated ? (
               <div className="multiButtons">
-                <Button size="small" onClick={() => logout({ returnTo: 'http://localhost:3000' })} label="Log out" />
+                <Button size="small" onClick={() => logout({ returnTo: `${url}` })} label="Log out" />
                 <Link href='/dashboard'>
                   <Button primary size="small" label="Dashboard" />
                 </Link>

@@ -16,18 +16,32 @@ function Profile() {
       logout,
     } = useAuth0();
 
+    console.log(user);
+
   return (
     <Layout>
       <Head>
         <title>Too Much Munch</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (null)}
+
+      {error ? (
+        <div>Oops... {error.message}</div>
+      ) : (null)}
+
       <div>
-        <h1>Profile</h1>
-        <p>This is the profile page.</p>
-        <pre>{JSON.stringify(user.nickname || { }, null, 2)}</pre>
+        <h1>Dashboard</h1>
+        <p>This is the Dashboard page.</p>
+        {isAuthenticated ? (
+          <p>Hello, {user.nickname}</p>
+        ) : (null)}
       </div>
     </Layout>
+
       );
       }
 

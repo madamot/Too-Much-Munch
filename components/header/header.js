@@ -30,7 +30,6 @@ const Title = styled.h1`
 
 
 const Header = () => {
-  const { pathname, query } = useRouter();
   const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
 
   return (
@@ -71,7 +70,9 @@ const Header = () => {
             ) : (
               <div className="multiButtons">
                 <Button size="small" onClick={loginWithRedirect} label="Log in" />
-                <Button primary size="small" onClick={loginWithRedirect} label="Log in" />
+                <Button primary size="small" onClick={() => loginWithRedirect({
+                  screen_hint: "signup",
+                })} label="Sign Up" />
               </div>
             )
           )}

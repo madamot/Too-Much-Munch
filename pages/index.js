@@ -1,8 +1,20 @@
 import Head from 'next/head'
 import Layout from '../components/layout/layout'
+import Button from '../components/Button/Button';
+import Link from 'next/link';
 import styles from '../styles/Home.module.css'
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Home() {
+    const {
+      isLoading,
+      isAuthenticated,
+      error,
+      user,
+      loginWithRedirect,
+      logout,
+    } = useAuth0();
+
   return (
     <Layout>
       <Head>
@@ -16,6 +28,19 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>Breakfast, Dinner & Lunch</p>
+
+        {!isLoading && (
+          isAuthenticated ? (
+            <div className="multiButtons">
+              <Button size="large" onClick={() => logout({ returnTo: 'http://localhost:3000' })} label="Log out" />
+              <Link href='/dashboard'>
+                <Button primary size="large" label="Dashboard" />
+              </Link>
+            </div>
+          ) : (
+            <Button size="small" onClick={loginWithRedirect} label="Log in" />
+          )
+        )}
 
         <div className={styles.grid}>
           <div className={styles.card}>

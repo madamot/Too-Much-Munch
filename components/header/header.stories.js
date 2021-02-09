@@ -17,4 +17,5 @@ Logged_Out.args = {
 export const Logged_In = Template.bind({});
 Logged_In.args = {
   isAuthenticated: true,
+  isLoading: false,
 };

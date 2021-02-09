@@ -9,8 +9,8 @@ const App = ({ Component, pageProps }) => {
   }
   return (
    <Auth0Provider
-     domain="madamot.eu.auth0.com"
-     clientId="nEQCfkAaLNeddxUxQu0MYDNQB88OyLi6"
+     domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
+     clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
      redirectUri={url}
    >
 

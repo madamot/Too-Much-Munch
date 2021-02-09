@@ -1,0 +1,9 @@
+type Recipe @collection(name: "recipes") {
+  user: String!
+  name: String!
+  description: String!
+}
+
+type Query {
+  allRecipes: [Recipe!]! @index(name: "all_recipes")
+}

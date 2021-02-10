@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
 
-const fetcher = async (query) => await graphQLClient.request(query);
+
 
 const Dashboard = () => {
   const {
@@ -21,25 +21,15 @@ const Dashboard = () => {
       logout,
     } = useAuth0();
 
-  //   const { data, faunaerror } = useSWR(
-  //   gql`
-  //     {
-  //       allRecipes {
-  //         data {
-  //           _id
-  //           name
-  //           description
-  //         }
-  //       }
-  //     }
-  //   `,
-  //   fetcher
-  // );
 
-  const { data, faunaerror } = useSWR(
-  gql`
-    {
-      findUserByID(id: "auth0|6019158727e50e006cb0ba72") {
+  let id = user.sub;
+
+
+  const fetcher = async (query) => await graphQLClient.request(query, { id });
+
+  const query = gql`
+    query getRecipesByUser($id: String!) {
+      findUserByID(id: $id) {
         recipes {
           data {
             _id
@@ -48,15 +38,12 @@ const Dashboard = () => {
         }
       }
     }
-  `,
-  fetcher
-);
+  `;
 
-
+  const { data, faunaerror } = useSWR([query, id], fetcher);
 
    if (faunaerror) return <div>failed to load</div>;
 
-    console.log(user);
 
   return (
     <Layout>
@@ -77,7 +64,7 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
         <p>This is the Dashboard page.</p>
         {isAuthenticated ? (
-          <p>Hello, {user.nickname}{' '}{user.sub}</p>
+          <p>Hello, {user.nickname}</p>
 
         ) : (null)}
         {data ? (
@@ -95,7 +82,7 @@ const Dashboard = () => {
     </Layout>
 
       );
-      }
+    }
 
       export default withAuthenticationRequired(Dashboard, {
         // Show a message while the user waits to be redirected to the login page.

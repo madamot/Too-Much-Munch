@@ -4,11 +4,11 @@ import Footer from "../footer/footer"
 
 const Wrapper = styled.div`
   min-height: 80vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 0 1.0875rem 0;
+  ${'' /* justify-content: center; */}
+  ${'' /* align-items: center; */}
 `;
 
 export default function Layout({ children }) {

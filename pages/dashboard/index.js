@@ -1,7 +1,9 @@
 import React from 'react';
+import styled, { css } from 'styled-components';
 import Head from 'next/head'
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
+import Card from '../../components/Card/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
@@ -9,7 +11,12 @@ import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
 
-
+const Grid = styled.div`
+  display: flex;
+  align-items: center;
+  ${'' /* justify-content: center; */}
+  flex-wrap: wrap;
+`;
 
 const Dashboard = () => {
   const {
@@ -32,8 +39,8 @@ const Dashboard = () => {
       findUserByID(id: $id) {
         recipes {
           data {
-            _id
             name
+            description
           }
         }
       }
@@ -61,20 +68,19 @@ const Dashboard = () => {
       ) : (null)}
 
       <div>
-        <h1>Dashboard</h1>
-        <p>This is the Dashboard page.</p>
         {isAuthenticated ? (
-          <p>Hello, {user.nickname}</p>
+          <h3>Hello, {user.nickname}</h3>
 
         ) : (null)}
         {data ? (
-          <ul>
+          <Grid>
             {data.findUserByID.recipes.data.map((recipe) => (
-              <li key={recipe._id}>
-                <span>{recipe.name}</span>
-              </li>
+              <Card recipe key={recipe._id}>
+                {recipe.name} <br />
+                {recipe.description}
+              </Card>
             ))}
-          </ul>
+          </Grid>
         ) : (
           <div>loading...</div>
         )}

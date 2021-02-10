@@ -14,8 +14,14 @@ import { graphQLClient } from '../../utils/graphql-client';
 const Grid = styled.div`
   display: flex;
   align-items: center;
-  ${'' /* justify-content: center; */}
+  justify-content: center;
   flex-wrap: wrap;
+
+  &:after {
+  content: "";
+  width: 250px;
+  margin: 1rem;
+}
 `;
 
 const Dashboard = () => {
@@ -51,7 +57,6 @@ const Dashboard = () => {
 
    if (faunaerror) return <div>failed to load</div>;
 
-
   return (
     <Layout>
       <Head>
@@ -73,14 +78,26 @@ const Dashboard = () => {
 
         ) : (null)}
         {data ? (
-          <Grid>
-            {data.findUserByID.recipes.data.map((recipe) => (
-              <Card recipe key={recipe._id}>
-                {recipe.name} <br />
-                {recipe.description}
-              </Card>
-            ))}
-          </Grid>
+          <>
+            <Grid>
+              {data.findUserByID.recipes.data.map((recipe, i, arr) => {
+                if (arr.length - 1 === i) {
+                  return <>
+                    <Card recipe key={recipe._id}>
+                      {recipe.name} <br />
+                      {recipe.description}
+                    </Card>
+                    <Card add />
+                  </>
+                } else {
+                  return <Card recipe key={recipe._id}>
+                    {recipe.name} <br />
+                    {recipe.description}
+                  </Card>
+                }
+              })}
+            </Grid>
+          </>
         ) : (
           <div>loading...</div>
         )}

@@ -15,12 +15,6 @@ Recipe.args = {
   recipe: true,
 };
 
-export const Group = Template.bind({});
-Group.args = {
-  children: 'Martin Murphy',
-  user: true,
-};
-
 export const Add = Template.bind({});
 Add.args = {
   children: 'battered cod',

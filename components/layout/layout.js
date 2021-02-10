@@ -3,7 +3,7 @@ import Header from "../header/header"
 import Footer from "../footer/footer"
 
 const Wrapper = styled.div`
-  min-height: 100vh;
+  min-height: 80vh;
   padding: 0 0.5rem;
   display: flex;
   flex-direction: column;

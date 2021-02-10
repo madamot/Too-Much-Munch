@@ -21,21 +21,38 @@ const Dashboard = () => {
       logout,
     } = useAuth0();
 
-    const { data, faunaerror } = useSWR(
-    gql`
-      {
-        allRecipes {
+  //   const { data, faunaerror } = useSWR(
+  //   gql`
+  //     {
+  //       allRecipes {
+  //         data {
+  //           _id
+  //           name
+  //           description
+  //         }
+  //       }
+  //     }
+  //   `,
+  //   fetcher
+  // );
+
+  const { data, faunaerror } = useSWR(
+  gql`
+    {
+      findUserByID(id: "auth0|6019158727e50e006cb0ba72") {
+        recipes {
           data {
             _id
-            user
             name
-            description
           }
         }
       }
-    `,
-    fetcher
-  );
+    }
+  `,
+  fetcher
+);
+
+
 
    if (faunaerror) return <div>failed to load</div>;
 
@@ -48,23 +65,24 @@ const Dashboard = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* {isLoading ? (
+      {isLoading ? (
         <div>Loading...</div>
-        ) : (null)}
+      ) : (null)}
 
-        {error ? (
+      {error ? (
         <div>Oops... {error.message}</div>
-      ) : (null)} */}
+      ) : (null)}
 
       <div>
-        {/* <h1>Dashboard</h1>
-          <p>This is the Dashboard page.</p>
-          {isAuthenticated ? (
-          <p>Hello, {user.nickname}</p>
-        ) : (null)} */}
+        <h1>Dashboard</h1>
+        <p>This is the Dashboard page.</p>
+        {isAuthenticated ? (
+          <p>Hello, {user.nickname}{' '}{user.sub}</p>
+
+        ) : (null)}
         {data ? (
           <ul>
-            {data.allRecipes.data.map((recipe) => (
+            {data.findUserByID.recipes.data.map((recipe) => (
               <li key={recipe._id}>
                 <span>{recipe.name}</span>
               </li>

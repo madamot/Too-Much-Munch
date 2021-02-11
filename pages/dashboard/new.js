@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import Head from 'next/head'
-import Link from 'next/link';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
@@ -12,20 +11,8 @@ import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
 
-const Grid = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
 
-  &:after {
-  content: "";
-  width: 250px;
-  margin: 1rem;
-}
-`;
-
-const Dashboard = () => {
+const New = () => {
   const {
       isLoading,
       isAuthenticated,
@@ -61,10 +48,11 @@ const Dashboard = () => {
   return (
     <Layout>
       <Head>
-        <title>Too Much Munch</title>
+        <title>New Recipe</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
+      <h1>New Recipe +</h1>
 
       {isLoading ? (
         <div>Loading...</div>
@@ -76,40 +64,17 @@ const Dashboard = () => {
 
       <div>
         {isAuthenticated ? (
-          <h1>Hello, {user.nickname}, your Recipes</h1>
+          <h3>Hello, {user.nickname}</h3>
 
         ) : (null)}
-        {data ? (
-          <>
-            <Grid>
-              {data.findUserByID.recipes.data.map((recipe, i, arr) => {
-                if (arr.length - 1 === i) {
-                  return <>
-                    <Card recipe key={recipe._id}>
-                      {recipe.name} <br />
-                      {recipe.description}
-                    </Card>
-                    <Card add />
-                  </>
-                } else {
-                  return <Card recipe key={recipe._id}>
-                    {recipe.name} <br />
-                    {recipe.description}
-                  </Card>
-                }
-              })}
-            </Grid>
-          </>
-        ) : (
-          <div>loading...</div>
-        )}
+
       </div>
     </Layout>
 
       );
     }
 
-      export default withAuthenticationRequired(Dashboard, {
+      export default withAuthenticationRequired(New, {
         // Show a message while the user waits to be redirected to the login page.
         onRedirecting: () => <div>Redirecting you to the login page...</div>,
       });

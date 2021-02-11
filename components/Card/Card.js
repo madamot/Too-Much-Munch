@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
+import Link from 'next/link';
 
 const Container = styled.div`
   flex: 1;
@@ -49,9 +50,11 @@ const Card = ({ add, children}) => {
       <Container add={add}>
         {
           (add) ? (
-            <svg width="158" height="156" viewBox="0 0 158 156" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0.5 88.5V67.5H68.5V0.5H89.5V67.5H157.5V88.5H89.5V155.5H68.5V88.5H0.5Z" fill="#E5E5E5"/>
-            </svg>
+            <Link href="/dashboard/new">
+              <svg width="158" height="156" viewBox="0 0 158 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.5 88.5V67.5H68.5V0.5H89.5V67.5H157.5V88.5H89.5V155.5H68.5V88.5H0.5Z" fill="#E5E5E5"/>
+              </svg>
+            </Link>
           )
           : (
             <>

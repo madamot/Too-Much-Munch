@@ -11,10 +11,10 @@ const Wrapper = styled.div`
   ${'' /* align-items: center; */}
 `;
 
-export default function Layout({ children }) {
+export default function Layout({ children, dashboard }) {
   return (
     <>
-      <Header></Header>
+      <Header dashboard={dashboard}></Header>
       <Wrapper>
         <main>{children}</main>
       </Wrapper>

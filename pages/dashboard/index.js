@@ -59,12 +59,12 @@ const Dashboard = () => {
    if (faunaerror) return <div>failed to load</div>;
 
   return (
-    <Layout>
+    <Layout dashboard>
       <Head>
         <title>Too Much Munch</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
 
       {isLoading ? (
         <div>Loading...</div>

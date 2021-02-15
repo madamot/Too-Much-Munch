@@ -28,8 +28,12 @@ const Title = styled.h1`
   vertical-align: top;
 `;
 
+const DashNav = styled.div`
+  display: ${({dashboard}) => dashboard ? 'block': 'none'};
+`;
 
-const Header = dashboard => {
+
+const Header = ({dashboard}) => {
   const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
   let url = "";
   if (typeof window !== "undefined") {
@@ -66,6 +70,11 @@ const Header = dashboard => {
           )}
         </div>
       </Wrapper>
+      {!dashboard ? (
+        null
+      ) :
+      <p>dashboard</p>
+      }
     </header>
   )
 }

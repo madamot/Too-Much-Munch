@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Head from 'next/head'
 import Link from 'next/link';
@@ -11,6 +11,8 @@ import { withAuthenticationRequired } from '@auth0/auth0-react';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
+
+import Cookie from "js-cookie";
 
 const Grid = styled.div`
   display: flex;
@@ -38,12 +40,12 @@ const Dashboard = () => {
 
   let id = user.sub;
 
-
   const fetcher = async (query) => await graphQLClient.request(query, { id });
 
   const query = gql`
     query getRecipesByUser($id: String!) {
       findUserByID(id: $id) {
+        _id
         recipes {
           data {
             name
@@ -57,6 +59,10 @@ const Dashboard = () => {
   const { data, faunaerror } = useSWR([query, id], fetcher);
 
    if (faunaerror) return <div>failed to load</div>;
+
+   if (data) {
+     Cookie.set("FaunaID", data.findUserByID._id)
+   }
 
   return (
     <Layout dashboard>

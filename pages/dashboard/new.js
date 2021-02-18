@@ -1,6 +1,7 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React, { useState } from 'react';
 import Head from 'next/head'
+import styled, { css } from 'styled-components';
+import { useForm } from 'react-hook-form';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
@@ -10,6 +11,8 @@ import { withAuthenticationRequired } from '@auth0/auth0-react';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
+
+import Cookie from "js-cookie";
 
 
 const New = () => {
@@ -22,28 +25,39 @@ const New = () => {
       logout,
     } = useAuth0();
 
+  const [errorMessage, setErrorMessage] = useState('');
 
-  let id = user.sub;
+  const { handleSubmit, register, errors } = useForm();
 
+  let FaunaID = Cookie.get('FaunaID');
 
-  const fetcher = async (query) => await graphQLClient.request(query, { id });
+  const onSubmit = handleSubmit(async ({ name, description }) => {
+    if (errorMessage) setErrorMessage('');
 
-  const query = gql`
-    query getRecipesByUser($id: String!) {
-      findUserByID(id: $id) {
-        recipes {
-          data {
-            name
-            description
+    const query = gql`
+      mutation CreateARecipe($FaunaID: ID, $name: String!, $description: String!) {
+        createRecipe(data: {
+          author: { connect: $FaunaID}
+          name: $name
+          description: $description
+        }) {
+          author {
+            id
           }
+          name
+          description
         }
       }
+    `;
+
+    try {
+      await graphQLClient.request(query, { FaunaID, name, description });
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.message);
     }
-  `;
+  });
 
-  const { data, faunaerror } = useSWR([query, id], fetcher);
-
-   if (faunaerror) return <div>failed to load</div>;
 
   return (
     <Layout>
@@ -53,6 +67,7 @@ const New = () => {
       </Head>
 
       <h1>New Recipe +</h1>
+      <p>{FaunaID}</p>
 
       {isLoading ? (
         <div>Loading...</div>
@@ -64,7 +79,37 @@ const New = () => {
 
       <div>
         {isAuthenticated ? (
-          <h3>Hello, {user.nickname}</h3>
+          <div>
+            <h3>Hello, {user.nickname}</h3>
+
+            <form onSubmit={onSubmit}>
+              <div>
+                <label>Recipe name</label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="e.g. bolognese"
+                  ref={register({ required: 'Name is required' })}
+                />
+                <label>Recipe description</label>
+                <input
+                  type="text"
+                  name="description"
+                  placeholder="e.g. saucy"
+                  ref={register({ required: 'Description is required' })}
+                />
+                {errors.task && (
+                  <span role="alert">
+                    {errors.task.message}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <button type="submit">Create</button>
+              </div>
+            </form>
+          </div>
 
         ) : (null)}
 
@@ -74,7 +119,11 @@ const New = () => {
       );
     }
 
-      export default withAuthenticationRequired(New, {
-        // Show a message while the user waits to be redirected to the login page.
-        onRedirecting: () => <div>Redirecting you to the login page...</div>,
-      });
+    New.getInitialProps = () => {
+
+    }
+
+    export default withAuthenticationRequired(New, {
+      // Show a message while the user waits to be redirected to the login page.
+      onRedirecting: () => <div>Redirecting you to the login page...</div>,
+    });

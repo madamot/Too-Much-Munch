@@ -60,9 +60,10 @@ const Dashboard = () => {
 
    if (faunaerror) return <div>failed to load</div>;
 
-   if (data) {
-     Cookie.set("FaunaID", data.findUserByID._id)
-   }
+   // if (data.findUserByID._id) {
+   //   Cookie.set("FaunaID", data.findUserByID._id)
+   // }
+
 
   return (
     <Layout dashboard>
@@ -85,28 +86,32 @@ const Dashboard = () => {
           <h1>Hello {user.nickname}, your recipes</h1>
 
         ) : (null)}
-        {data ? (
-          <>
-            <Grid>
-              {data.findUserByID.recipes.data.map((recipe, i, arr) => {
-                if (arr.length - 1 === i) {
-                  return <>
-                    <Card recipe key={recipe._id}>
+
+        {data ? [
+          (data.findUserByID ?
+            <>
+              <Grid>
+                {data.findUserByID.recipes.data.map((recipe, i, arr) => {
+                  if (arr.length - 1 === i) {
+                    return <>
+                      <Card recipe key={recipe._id}>
+                        {recipe.name} <br />
+                        {recipe.description}
+                      </Card>
+                      <Card add />
+                    </>
+                  } else {
+                    return <Card recipe key={recipe._id}>
                       {recipe.name} <br />
                       {recipe.description}
                     </Card>
-                    <Card add />
-                  </>
-                } else {
-                  return <Card recipe key={recipe._id}>
-                    {recipe.name} <br />
-                    {recipe.description}
-                  </Card>
-                }
-              })}
-            </Grid>
-          </>
-        ) : (
+                  }
+                })}
+              </Grid>
+            </>
+          : <><p>You have no recipes</p><Card add /></>
+          )
+        ]: (
           <div>loading...</div>
         )}
       </div>

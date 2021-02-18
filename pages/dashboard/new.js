@@ -67,7 +67,6 @@ const New = () => {
       </Head>
 
       <h1>New Recipe +</h1>
-      <p>{FaunaID}</p>
 
       {isLoading ? (
         <div>Loading...</div>

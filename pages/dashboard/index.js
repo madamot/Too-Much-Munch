@@ -82,7 +82,7 @@ const Dashboard = () => {
 
       <div>
         {isAuthenticated ? (
-          <h1>Hello, {user.nickname}, your Recipes</h1>
+          <h1>Hello {user.nickname}, your recipes</h1>
 
         ) : (null)}
         {data ? (

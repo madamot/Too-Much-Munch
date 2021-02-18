@@ -98,9 +98,14 @@ const New = () => {
                   placeholder="e.g. saucy"
                   ref={register({ required: 'Description is required' })}
                 />
-                {errors.task && (
+                {errors.name &&  (
                   <span role="alert">
-                    {errors.task.message}
+                    {errors.name.message}
+                  </span>
+                )}
+                {errors.description &&  (
+                  <span role="alert">
+                    {errors.description.message}
                   </span>
                 )}
               </div>

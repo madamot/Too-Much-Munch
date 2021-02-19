@@ -29,31 +29,46 @@ const New = () => {
 
   const { handleSubmit, register, errors } = useForm();
 
-  let FaunaID = Cookie.get('FaunaID');
+  let faunaID = Cookie.get('FaunaID');
+
+  let sub = user.sub;
 
   const onSubmit = handleSubmit(async ({ name, description }) => {
     if (errorMessage) setErrorMessage('');
+    console.log(faunaID);
 
-    const query = gql`
-      mutation CreateARecipe($FaunaID: ID, $name: String!, $description: String!) {
-        createRecipe(data: {
-          author: { connect: $FaunaID}
-          name: $name
-          description: $description
-        }) {
-          author {
-            id
+
+
+      const query = gql`
+        mutation CreateARecipe($faunaID: ID, $name: String!, $description: String!) {
+          createRecipe(data: {
+            author: { connect: $faunaID}
+            name: $name
+            description: $description
+          }) {
+            author {
+              id
+            }
+            name
+            description
           }
-          name
-          description
         }
-      }
-    `;
+      `;
+      console.log('success');
+
+
+    const variables = {
+          faunaID,
+          sub,
+          name,
+          description,
+        };
 
     try {
-      await graphQLClient.request(query, { FaunaID, name, description });
+      await graphQLClient.request(query, variables);
     } catch (error) {
       console.log(error);
+      console.log(errorMessage);
       setErrorMessage(error.message);
     }
   });

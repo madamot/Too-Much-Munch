@@ -39,6 +39,9 @@ const Dashboard = () => {
 
 
   let id = user.sub;
+  id = id.substring(6);
+
+  console.log(id);
 
   const fetcher = async (query) => await graphQLClient.request(query, { id });
 
@@ -60,9 +63,15 @@ const Dashboard = () => {
 
    if (faunaerror) return <div>failed to load</div>;
 
-   // if (data.findUserByID._id) {
-   //   Cookie.set("FaunaID", data.findUserByID._id)
-   // }
+   console.log(data);
+
+   if (data) {
+     if (data.findUserByID) {
+       Cookie.set("FaunaID", data.findUserByID._id)
+     }
+   }
+
+
 
 
   return (
@@ -88,7 +97,7 @@ const Dashboard = () => {
         ) : (null)}
 
         {data ? [
-          (data.findUserByID ?
+          (Object.keys(data.findUserByID.recipes.data).length > 0 ?
             <>
               <Grid>
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {

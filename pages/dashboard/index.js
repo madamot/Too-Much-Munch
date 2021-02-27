@@ -51,6 +51,7 @@ const Dashboard = () => {
         _id
         recipes {
           data {
+            _id
             name
             description
           }
@@ -65,9 +66,12 @@ const Dashboard = () => {
 
    console.log(data);
 
+
+
    if (data) {
      if (data.findUserByID) {
        Cookie.set("FaunaID", data.findUserByID._id)
+       console.log(data.findUserByID._id);
      }
    }
 
@@ -103,14 +107,14 @@ const Dashboard = () => {
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card recipe key={recipe._id}>
+                      <Card recipe key={recipe._id} id={recipe._id}>
                         {recipe.name} <br />
                         {recipe.description}
                       </Card>
                       <Card add />
                     </>
                   } else {
-                    return <Card recipe key={recipe._id}>
+                    return <Card recipe key={recipe._id} id={recipe._id}>
                       {recipe.name} <br />
                       {recipe.description}
                     </Card>

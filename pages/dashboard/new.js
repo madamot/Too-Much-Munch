@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
+import Router from 'next/router';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
 import Layout from '../../components/layout/layout'

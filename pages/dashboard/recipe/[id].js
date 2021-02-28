@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import Layout from '../../../components/layout/layout';
-// import EditForm from '../../components/edit-form';
+import EditForm from '../../../components/EditForm/EditForm';
 import { graphQLClient } from '../../../utils/graphql-client';
 
 const Todo = () => {
@@ -39,11 +39,11 @@ const Todo = () => {
       )}
 
 
-      {/* {data ? (
-        <EditForm defaultValues={data.findTodoByID} id={id} />
-        ) : (
+      {data ? (
+        <EditForm defaultValues={data.findRecipeByID} id={id} />
+      ) : (
         <div>loading...</div>
-      )} */}
+      )}
     </Layout>
   );
 };

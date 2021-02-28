@@ -66,6 +66,7 @@ const New = () => {
 
     try {
       await graphQLClient.request(query, variables);
+      Router.push('/dashboard');
     } catch (error) {
       console.log(error);
       console.log(errorMessage);

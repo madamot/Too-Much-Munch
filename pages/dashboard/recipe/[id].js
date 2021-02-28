@@ -3,6 +3,7 @@ import Router from 'next/router';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import Layout from '../../../components/layout/layout';
+import Button from '../../../components/Button/Button';
 import EditForm from '../../../components/EditForm/EditForm';
 import { graphQLClient } from '../../../utils/graphql-client';
 
@@ -51,9 +52,7 @@ const Todo = () => {
           <h2>{data.findRecipeByID.name}</h2>
           <br />
           <p>{data.findRecipeByID.description}</p>
-          <span onClick={() => deleteATodo(id)} >
-            Delete
-          </span>
+          <Button size="small" onClick={() => deleteATodo(id)} label="Delete" />
         </>
       ) : (
         <div>loading...</div>

@@ -127,7 +127,8 @@ const New = () => {
               </div>
 
               <div>
-                <button type="submit">Create</button>
+                <Button type="submit" primary size="small" label="Create" />
+                {/* <button type="submit">Create</button> */}
               </div>
             </form>
           </div>

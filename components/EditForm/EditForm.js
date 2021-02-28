@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import { gql } from 'graphql-request';
 import { useForm } from 'react-hook-form';
+import Button from '../../components/Button/Button';
 import { graphQLClient } from '../../utils/graphql-client';
 
 import { useAuth0 } from '@auth0/auth0-react';
@@ -95,7 +96,7 @@ const EditForm = ({ defaultValues, id }) => {
             </div>
 
             <div>
-              <button type="submit">Create</button>
+              <Button type="submit" size="small" label="Update" />
             </div>
           </form>
         </div>

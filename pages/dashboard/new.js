@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
+import Router from 'next/router';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
 import Layout from '../../components/layout/layout'
@@ -66,6 +67,7 @@ const New = () => {
 
     try {
       await graphQLClient.request(query, variables);
+      Router.push('/dashboard');
     } catch (error) {
       console.log(error);
       console.log(errorMessage);
@@ -125,7 +127,8 @@ const New = () => {
               </div>
 
               <div>
-                <button type="submit">Create</button>
+                <Button type="submit" primary size="small" label="Create" />
+                {/* <button type="submit">Create</button> */}
               </div>
             </form>
           </div>

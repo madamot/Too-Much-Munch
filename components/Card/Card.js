@@ -44,8 +44,8 @@ const Image = styled.img`
   color: ${props => props.primary ? "white" : "#333"};
 `;
 
-const Card = ({ add, children}) => {
-
+const Card = ({ add, id, children}) => {
+  console.log(id);
     return (
       <Container add={add}>
         {
@@ -58,10 +58,15 @@ const Card = ({ add, children}) => {
           )
           : (
             <>
-              <Details>
-                {children}
-              </Details>
-              <Image src="https://via.placeholder.com/250" />
+              <Link href="/dashboard/recipe/[id]" as={`/dashboard/recipe/${id}`}>
+                <a>
+                  <Details>
+                    {children}
+
+                  </Details>
+                  <Image src="https://via.placeholder.com/250" />
+                </a>
+              </Link>
             </>
           )
 

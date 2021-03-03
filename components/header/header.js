@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import Button from '../Button/Button';
 import Link from 'next/link';
-import { useRouter } from 'next/router'
+import { useRouter, withRouter } from 'next/router'
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -12,6 +12,18 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const DashNavWrapper = styled.div`
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px 0px;
+  max-height: 40px;
+  text-align: center;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Logo = styled.svg`
@@ -28,13 +40,37 @@ const Title = styled.h1`
   vertical-align: top;
 `;
 
-const DashNav = styled.div`
-  display: ${({dashboard}) => dashboard ? 'block': 'none'};
+const DashNav = styled.ul`
+  display: flex;
+  margin: 0;
+  height: 100%;
+  list-style-type: none;
+  padding: 0;
+  width: 50%;
+  position: absolute;
+  overflow: auto;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const NavItem = styled.li`
+  display: inline-block;
+  height: 100%;
+  list-style: none;
+  align-items: center;
+  display: flex;
+  min-height: 100%;
+  padding: 0;
+  border-bottom: ${props => props.router == props.location ? "solid 2px black" : "none"};
+
 `;
 
 
 const Header = ({dashboard}) => {
   const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
+  const router = useRouter();
+
+  console.log(router.pathname);
   let url = "";
   if (typeof window !== "undefined") {
     url = window.location.href;
@@ -73,7 +109,13 @@ const Header = ({dashboard}) => {
       {!dashboard ? (
         null
       ) :
-      <p>dashboard</p>
+      <DashNavWrapper>
+        <DashNav>
+          <NavItem router={router.pathname} location='/dashboard'><Link href='/dashboard'>Recipes</Link></NavItem>
+          <NavItem router={router.pathname} location='/dashboard/groups'><Link href='/dashboard/groups'>Groups</Link></NavItem>
+          <NavItem router={router.pathname}>Coming soon...</NavItem>
+        </DashNav>
+      </DashNavWrapper>
       }
     </header>
   )

@@ -77,7 +77,7 @@ const New = () => {
 
 
   return (
-    <Layout>
+    <Layout dashboard>
       <Head>
         <title>New Recipe</title>
         <link rel="icon" href="/favicon.ico" />

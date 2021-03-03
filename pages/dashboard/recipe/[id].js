@@ -26,7 +26,7 @@ const Todo = () => {
 
   if (error) return <div>failed to load</div>;
 
-  const deleteATodo = async (id) => {
+  const deleteARecipe = async (id) => {
     const query = gql`
       mutation DeleteARecipe($id: ID!) {
         deleteRecipe(id: $id) {
@@ -44,7 +44,7 @@ const Todo = () => {
 };
 
   return (
-    <Layout>
+    <Layout dashboard>
       <h1>Edit Todo</h1>
 
       {data ? (
@@ -52,7 +52,7 @@ const Todo = () => {
           <h2>{data.findRecipeByID.name}</h2>
           <br />
           <p>{data.findRecipeByID.description}</p>
-          <Button size="small" onClick={() => deleteATodo(id)} label="Delete" />
+          <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
         </>
       ) : (
         <div>loading...</div>

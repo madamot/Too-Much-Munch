@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
+import RichTextEditor from '../../components/RichTextEditor/RichTextEditor';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
@@ -131,6 +132,7 @@ const New = () => {
                 {/* <button type="submit">Create</button> */}
               </div>
             </form>
+            <RichTextEditor />
           </div>
 
         ) : (null)}

@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
+import { EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
@@ -27,6 +30,10 @@ const New = () => {
     } = useAuth0();
 
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [editorState, setEditorState] = useState(
+    () => EditorState.createEmpty(),
+  );
 
   const { handleSubmit, register, errors } = useForm();
 
@@ -131,10 +138,13 @@ const New = () => {
                 {/* <button type="submit">Create</button> */}
               </div>
             </form>
+            <Editor
+              editorState={editorState}
+              onEditorStateChange={setEditorState}
+            />
           </div>
 
         ) : (null)}
-
       </div>
     </Layout>
 

@@ -1,7 +1,31 @@
 import React from 'react';
+import styled, { css } from 'styled-components';
 import { Editor, EditorState, getDefaultKeyBinding, RichUtils } from 'draft-js';
-import styles from '../../styles/RichEditor.module.css';
+import '../../styles/RichEditor.module.css';
 import '../../node_modules/draft-js/dist/Draft.css';
+
+const RichEditorRoot = styled.div`
+  background: #fff;
+  border: 1px solid #ddd;
+  ${'' /* font-family: 'Georgia', serif; */}
+  font-size: 14px;
+  padding: 15px;
+`;
+
+const RichEditorControls = styled.div`
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+`;
+
+const RichEditorStyleButton = styled.div`
+  color: #999;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 2px 0;
+  display: inline-block;
+`;
 
 class RichTextEditor extends React.Component {
     constructor(props) {
@@ -59,6 +83,8 @@ class RichTextEditor extends React.Component {
       );
     }
 
+
+
     render() {
       const {editorState} = this.state;
 
@@ -72,8 +98,10 @@ class RichTextEditor extends React.Component {
         }
       }
 
+          console.log(this.state.editorState);
+
       return (
-        <div className="RichEditor-root">
+        <RichEditorRoot>
           <BlockStyleControls
             editorState={editorState}
             onToggle={this.toggleBlockType}
@@ -95,7 +123,7 @@ class RichTextEditor extends React.Component {
               spellCheck={true}
             />
           </div>
-        </div>
+        </RichEditorRoot>
       );
     }
   }
@@ -133,9 +161,9 @@ class RichTextEditor extends React.Component {
       }
 
       return (
-        <span className={className} onMouseDown={this.onToggle}>
+        <RichEditorStyleButton onMouseDown={this.onToggle}>
           {this.props.label}
-        </span>
+        </RichEditorStyleButton>
       );
     }
   }
@@ -162,7 +190,7 @@ class RichTextEditor extends React.Component {
       .getType();
 
     return (
-      <div className="RichEditor-controls">
+      <RichEditorControls>
         {BLOCK_TYPES.map((type) =>
           <StyleButton
             key={type.label}
@@ -172,7 +200,7 @@ class RichTextEditor extends React.Component {
             style={type.style}
           />
         )}
-      </div>
+      </RichEditorControls>
     );
   };
 
@@ -187,7 +215,7 @@ class RichTextEditor extends React.Component {
     const currentStyle = props.editorState.getCurrentInlineStyle();
 
     return (
-      <div className="RichEditor-controls">
+      <RichEditorControls>
         {INLINE_STYLES.map((type) =>
           <StyleButton
             key={type.label}
@@ -197,7 +225,7 @@ class RichTextEditor extends React.Component {
             style={type.style}
           />
         )}
-      </div>
+      </RichEditorControls>
     );
   };
 

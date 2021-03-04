@@ -3,7 +3,8 @@ import Head from 'next/head'
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
 import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
+import dynamic from 'next/dynamic';
+// import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import Layout from '../../components/layout/layout'
@@ -17,6 +18,10 @@ import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
 
 import Cookie from "js-cookie";
+const Editor = dynamic(
+  () => import('react-draft-wysiwyg').then(mod => mod.Editor),
+  { ssr: false }
+)
 
 
 const New = () => {
@@ -145,6 +150,8 @@ const New = () => {
           </div>
 
         ) : (null)}
+
+
       </div>
     </Layout>
 

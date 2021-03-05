@@ -6,7 +6,9 @@ import { EditorState } from 'draft-js';
 import dynamic from 'next/dynamic';
 // import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { useForm } from 'react-hook-form';
+import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
+import { convertToHTML } from 'draft-convert';
+import { useForm, Controller } from 'react-hook-form';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
@@ -40,7 +42,20 @@ const New = () => {
     () => EditorState.createEmpty(),
   );
 
-  const { handleSubmit, register, errors } = useForm();
+  const  [convertedContent, setConvertedContent] = useState(null);
+
+  const handleEditorChange = (state) => {
+    setEditorState(state);
+    convertContentToHTML();
+  }
+  const convertContentToHTML = () => {
+    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+    setConvertedContent(currentContentAsHTML);
+  }
+
+  const { handleSubmit, register, errors, control } = useForm({
+    mode: "onChange"
+  });
 
   let faunaID = Cookie.get('FaunaID');
 
@@ -120,11 +135,16 @@ const New = () => {
                   ref={register({ required: 'Name is required' })}
                 />
                 <label>Recipe description</label>
-                <input
+                {/* <input
                   type="text"
                   name="description"
                   placeholder="e.g. saucy"
                   ref={register({ required: 'Description is required' })}
+                /> */}
+                <Controller
+                  as={<WYSIWYGEditor />}
+                  name="description"
+                  control={control}
                 />
                 {errors.name &&  (
                   <span role="alert">
@@ -143,10 +163,7 @@ const New = () => {
                 {/* <button type="submit">Create</button> */}
               </div>
             </form>
-            <Editor
-              editorState={editorState}
-              onEditorStateChange={setEditorState}
-            />
+
           </div>
 
         ) : (null)}

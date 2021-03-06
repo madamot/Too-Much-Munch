@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { EditorState, convertFromHTML, ContentState } from 'draft-js';
 import dynamic from 'next/dynamic';
@@ -11,6 +11,12 @@ const Editor = dynamic(
 
 const WYSIWYGEditor = props => {
 
+  // useEffect(() => {
+    // console.log(props.convo);
+  //   const blocksFromHTML = convertFromHTML(
+  //         props.convo
+  //     ); // asynchronously reset your form values
+  // }, [props.convo]);
 
     const blocksFromHTML = convertFromHTML(
           props.convo
@@ -34,6 +40,7 @@ const WYSIWYGEditor = props => {
   const convertContentToHTML = () => {
     let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
     setConvertedContent(currentContentAsHTML);
+
     console.log("PROPS ==> ", props);
     return props.onChange(
       convertedContent

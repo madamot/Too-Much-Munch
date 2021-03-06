@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Router from 'next/router';
 import { gql } from 'graphql-request';
 import { useForm, Controller } from 'react-hook-form';
@@ -27,11 +27,13 @@ const EditForm = ({ defaultValues, id }) => {
     reset(defaultValues); // asynchronously reset your form values
   }, [reset, defaultValues]);
 
-//   useEffect(() => {
-//     if (defaultValues) {
-//         setValue("description", defaultValues.description);
-//       }
-// }, [defaultValues])
+  useEffect(() => {
+    if (defaultValues) {
+        setValue("description", editorState);
+      }
+}, [defaultValues])
+
+
 
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -86,9 +88,11 @@ const EditForm = ({ defaultValues, id }) => {
     mode: "onChange",
   });
 
+  const description = useRef();
+
   const onSubmit = handleSubmit(async ({ name, description }) => {
     if (errorMessage) setErrorMessage('');
-    console.log(description);
+    // console.log(description);
 
     const query = gql`
       mutation UpdateARecipe($id: ID!, $name: String!, $description: String!) {
@@ -134,30 +138,51 @@ const EditForm = ({ defaultValues, id }) => {
                 ref={register({ required: 'Name is required' })}
               />
               <label>Recipe description</label>
-              <Controller
-                as={<WYSIWYGEditor convo={defaultValues.description} />}
-                name="description"
-                valueName={convertedContent}
-                defaultValue={convertedContent}
-                control={control}
-              />
+
+              {content ? (
+                <>
+                  <Controller
+                    as={<WYSIWYGEditor convo={defaultValues.description} />}
+                    name="description"
+                    control={control}
+                    ref={(e) => {
+                      register(e)
+                      description.current = e // you can still assign to ref
+                    }}
+                    ref={register({ required: 'Description is required' })}
+                  />
+                </>
+              ) : (
+                <div>loading...</div>
+              )}
+              {/* {content &&  (
+                <Controller
+                  as={<WYSIWYGEditor convo={content} />}
+                  name="description"
+                  control={control}
+                  ref={register}
+                />
+              )} */}
+
 
               {/* <Controller
                 name="description"
                 control={control}
-                valueName="editorState"
-                render={() => (
+                render={({ editorState, handleEditorChange }) => (
                   <Editor
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
                   />
                 )}
+
               /> */}
 
               {/* <Editor
                 editorState={editorState}
                 name="description"
                 onEditorStateChange={handleEditorChange}
+                defaultValue={editorState}
+                value={editorState}
               /> */}
               {/* <p>{description}</p> */}
               {errors.name &&  (
@@ -171,11 +196,11 @@ const EditForm = ({ defaultValues, id }) => {
                 </span>
               )}
             </div>
-
             <div>
               <Button type="submit" size="small" label="Update" />
             </div>
           </form>
+
         </div>
 
       ) : (null)}

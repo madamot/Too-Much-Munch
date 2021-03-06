@@ -7,7 +7,7 @@ import { EditorState, convertFromHTML, ContentState } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import dynamic from 'next/dynamic';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
+// import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
 

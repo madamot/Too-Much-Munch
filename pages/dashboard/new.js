@@ -2,13 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
-import { EditorState } from 'draft-js';
-import dynamic from 'next/dynamic';
-// import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
-import { convertToHTML } from 'draft-convert';
 import { useForm, Controller } from 'react-hook-form';
+import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
@@ -20,10 +15,6 @@ import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
 
 import Cookie from "js-cookie";
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then(mod => mod.Editor),
-  { ssr: false }
-)
 
 
 const New = () => {
@@ -37,21 +28,6 @@ const New = () => {
     } = useAuth0();
 
   const [errorMessage, setErrorMessage] = useState('');
-
-  const [editorState, setEditorState] = useState(
-    () => EditorState.createEmpty(),
-  );
-
-  const  [convertedContent, setConvertedContent] = useState(null);
-
-  const handleEditorChange = (state) => {
-    setEditorState(state);
-    convertContentToHTML();
-  }
-  const convertContentToHTML = () => {
-    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
-  }
 
   const { handleSubmit, register, errors, control } = useForm({
     mode: "onChange"
@@ -145,6 +121,7 @@ const New = () => {
                   as={<WYSIWYGEditor />}
                   name="description"
                   control={control}
+                  defaultValue=''
                 />
                 {errors.name &&  (
                   <span role="alert">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { EditorState } from 'draft-js';
+import { EditorState, convertFromHTML, ContentState } from 'draft-js';
 import dynamic from 'next/dynamic';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { convertToHTML } from 'draft-convert';
@@ -11,9 +11,18 @@ const Editor = dynamic(
 
 const WYSIWYGEditor = props => {
 
-  const [editorState, setEditorState] = useState(
-    () => EditorState.createEmpty(),
-  );
+
+    const blocksFromHTML = convertFromHTML(
+          props.convo
+      );
+
+
+      const content = ContentState.createFromBlockArray(
+          blocksFromHTML.contentBlocks,
+          blocksFromHTML.entityMap
+      );
+
+      const [editorState, setEditorState] = useState(EditorState.createWithContent(content));
 
   const [convertedContent, setConvertedContent] = useState(null);
 

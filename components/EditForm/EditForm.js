@@ -24,7 +24,7 @@ const Editor = dynamic(
 const EditForm = ({ defaultValues, id }) => {
 
   useEffect(() => {
-    reset(defaultValues); // asynchronously reset your form values
+    reset(defaultValues);
   }, [reset, defaultValues]);
 
   useEffect(() => {

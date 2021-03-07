@@ -59,17 +59,19 @@ const Todo = () => {
           <br />
           <p>{data.findRecipeByID.description}</p>
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
+          <EditForm defaultValues={data.findRecipeByID} id={id} />
         </>
+
       ) : (
         <div>loading...</div>
       )}
 
 
-      {data ? (
+      {/* {data ? (
         <EditForm defaultValues={data.findRecipeByID} id={id} />
-      ) : (
+        ) : (
         <div>loading...</div>
-      )}
+      )} */}
     </Layout>
   );
 };

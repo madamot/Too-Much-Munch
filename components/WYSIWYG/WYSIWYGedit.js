@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import Router from 'next/router';
 import { EditorState, convertFromHTML, ContentState } from 'draft-js';
 import dynamic from 'next/dynamic';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,13 +11,7 @@ const Editor = dynamic(
 
 const WYSIWYGEditor = props => {
 
-  // useEffect(() => {
-    // console.log(props.convo);
-  //   const blocksFromHTML = convertFromHTML(
-  //         props.convo
-  //     ); // asynchronously reset your form values
-  // }, [props.convo]);
-
+  useEffect(() => {
     const blocksFromHTML = convertFromHTML(
           props.convo
       );
@@ -28,7 +22,13 @@ const WYSIWYGEditor = props => {
           blocksFromHTML.entityMap
       );
 
-      const [editorState, setEditorState] = useState(EditorState.createWithContent(content));
+      setEditorState(EditorState.createWithContent(content));
+  }, [props.convo]);
+
+
+
+      const [editorState, setEditorState] = useState(
+      () => EditorState.createEmpty(),);
 
   const [convertedContent, setConvertedContent] = useState(null);
 

@@ -45,7 +45,6 @@ const Image = styled.img`
 `;
 
 const Card = ({ add, id, children}) => {
-  console.log(id);
     return (
       <Container add={add}>
         {

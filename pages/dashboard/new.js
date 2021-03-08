@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
@@ -28,7 +29,9 @@ const New = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { handleSubmit, register, errors } = useForm();
+  const { handleSubmit, register, errors, control } = useForm({
+    mode: "onChange"
+  });
 
   let faunaID = Cookie.get('FaunaID');
 
@@ -108,11 +111,17 @@ const New = () => {
                   ref={register({ required: 'Name is required' })}
                 />
                 <label>Recipe description</label>
-                <input
+                {/* <input
                   type="text"
                   name="description"
                   placeholder="e.g. saucy"
                   ref={register({ required: 'Description is required' })}
+                /> */}
+                <Controller
+                  as={<WYSIWYGEditor />}
+                  name="description"
+                  control={control}
+                  defaultValue=''
                 />
                 {errors.name &&  (
                   <span role="alert">
@@ -131,9 +140,11 @@ const New = () => {
                 {/* <button type="submit">Create</button> */}
               </div>
             </form>
+
           </div>
 
         ) : (null)}
+
 
       </div>
     </Layout>

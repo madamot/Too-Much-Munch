@@ -108,14 +108,14 @@ const Groups = () => {
                 {data.findUserByID.groups.data.map((group, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card recipe key={group._id} id={group._id}>
+                      <Card state='recipe' display='card' key={group._id} id={group._id}>
                         {group.name} <br />
                         {group.description}
                       </Card>
-                      <Card add />
+                      <Card state='add' display='card' />
                     </>
                   } else {
-                    return <Card recipe key={group._id} id={group._id}>
+                    return <Card state='recipe' display='card' key={group._id} id={group._id}>
                       {group.name} <br />
                       {group.description}
                     </Card>
@@ -123,7 +123,7 @@ const Groups = () => {
                 })}
               </Grid>
             </>
-          : <><p>You have no recipes</p><Card add /></>
+          : <><p>You have no recipes</p><Card state='add' display='card' /></>
           )
         ]: (
           <div>loading...</div>

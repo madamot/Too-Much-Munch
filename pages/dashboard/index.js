@@ -37,6 +37,8 @@ const Dashboard = () => {
       logout,
     } = useAuth0();
 
+    const [display, setDisplay] = useState('card');
+
 
   let id = user.sub;
   id = id.substring(6);
@@ -100,6 +102,11 @@ const Dashboard = () => {
 
         ) : (null)}
 
+        <div>
+          <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+          <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+        </div><br />
+
         {data ? [
           (Object.keys(data.findUserByID.recipes.data).length > 0 ?
             <>
@@ -107,22 +114,20 @@ const Dashboard = () => {
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card recipe key={recipe._id} id={recipe._id}>
-                        {recipe.name} <br />
-                        {recipe.description}
+                      <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                        {recipe.name}
                       </Card>
-                      <Card add />
+                      <Card state='add' display={display} />
                     </>
                   } else {
-                    return <Card recipe key={recipe._id} id={recipe._id}>
-                      {recipe.name} <br />
-                      {recipe.description}
+                    return <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                      {recipe.name}
                     </Card>
                   }
                 })}
               </Grid>
             </>
-          : <><p>You have no recipes</p><Card add /></>
+          : <><p>You have no recipes</p><Card state='add' display={display} /></>
           )
         ]: (
           <div>loading...</div>

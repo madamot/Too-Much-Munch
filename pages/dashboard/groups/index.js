@@ -15,6 +15,19 @@ import { graphQLClient } from '../../../utils/graphql-client';
 
 import Cookie from "js-cookie";
 
+const Grid = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  &:after {
+  content: "";
+  width: 250px;
+  margin: 1rem;
+}
+`;
+
 
 const Groups = () => {
   const {
@@ -26,11 +39,46 @@ const Groups = () => {
       logout,
     } = useAuth0();
 
+    let id = user.sub;
+    id = id.substring(6);
+
+    console.log(id);
+
+    const fetcher = async (query) => await graphQLClient.request(query, { id });
+
+    const query = gql`
+      query getGroupsByUser($id: String!) {
+        findUserByID(id: $id) {
+          _id
+          groups {
+            data {
+              _id
+              name
+            }
+          }
+        }
+      }
+    `;
+
+    const { data, faunaerror } = useSWR([query, id], fetcher);
+
+     if (faunaerror) return <div>failed to load</div>;
+
+     console.log(data);
+
+
+
+     if (data) {
+       if (data.findUserByID) {
+         Cookie.set("FaunaID", data.findUserByID._id)
+         console.log(data.findUserByID._id);
+       }
+     }
 
   return (
     <Layout dashboard>
       <Head>
-        <title>Grou[s]</title>
+        <title>Groups]</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -52,6 +100,34 @@ const Groups = () => {
           </div>
 
         ) : (<p>Loading</p>)}
+
+        {data ? [
+          (Object.keys(data.findUserByID.groups.data).length > 0 ?
+            <>
+              <Grid>
+                {data.findUserByID.groups.data.map((group, i, arr) => {
+                  if (arr.length - 1 === i) {
+                    return <>
+                      <Card recipe key={group._id} id={group._id}>
+                        {group.name} <br />
+                        {group.description}
+                      </Card>
+                      <Card add />
+                    </>
+                  } else {
+                    return <Card recipe key={group._id} id={group._id}>
+                      {group.name} <br />
+                      {group.description}
+                    </Card>
+                  }
+                })}
+              </Grid>
+            </>
+          : <><p>You have no recipes</p><Card add /></>
+          )
+        ]: (
+          <div>loading...</div>
+        )}
 
       </div>
     </Layout>

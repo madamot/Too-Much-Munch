@@ -51,7 +51,7 @@ const Todo = () => {
 
   return (
     <Layout dashboard>
-      <h1>Edit Todo</h1>
+      <h1>Edit Recipe</h1>
 
       {data ? (
         <>

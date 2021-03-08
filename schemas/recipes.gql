@@ -7,9 +7,16 @@ type Recipe @collection(name: "recipes") {
 type User @collection(name: "users") {
   id: String! @unique
   recipes: [Recipe!] @relation(name: "user_created_recipes")
+  groups: [Group!] @relation(name: "user_in_group")
+}
+
+type Group @collection(name: "groups") {
+  name: String!
+  users: [User!] @relation(name: "user_in_group")
 }
 
 type Query {
+  allGroups: [Group!] @index(name: "all_groups")
   allRecipes: [Recipe!] @index(name: "all_recipes")
   allUsers: [User!]
   findUserByID(id: String!): User

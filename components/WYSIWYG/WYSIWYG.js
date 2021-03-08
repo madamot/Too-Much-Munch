@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import dynamic from 'next/dynamic';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { convertToHTML } from 'draft-convert';
+import { convertToHTML, convertFromHTML } from 'draft-convert';
+import {stateFromHTML} from 'draft-js-import-html';
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then(mod => mod.Editor),
   { ssr: false }
 )
 
+
 const WYSIWYGEditor = props => {
+
+if (props.convo) {
+  useEffect(() => {
+    const blocksFromHTML = convertFromHTML(
+          props.convo
+      );
+
+
+      // const content = ContentState.createFromBlockArray(
+      //     blocksFromHTML.contentBlocks,
+      //     blocksFromHTML.entityMap
+      // );
+
+      setEditorState(EditorState.createWithContent(blocksFromHTML));
+  }, [props.convo]);
+}
+
 
   const [editorState, setEditorState] = useState(
     () => EditorState.createEmpty(),
@@ -23,7 +42,30 @@ const WYSIWYGEditor = props => {
   }
 
   const convertContentToHTML = () => {
-    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+    let currentContentAsHTML = convertToHTML({
+      blockToHTML: (block) => {
+        const type = block.type
+        console.log(block);
+        if (type === 'atomic') {
+          let url = block.data.url
+          return { start: "<img src='" + (url) + "'", end: "</img>" }
+        }
+        if (type === 'unstyled') {
+          return <p />
+        }
+      },
+
+     //  blockToHTML: (block) => {
+     //   const type = block.type
+     //   if (type === 'atomic') {
+     //     let url = block.data.src
+     //     return <img src={url} />
+     //   }
+     //   if (type === 'unstyled') {
+     //     return <p />
+     //   }
+     // },
+})(editorState.getCurrentContent());
     setConvertedContent(currentContentAsHTML);
     console.log("PROPS ==> ", props);
     return props.onChange(
@@ -31,9 +73,20 @@ const WYSIWYGEditor = props => {
     );
   }
 
+  const uploadCallback = (file) => {
+  return new Promise(
+    (resolve, reject) => {
+      resolve({ data: { link: "http://dummy_image_src.com" } });
+    }
+  );
+}
+
     return (
 
       <Editor
+        toolbar={{
+          options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'emoji', 'remove', 'history'],
+        }}
         editorState={editorState}
         onEditorStateChange={handleEditorChange}
       />

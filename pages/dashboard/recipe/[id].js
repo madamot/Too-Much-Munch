@@ -55,11 +55,12 @@ const Todo = () => {
 
       {data ? (
         <>
-          <h2>{data.findRecipeByID.name}</h2>
-          <br />
-          <p>{data.findRecipeByID.description}</p>
+          {/* <h2>{data.findRecipeByID.name}</h2>
+          <br /> */}
+          {/* <p>{data.findRecipeByID.description}</p> */}
+          {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
-          <EditForm defaultValues={data.findRecipeByID} id={id} />
+          {/* <EditForm defaultValues={data.findRecipeByID} id={id} /> */}
         </>
 
       ) : (
@@ -67,11 +68,11 @@ const Todo = () => {
       )}
 
 
-      {/* {data ? (
+      {data ? (
         <EditForm defaultValues={data.findRecipeByID} id={id} />
-        ) : (
+      ) : (
         <div>loading...</div>
-      )} */}
+      )}
     </Layout>
   );
 };

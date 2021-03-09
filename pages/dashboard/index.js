@@ -37,7 +37,7 @@ const Dashboard = () => {
       logout,
     } = useAuth0();
 
-    const [display, setDisplay] = useState('card');
+    const [display, setDisplay] = useState('list');
 
 
   let id = user.sub;

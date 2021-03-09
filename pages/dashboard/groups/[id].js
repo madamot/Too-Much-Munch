@@ -44,7 +44,7 @@ const Group = () => {
         name
         users {
           data {
-            id
+            username
           }
         }
       }
@@ -69,13 +69,13 @@ const Group = () => {
               if (arr.length - 1 === i) {
                 return <>
                   <Card state='groups' display='card' key={user._id} id={user._id}>
-                    {user.id}
+                    {user.username}
                   </Card>
                   <Card state='add' display='card' />
                 </>
               } else {
                 return <Card state='groups' display='card' key={user._id} id={user._id}>
-                  {user.id}
+                  {user.username}
                 </Card>
               }
             })}

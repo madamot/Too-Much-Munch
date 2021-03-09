@@ -39,6 +39,8 @@ const Groups = () => {
       logout,
     } = useAuth0();
 
+    const [display, setDisplay] = useState('list');
+
     let id = user.sub;
     id = id.substring(6);
 
@@ -101,6 +103,11 @@ const Groups = () => {
 
         ) : (<p>Loading</p>)}
 
+        <div>
+          <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+          <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+        </div><br />
+
         {data ? [
           (Object.keys(data.findUserByID.groups.data).length > 0 ?
             <>
@@ -108,14 +115,14 @@ const Groups = () => {
                 {data.findUserByID.groups.data.map((group, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card state='groups' display='card' key={group._id} id={group._id}>
+                      <Card state='groups' display={display} key={group._id} id={group._id}>
                         {group.name} <br />
                         {group.description}
                       </Card>
-                      <Card state='add' display='card' />
+                      <Card state='add' display={display} />
                     </>
                   } else {
-                    return <Card state='groups' display='card' key={group._id} id={group._id}>
+                    return <Card state='groups' display={display} key={group._id} id={group._id}>
                       {group.name} <br />
                       {group.description}
                     </Card>
@@ -123,7 +130,7 @@ const Groups = () => {
                 })}
               </Grid>
             </>
-          : <><p>You have no recipes</p><Card state='add' display='card' /></>
+          : <><p>You have no Groups</p><Card state='add' display={display} /></>
           )
         ]: (
           <div>loading...</div>

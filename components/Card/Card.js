@@ -101,7 +101,7 @@ const Card = ({ display, state, id, children}) => {
             <Link href="/dashboard/new">
               {
                 (display == 'list') ? (
-                  <p>➕ New recipe</p>
+                  <p>➕ New</p>
                 )
                 : (
                   <svg width="158" height="156" viewBox="0 0 158 156" fill="none" xmlns="http://www.w3.org/2000/svg">

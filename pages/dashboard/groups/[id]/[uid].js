@@ -9,10 +9,10 @@ import { gql } from 'graphql-request';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { convertFromHTML } from 'draft-convert';
-import Layout from '../../../components/layout/layout';
-import Button from '../../../components/Button/Button';
-import Card from '../../../components/Card/Card';
-import { graphQLClient } from '../../../utils/graphql-client';
+import Layout from '../../../../components/layout/layout';
+import Button from '../../../../components/Button/Button';
+import Card from '../../../../components/Card/Card';
+import { graphQLClient } from '../../../../utils/graphql-client';
 
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
@@ -22,42 +22,39 @@ const Grid = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-
-  &:after {
-  content: "";
-  width: 250px;
-  margin: 1rem;
 }
 `;
 
 
-const Group = () => {
+const User = () => {
 
   const router = useRouter();
-  const { id } = router.query;
+  const { uid, id } = router.query;
 
-  console.log(id);
+  console.log(uid);
 
-  const fetcher = async (query) => await graphQLClient.request(query, { id });
+  const fetcher = async (query) => await graphQLClient.request(query, { uid });
 
   const query = gql`
-    query FindAGroupByID($id: ID!) {
-      findGroupByID(id: $id) {
+    query getRecipesByUser($uid: String!) {
+      findUserByID(id: $uid) {
         _id
-        name
-        users {
+        username
+        recipes {
           data {
-            username
-            id
+            _id
+            name
+            description
           }
         }
       }
     }
   `;
 
-  const { data, error } = useSWR([query, id], fetcher);
+  const { data, error } = useSWR([query, uid], fetcher);
 
-  if (error) return <div>failed to load</div>;
+  // if (error) return console.log(error);
+  console.log(error);
 
 
   return (
@@ -66,24 +63,25 @@ const Group = () => {
 
       {data ? (
         <>
-          <h1>{data.findGroupByID.name}</h1>
+
+          <h1>{data.findUserByID.username}'s recipes</h1>
           <br />
+
           <Grid>
-            {data.findGroupByID.users.data.map((user, i, arr) => {
+            {data.findUserByID.recipes.data.map((recipe, i, arr) => {
               if (arr.length - 1 === i) {
                 return <>
-                  <Link href={`/dashboard/groups/${id}/[uid]`} as={`/dashboard/groups/${id}/${user.id}`}>
+                  <Link href={`/dashboard/groups/[id]/[uid]/[rid]`} as={`/dashboard/groups/${id}/${uid}/${recipe._id}`}>
                     <a>
-                      <p>{user.username}</p>
-                      <Card state='add' display='card' />
+                      {recipe.name}
                     </a>
                   </Link>
                 </>
               } else {
                 return <>
-                  <Link href={`/dashboard/groups/${id}/[uid]`} as={`/dashboard/groups/${id}/${user.id}`}>
+                  <Link href={`/dashboard/groups/[id]/[uid]/[rid]`} as={`/dashboard/groups/${id}/${uid}/${recipe._id}`}>
                     <a>
-                      <p>{user.username}</p>
+                      {recipe.name}
                     </a>
                   </Link>
                 </>
@@ -103,7 +101,7 @@ const Group = () => {
 };
 
 
-export default withAuthenticationRequired(Group, {
+export default withAuthenticationRequired(User, {
   // Show a message while the user waits to be redirected to the login page.
   onRedirecting: () => <div>Redirecting you to the login page...</div>,
 });

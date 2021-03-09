@@ -1,4 +1,5 @@
-import React, { useStatem } from 'react';
+import React, { useState } from 'react';
+import Head from 'next/head'
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import useSWR from 'swr';
@@ -11,7 +12,7 @@ import Button from '../../../components/Button/Button';
 import EditForm from '../../../components/EditForm/EditForm';
 import { graphQLClient } from '../../../utils/graphql-client';
 
-const Todo = () => {
+const Recipe = () => {
 
 
   const router = useRouter();
@@ -77,4 +78,4 @@ const Todo = () => {
   );
 };
 
-export default Todo;
+export default Recipe;

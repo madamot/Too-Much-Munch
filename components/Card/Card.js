@@ -14,6 +14,7 @@ const Container = styled.div`
   text-align: left;
   color: inherit;
   text-decoration: none;
+  min-width: 0;
 
   ${({ state, display }) =>
   state === 'add' && display === 'card' &&
@@ -25,25 +26,25 @@ const Container = styled.div`
       background: grey;
       height: 306px;
       max-width: 250px;
-      min-width: 250px;
+      ${'' /* min-width: 250px; */}
 
-      @media (max-width: 900px) {
+      ${'' /* @media (max-width: 900px) {
         max-width: 200px;
         min-width: 200px;
-      }
+      } */}
     `}
 
     ${({ display }) =>
     display === 'card'  &&
       css`
       margin: 1rem;
-      max-height: 306px;
-      max-width: 250px;
+      height: 25vh;
+      width: 20vw;
       border: solid 1px lightgrey;
-      @media (max-width: 900px) {
+      ${'' /* @media (max-width: 900px) {
         max-width: 200px;
         min-width: 200px;
-      }
+      } */}
       `}
 
     ${({ display }) =>
@@ -113,7 +114,7 @@ const Card = ({ display, state, id, children}) => {
           )
           : (
             <>
-              <Link href="/dashboard/recipe/[id]" as={`/dashboard/recipe/${id}`}>
+              <Link href={`/dashboard/${state}/[id]`} as={`/dashboard/${state}/${id}`}>
                 <a>
                   <Details display={display} state={state}>
                     {children}

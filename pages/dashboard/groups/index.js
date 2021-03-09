@@ -78,7 +78,7 @@ const Groups = () => {
   return (
     <Layout dashboard>
       <Head>
-        <title>Groups]</title>
+        <title>Groups</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -108,14 +108,14 @@ const Groups = () => {
                 {data.findUserByID.groups.data.map((group, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card state='recipe' display='card' key={group._id} id={group._id}>
+                      <Card state='groups' display='card' key={group._id} id={group._id}>
                         {group.name} <br />
                         {group.description}
                       </Card>
                       <Card state='add' display='card' />
                     </>
                   } else {
-                    return <Card state='recipe' display='card' key={group._id} id={group._id}>
+                    return <Card state='groups' display='card' key={group._id} id={group._id}>
                       {group.name} <br />
                       {group.description}
                     </Card>

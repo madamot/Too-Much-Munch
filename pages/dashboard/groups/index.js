@@ -87,7 +87,7 @@ const Groups = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Groups</h1>
+      <h1>Groups 🥰</h1>
 
       {isLoading ? (
         <div>Loading...</div>
@@ -98,13 +98,6 @@ const Groups = () => {
       ) : (null)}
 
       <div>
-        {isAuthenticated ? (
-          <div>
-            <h3>Hello, {user.nickname}</h3>
-
-          </div>
-
-        ) : (<p>Loading</p>)}
 
         <div>
           <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>

@@ -14,11 +14,13 @@ import Button from '../../../components/Button/Button';
 import Card from '../../../components/Card/Card';
 import { graphQLClient } from '../../../utils/graphql-client';
 
+import { useDisplay } from "../../../utils/hooks";
+
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 
 const Grid = styled.div`
-  display: flex;
+  ${'' /* display: flex; */}
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -35,6 +37,8 @@ const Group = () => {
 
   const router = useRouter();
   const { id } = router.query;
+
+  const [ display, setDisplay ] = useDisplay();
 
   console.log(id);
 
@@ -64,18 +68,25 @@ const Group = () => {
     <Layout dashboard>
 
 
+
       {data ? (
         <>
           <h1>{data.findGroupByID.name}</h1>
           <br />
+          <div>
+            <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+            <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+          </div><br />
           <Grid>
             {data.findGroupByID.users.data.map((user, i, arr) => {
               if (arr.length - 1 === i) {
                 return <>
                   <Link href={`/dashboard/groups/${id}/[uid]`} as={`/dashboard/groups/${id}/${user.id}`}>
                     <a>
-                      <p>{user.username}</p>
-                      <Card state='add' display='card' />
+                      <Card state='groups' display={display} key={user.id} id={user.id}>
+                        {user.username}
+                      </Card>
+                      <Card state='add' display={display} />
                     </a>
                   </Link>
                 </>
@@ -83,7 +94,9 @@ const Group = () => {
                 return <>
                   <Link href={`/dashboard/groups/${id}/[uid]`} as={`/dashboard/groups/${id}/${user.id}`}>
                     <a>
-                      <p>{user.username}</p>
+                      <Card state='groups' display={display} key={user.id} id={user.id}>
+                        {user.username}
+                      </Card>
                     </a>
                   </Link>
                 </>

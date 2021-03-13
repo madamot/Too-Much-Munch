@@ -2,22 +2,21 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
-import { useForm, Controller } from 'react-hook-form';
-import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
-import Layout from '../../components/layout/layout'
-import Button from '../../components/Button/Button';
-import Card from '../../components/Card/Card';
+import { useForm } from 'react-hook-form';
+import Layout from '../../../components/layout/layout'
+import Button from '../../../components/Button/Button';
+import Card from '../../../components/Card/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
-import { graphQLClient } from '../../utils/graphql-client';
+import { graphQLClient } from '../../../utils/graphql-client';
 
 import Cookie from "js-cookie";
 
 
-const New = () => {
+const NewGroup = () => {
   const {
       isLoading,
       isAuthenticated,
@@ -29,32 +28,25 @@ const New = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { handleSubmit, register, errors, control } = useForm({
-    mode: "onChange"
-  });
+  const { handleSubmit, register, errors } = useForm();
 
   let faunaID = Cookie.get('FaunaID');
 
   let sub = user.sub;
 
-  const onSubmit = handleSubmit(async ({ name, description }) => {
+  const onSubmit = handleSubmit(async ({ name }) => {
     if (errorMessage) setErrorMessage('');
     console.log(faunaID);
 
 
 
       const query = gql`
-        mutation CreateARecipe($faunaID: [ID], $name: String!, $description: String!) {
-          createRecipe(data: {
-            author: { connect: $faunaID}
-            name: $name
-            description: $description
+        mutation CreateAGroup($faunaID: [ID], $name: String!) {
+          createGroup(data: {
+            name: $name,
+            users: { connect: $faunaID, }
           }) {
-            author {
-              id
-            }
             name
-            description
           }
         }
       `;
@@ -65,12 +57,11 @@ const New = () => {
           faunaID,
           sub,
           name,
-          description,
         };
 
     try {
       await graphQLClient.request(query, variables);
-      Router.push('/dashboard');
+      Router.push('/dashboard/groups');
     } catch (error) {
       console.log(error);
       console.log(errorMessage);
@@ -82,7 +73,7 @@ const New = () => {
   return (
     <Layout dashboard>
       <Head>
-        <title>New Recipe</title>
+        <title>New Group</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -103,34 +94,16 @@ const New = () => {
 
             <form onSubmit={onSubmit}>
               <div>
-                <label>Recipe name</label>
+                <label>Group name</label>
                 <input
                   type="text"
                   name="name"
                   placeholder="e.g. bolognese"
                   ref={register({ required: 'Name is required' })}
                 />
-                <label>Recipe description</label>
-                {/* <input
-                  type="text"
-                  name="description"
-                  placeholder="e.g. saucy"
-                  ref={register({ required: 'Description is required' })}
-                /> */}
-                <Controller
-                  as={<WYSIWYGEditor />}
-                  name="description"
-                  control={control}
-                  defaultValue=''
-                />
                 {errors.name &&  (
                   <span role="alert">
                     {errors.name.message}
-                  </span>
-                )}
-                {errors.description &&  (
-                  <span role="alert">
-                    {errors.description.message}
                   </span>
                 )}
               </div>
@@ -152,11 +125,11 @@ const New = () => {
       );
     }
 
-    New.getInitialProps = () => {
+    NewGroup.getInitialProps = () => {
 
     }
 
-    export default withAuthenticationRequired(New, {
+    export default withAuthenticationRequired(NewGroup, {
       // Show a message while the user waits to be redirected to the login page.
       onRedirecting: () => <div>Redirecting you to the login page...</div>,
     });

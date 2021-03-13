@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
+import Link from 'next/link';
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -9,6 +10,8 @@ import Card from '../../../components/Card/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
+import { useDisplay } from "../../../utils/hooks";
+
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../../utils/graphql-client';
@@ -16,7 +19,7 @@ import { graphQLClient } from '../../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  display: flex;
+  ${'' /* display: flex; */}
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -39,7 +42,7 @@ const Groups = () => {
       logout,
     } = useAuth0();
 
-    const [display, setDisplay] = useState('list');
+    const [ display, setDisplay ] = useDisplay();
 
     let id = user.sub;
     id = id.substring(6);
@@ -115,22 +118,34 @@ const Groups = () => {
                 {data.findUserByID.groups.data.map((group, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card state='groups' display={display} key={group._id} id={group._id}>
-                        {group.name} <br />
-                        {group.description}
-                      </Card>
-                      <Card state='add' display={display} />
+                      <Link href={`/dashboard/groups/[id]`} as={`/dashboard/groups/${group._id}`}>
+                        <a>
+                          <Card state='groups' display={display} key={group._id} id={group._id}>
+                            {group.name}
+                          </Card>
+                        </a>
+                      </Link>
+                      <Link href="/dashboard/groups/new">
+                        <a>
+                          <Card state='add' display={display} />
+                        </a>
+                      </Link>
                     </>
                   } else {
-                    return <Card state='groups' display={display} key={group._id} id={group._id}>
-                      {group.name} <br />
-                      {group.description}
-                    </Card>
+                    return <>
+                      <Link href={`/dashboard/groups/[id]`} as={`/dashboard/groups/${group._id}`}>
+                        <a>
+                          <Card state='groups' display={display} key={group._id} id={group._id}>
+                            {group.name}
+                          </Card>
+                        </a>
+                      </Link>
+                    </>
                   }
                 })}
               </Grid>
             </>
-          : <><p>You have no Groups</p><Card state='add' display={display} /></>
+          : <><p>You have no Groups</p><Link href="/dashboard/groups/new"><a><Card state='add' display={display} /></a></Link></>
           )
         ]: (
           <div>loading...</div>

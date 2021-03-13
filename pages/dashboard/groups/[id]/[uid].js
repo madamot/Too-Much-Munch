@@ -14,11 +14,13 @@ import Button from '../../../../components/Button/Button';
 import Card from '../../../../components/Card/Card';
 import { graphQLClient } from '../../../../utils/graphql-client';
 
+import { useDisplay } from "../../../../utils/hooks";
+
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 
 const Grid = styled.div`
-  display: flex;
+  ${'' /* display: flex; */}
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -30,6 +32,8 @@ const User = () => {
 
   const router = useRouter();
   const { uid, id } = router.query;
+
+  const [ display, setDisplay ] = useDisplay();
 
   console.log(uid);
 
@@ -67,13 +71,20 @@ const User = () => {
           <h1>{data.findUserByID.username}'s recipes</h1>
           <br />
 
+          <div>
+            <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+            <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+          </div><br />
+
           <Grid>
             {data.findUserByID.recipes.data.map((recipe, i, arr) => {
               if (arr.length - 1 === i) {
                 return <>
                   <Link href={`/dashboard/groups/[id]/[uid]/[rid]`} as={`/dashboard/groups/${id}/${uid}/${recipe._id}`}>
                     <a>
-                      {recipe.name}
+                      <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                        {recipe.name}
+                      </Card>
                     </a>
                   </Link>
                 </>
@@ -81,7 +92,9 @@ const User = () => {
                 return <>
                   <Link href={`/dashboard/groups/[id]/[uid]/[rid]`} as={`/dashboard/groups/${id}/${uid}/${recipe._id}`}>
                     <a>
-                      {recipe.name}
+                      <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                        {recipe.name}
+                      </Card>
                     </a>
                   </Link>
                 </>

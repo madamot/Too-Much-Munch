@@ -8,6 +8,8 @@ import Card from '../../components/Card/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
+import { useDisplay } from "../../utils/hooks";
+
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
@@ -15,7 +17,7 @@ import { graphQLClient } from '../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  display: flex;
+  ${'' /* display: flex; */}
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -37,7 +39,9 @@ const Dashboard = () => {
       logout,
     } = useAuth0();
 
-    const [display, setDisplay] = useState('list');
+    const [ display, setDisplay ] = useDisplay();
+
+    // const [display, setDisplay] = useState('list');
 
 
   let id = user.sub;
@@ -114,21 +118,35 @@ const Dashboard = () => {
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
-                        {recipe.name}
-                      </Card>
-                      <Card state='add' display={display} />
+                      <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
+                        <a>
+                          <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                            {recipe.name}
+                          </Card>
+                        </a>
+                      </Link>
+                      <Link href="/dashboard/new">
+                        <a>
+                          <Card state='add' display={display} />
+                        </a>
+                      </Link>
+                        </>
+                        } else {
+                          return <>
+                            <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
+                              <a>
+                                <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                                  {recipe.name}
+                                </Card>
+                              </a>
+                            </Link>
+                          </>
+                        }
+                        })}
+                      </Grid>
                     </>
-                  } else {
-                    return <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
-                      {recipe.name}
-                    </Card>
-                  }
-                })}
-              </Grid>
-            </>
-          : <><p>You have no recipes</p><Card state='add' display={display} /></>
-          )
+                    : <><p>You have no recipes</p><Link href="/dashboard/new"><a><Card state='add' display={display} /></a></Link></>
+                    )
         ]: (
           <div>loading...</div>
         )}

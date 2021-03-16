@@ -110,7 +110,6 @@ const NewGroup = () => {
 
               <div>
                 <Button type="submit" primary size="small" label="Create" />
-                {/* <button type="submit">Create</button> */}
               </div>
             </form>
 

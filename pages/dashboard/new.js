@@ -44,7 +44,7 @@ const New = () => {
 
 
       const query = gql`
-        mutation CreateARecipe($faunaID: [ID], $name: String!, $description: String!) {
+        mutation CreateARecipe($faunaID: ID, $name: String!, $description: String!) {
           createRecipe(data: {
             author: { connect: $faunaID}
             name: $name

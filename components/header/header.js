@@ -90,7 +90,7 @@ const Header = ({dashboard}) => {
           {!isLoading && (
             isAuthenticated ? (
               <div className="multiButtons">
-                <Button size="small" onClick={() => logout({ returnTo: '/' })} label="Log out" />
+                <Button size="small" onClick={() => logout({ returnTo: url })} label="Log out" />
                 <Link href='/dashboard'>
                   <Button primary size="small" label="Dashboard" />
                 </Link>

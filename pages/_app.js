@@ -11,7 +11,7 @@ const App = ({ Component, pageProps }) => {
    <Auth0Provider
      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
-     redirectUri='https://toomuchmunch.com'
+     redirectUri={url}
    >
 
      <Component {...pageProps} />

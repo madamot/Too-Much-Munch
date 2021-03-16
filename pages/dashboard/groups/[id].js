@@ -50,7 +50,6 @@ const Group = () => {
 
   const { handleSubmit, errors } = useForm();
 
-  console.log(id);
 
   const fetcher = async (query) => await graphQLClient.request(query, { id });
 
@@ -62,6 +61,7 @@ const Group = () => {
         admin {
           username
           id
+          email
         }
         users {
           data {
@@ -116,13 +116,16 @@ const Group = () => {
   };
 
 
+  console.log(user.sub);
+
+
   return (
     <Layout dashboard>
 
       {data ? (
         <>
           <div>
-            {data.findGroupByID.admin.id = user.sub ? (
+            {data.findGroupByID.admin.email == user.email ? (
               <GroupEditForm defaultValues={data.findGroupByID} id={data.findGroupByID._id} />
             ) : ( <h1>{data.findGroupByID.name}</h1>
             )}
@@ -161,7 +164,7 @@ const Group = () => {
             })}
           </Grid>
           <br />
-          {data.findGroupByID.admin.id = user.sub ? (
+          {data.findGroupByID.admin.email === user.email ? (
           null ) : (
             <Button size='small' label='Leave group' onClick={() => leaveAGroup(data.findGroupByID._id)}/>
           )}
@@ -172,11 +175,6 @@ const Group = () => {
       ) : (
         <div>loading...</div>
       )}
-
-
-
-
-
 
     </Layout>
   );

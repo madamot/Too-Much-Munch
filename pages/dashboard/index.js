@@ -8,6 +8,8 @@ import Card from '../../components/Card/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
+import { useDisplay } from "../../utils/hooks";
+
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { graphQLClient } from '../../utils/graphql-client';
@@ -15,7 +17,7 @@ import { graphQLClient } from '../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  display: flex;
+  ${'' /* display: flex; */}
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -36,6 +38,10 @@ const Dashboard = () => {
       loginWithRedirect,
       logout,
     } = useAuth0();
+
+    const [ display, setDisplay ] = useDisplay();
+
+    // const [display, setDisplay] = useState('list');
 
 
   let id = user.sub;
@@ -96,9 +102,14 @@ const Dashboard = () => {
 
       <div>
         {isAuthenticated ? (
-          <h1>Hello {user.nickname}, your recipes</h1>
+          <h1>Your recipes 🍳</h1>
 
         ) : (null)}
+
+        <div>
+          <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+          <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+        </div><br />
 
         {data ? [
           (Object.keys(data.findUserByID.recipes.data).length > 0 ?
@@ -107,23 +118,35 @@ const Dashboard = () => {
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <>
-                      <Card recipe key={recipe._id} id={recipe._id}>
-                        {recipe.name} <br />
-                        {recipe.description}
-                      </Card>
-                      <Card add />
+                      <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
+                        <a>
+                          <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                            {recipe.name}
+                          </Card>
+                        </a>
+                      </Link>
+                      <Link href="/dashboard/new">
+                        <a>
+                          <Card state='add' display={display} />
+                        </a>
+                      </Link>
+                        </>
+                        } else {
+                          return <>
+                            <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
+                              <a>
+                                <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                                  {recipe.name}
+                                </Card>
+                              </a>
+                            </Link>
+                          </>
+                        }
+                        })}
+                      </Grid>
                     </>
-                  } else {
-                    return <Card recipe key={recipe._id} id={recipe._id}>
-                      {recipe.name} <br />
-                      {recipe.description}
-                    </Card>
-                  }
-                })}
-              </Grid>
-            </>
-          : <><p>You have no recipes</p><Card add /></>
-          )
+                    : <><p>You have no recipes</p><Link href="/dashboard/new"><a><Card state='add' display={display} /></a></Link></>
+                    )
         ]: (
           <div>loading...</div>
         )}

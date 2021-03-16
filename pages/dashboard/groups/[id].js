@@ -71,7 +71,11 @@ const Group = () => {
 
       {data ? (
         <>
-          <h1>{data.findGroupByID.name}</h1>
+          <div>
+            <h1>{data.findGroupByID.name}</h1>
+            <h2>{`Code: ${data.findGroupByID._id}`}</h2>
+            <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
+          </div>
           <br />
           <div>
             <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>

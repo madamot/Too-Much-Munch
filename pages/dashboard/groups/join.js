@@ -16,7 +16,7 @@ import { graphQLClient } from '../../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 
-const NewGroup = () => {
+const JoinGroup = () => {
   const {
       isLoading,
       isAuthenticated,
@@ -34,17 +34,16 @@ const NewGroup = () => {
 
   let sub = user.sub;
 
-  const onSubmit = handleSubmit(async ({ name }) => {
+  const onSubmit = handleSubmit(async ({ id }) => {
     if (errorMessage) setErrorMessage('');
     console.log(faunaID);
 
       const query = gql`
-        mutation CreateAGroup($faunaID: [ID], $name: String!) {
-          createGroup(data: {
-            name: $name,
-            users: { connect: $faunaID, }
+        mutation JoinGroup($id: ID!, $faunaID: [ID]) {
+          partialUpdateGroup(id: $id, data: {
+            users: { connect: $faunaID}
           }) {
-            name
+            _id
           }
         }
       `;
@@ -54,12 +53,12 @@ const NewGroup = () => {
     const variables = {
           faunaID,
           sub,
-          name,
+          id,
         };
 
     try {
       await graphQLClient.request(query, variables);
-      Router.push('/dashboard/groups');
+      Router.push('/dashboard/groups/' + id);
     } catch (error) {
       console.log(error);
       console.log(errorMessage);
@@ -75,7 +74,7 @@ const NewGroup = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Create a new Group 👨‍👩‍👧‍👦 +</h1>
+      <h1>Join a Group 👨‍👩‍👧‍👦 +</h1>
 
       {isLoading ? (
         <div>Loading...</div>
@@ -90,12 +89,12 @@ const NewGroup = () => {
           <div>
             <form onSubmit={onSubmit}>
               <div>
-                <label>Group name</label>
+                <label>Group Code</label>
                 <input
                   type="text"
-                  name="name"
-                  placeholder="e.g. bolognese"
-                  ref={register({ required: 'Name is required' })}
+                  name="id"
+                  placeholder=""
+                  ref={register({ required: 'Group ID is required' })}
                 />
                 {errors.name &&  (
                   <span role="alert">
@@ -105,7 +104,7 @@ const NewGroup = () => {
               </div>
 
               <div>
-                <Button type="submit" primary size="small" label="Create" />
+                <Button type="submit" primary size="small" label="Join Group" />
                 {/* <button type="submit">Create</button> */}
               </div>
             </form>
@@ -121,11 +120,11 @@ const NewGroup = () => {
       );
     }
 
-    NewGroup.getInitialProps = () => {
+    JoinGroup.getInitialProps = () => {
 
     }
 
-    export default withAuthenticationRequired(NewGroup, {
+    export default withAuthenticationRequired(JoinGroup, {
       // Show a message while the user waits to be redirected to the login page.
       onRedirecting: () => <div>Redirecting you to the login page...</div>,
     });

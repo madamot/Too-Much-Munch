@@ -118,11 +118,20 @@ const Groups = () => {
                           </Card>
                         </a>
                       </Link>
+                      <br />
+                      <br />
                       <Link href="/dashboard/groups/new">
                         <a>
-                          <Card state='add' display={display} />
+                          <Button primary size='medium' label='Create a Group +' />
                         </a>
                       </Link>
+                      <Link href="/dashboard/groups/join">
+                        <a>
+                          <Button primary size='medium' label='Join a Group +' />
+                        </a>
+                      </Link>
+                      <br />
+                      <br />
                     </>
                   } else {
                     return <>
@@ -138,7 +147,7 @@ const Groups = () => {
                 })}
               </Grid>
             </>
-          : <><p>You have no Groups</p><Link href="/dashboard/groups/new"><a><Card state='add' display={display} /></a></Link></>
+          : <><p>You have no Groups</p><Link href="/dashboard/groups/new"><a><Button size='small' label='Create a Group' /></a></Link></>
           )
         ]: (
           <div>loading...</div>

@@ -49,6 +49,9 @@ const Group = () => {
       findGroupByID(id: $id) {
         _id
         name
+        admin {
+          username
+        }
         users {
           data {
             username
@@ -75,6 +78,7 @@ const Group = () => {
             <h1>{data.findGroupByID.name}</h1>
             <h2>{`Code: ${data.findGroupByID._id}`}</h2>
             <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
+            <h5>{`Admin: ${data.findGroupByID.admin.username}`}</h5>
           </div>
           <br />
           <div>
@@ -90,7 +94,6 @@ const Group = () => {
                       <Card state='groups' display={display} key={user.id} id={user.id}>
                         {user.username}
                       </Card>
-                      <Card state='add' display={display} />
                     </a>
                   </Link>
                 </>

@@ -32,6 +32,8 @@ const NewGroup = () => {
 
   let faunaID = Cookie.get('FaunaID');
 
+  let adminID = Cookie.get('FaunaID');
+
   let sub = user.sub;
 
   const onSubmit = handleSubmit(async ({ name }) => {
@@ -39,10 +41,11 @@ const NewGroup = () => {
     console.log(faunaID);
 
       const query = gql`
-        mutation CreateAGroup($faunaID: [ID], $name: String!) {
+        mutation CreateAGroup($faunaID: [ID], $adminID: ID, $name: String!) {
           createGroup(data: {
             name: $name,
             users: { connect: $faunaID, }
+            admin: { connect: $adminID, }
           }) {
             name
           }
@@ -53,6 +56,7 @@ const NewGroup = () => {
 
     const variables = {
           faunaID,
+          adminID,
           sub,
           name,
         };

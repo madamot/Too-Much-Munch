@@ -15,6 +15,7 @@ type User @collection(name: "users") {
 type Group @collection(name: "groups") {
   name: String!
   users: [User] @relation(name: "user_in_group")
+  admin: User!
 }
 
 type Query {

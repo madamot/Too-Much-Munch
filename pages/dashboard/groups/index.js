@@ -147,7 +147,19 @@ const Groups = () => {
                 })}
               </Grid>
             </>
-          : <><p>You have no Groups</p><Link href="/dashboard/groups/new"><a><Button size='small' label='Create a Group' /></a></Link></>
+          : <>
+            <p>You have no Groups</p>
+            <Link href="/dashboard/groups/new">
+              <a>
+                <Button primary size='medium' label='Create a Group +' />
+              </a>
+            </Link>
+            <Link href="/dashboard/groups/join">
+              <a>
+                <Button primary size='medium' label='Join a Group +' />
+              </a>
+            </Link>
+          </>
           )
         ]: (
           <div>loading...</div>

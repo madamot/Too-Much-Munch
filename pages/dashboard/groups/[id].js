@@ -98,7 +98,7 @@ const Group = () => {
 
   const leaveAGroup = async (id) => {
       const query = gql`
-        mutation LeaveGroup($id: [ID], $faunaID: ID!) {
+        mutation LeaveGroup($id: ID!, $faunaID: [ID]) {
           partialUpdateGroup(id: $id, data: {
             users: { disconnect: $faunaID}
           }) {

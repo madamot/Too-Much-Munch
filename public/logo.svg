@@ -1,0 +1,26 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 227 160.12">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 72px;
+        letter-spacing: 0em;
+      }
+
+      .cls-1, .cls-3 {
+        fill: #0d1c72;
+        font-family: BebasNeue-Regular, Bebas Neue;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        font-size: 100px;
+        letter-spacing: 0.02em;
+      }
+    </style>
+  </defs>
+  <text class="cls-1" transform="translate(3.1 61.2)">TOO Much</text>
+  <text class="cls-3" transform="translate(0 140.12)">Munch</text>
+</svg>

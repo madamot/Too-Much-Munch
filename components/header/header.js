@@ -87,6 +87,13 @@ const Header = ({dashboard}) => {
           </Link>
         </div>
         <div>
+          <Link href="blog/">
+            <a>
+              Blog
+            </a>
+          </Link>
+        </div>
+        <div>
           {!isLoading && (
             isAuthenticated ? (
               <div className="multiButtons">

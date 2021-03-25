@@ -95,6 +95,7 @@ export async function getStaticProps(context) {
   };
 }
 
+
 export default function Blog({data}) {
 
 
@@ -126,7 +127,13 @@ export default function Blog({data}) {
 
           {data.allBlogs.map(blog => {
             return (
-              <h1 key={blog.id}>{blog.title}</h1>
+              <div key={blog.id}>
+                <Link href={`/blog/[id]`} as={`/blog/${blog.id}`}>
+                  <a>
+                    <h1>{blog.title}</h1>
+                  </a>
+                </Link>
+              </div>
             );
           })}
         </Grid>

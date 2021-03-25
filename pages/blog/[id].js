@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
-import { useRouter } from 'next/router';
-import Router from 'next/router';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import Layout from '../../components/layout/layout';
@@ -10,27 +8,6 @@ import EditForm from '../../components/EditForm/EditForm';
 import { graphQLClient } from '../../utils/graphql-client';
 
 import { request } from "../../utils/datocms";
-
-
-const BLOG_QUERY = `
-query MyQuery($id: ItemId) {
-  blog(filter: {id: {eq: $id}}) {
-    title
-  }
-}
-`;
-
-export async function getStaticProps(context) {
-  const data = await request({
-    query: BLOG_QUERY,
-    variables: { limit: 10 },
-    preview: context.preview
-  });
-  return {
-    props: { data }
-  };
-}
-
 
 const PATHS_QUERY = `
   query MyQuery {
@@ -41,27 +18,42 @@ const PATHS_QUERY = `
 `;
 
 export async function getStaticPaths() {
-  const data = await request({
+  const blogs = await request({
     query: PATHS_QUERY,
-    variables: { limit: 10 },
   });
 
-  const paths = data.allBlogs.map((blog) => ({
+  const paths = blogs.allBlogs.map((blog) => ({
     params: { id: blog.id },
   }))
 
   return { paths, fallback: false }
 }
 
-export default function BlogPost({data}) {
 
-  const router = useRouter();
-  const { id } = router.query;
+const BLOG_QUERY = `
+query MyQuery($id: ItemId) {
+  blog(filter: {id: {eq: $id}}) {
+    title
+  }
+}
+`;
+
+export async function getStaticProps({ params }) {
+  const blog = await request({
+    query: BLOG_QUERY,
+    variables: { id: params.id },
+    // preview: context.preview
+  });
+  return {
+    props: { blog }
+  };
+}
+
+export default function BlogPost({ blog }) {
 
   return (
     <Layout>
-      <h1>blog post</h1>
-      <h2>{data.blog.title}</h2>
+      <h1>{blog.blog.title}</h1>
     </Layout>
   );
 };

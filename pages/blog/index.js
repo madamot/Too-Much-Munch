@@ -64,11 +64,23 @@ const Subsubtitle = styled.h5`
 }
 `;
 
+const Grid = styled.div`
+  ${'' /* display: flex; */}
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
 const BLOGPAGE_QUERY = `
   query MyQuery {
     blogPage {
       id
       blogPageTitle
+    }
+    allBlogs {
+      title
+      createdAt
+      id
     }
   }
 `;
@@ -84,6 +96,10 @@ export async function getStaticProps(context) {
 }
 
 export default function Blog({data}) {
+
+
+  console.log(data.allBlogs);
+
     const {
       isLoading,
       isAuthenticated,
@@ -106,7 +122,15 @@ export default function Blog({data}) {
         {/* <Subtitle></Subtitle> */}
       </Hero>
       <Main>
-        <h1>📄 Blog</h1>
+        <Grid>
+
+          {data.allBlogs.map(blog => {
+            return (
+              <h1 key={blog.id}>{blog.title}</h1>
+            );
+          })}
+        </Grid>
+
       </Main>
     </Layout>
   )

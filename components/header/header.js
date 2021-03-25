@@ -87,7 +87,7 @@ const Header = ({dashboard}) => {
           </Link>
         </div>
         <div>
-          <Link href="blog/">
+          <Link href="/blog">
             <a>
               Blog
             </a>

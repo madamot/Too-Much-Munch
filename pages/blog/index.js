@@ -6,7 +6,6 @@ import styled, { css } from 'styled-components';
 // import styles from '../styles/Home.module.css'
 
 import { request } from "../../utils/datocms";
-import { StructuredText } from "react-datocms";
 
 import { useAuth0 } from '@auth0/auth0-react';
 

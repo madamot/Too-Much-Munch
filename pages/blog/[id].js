@@ -64,11 +64,11 @@ query MyQuery($id: ItemId) {
 }
 `;
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps(context) {
   const blog = await request({
     query: BLOG_QUERY,
-    variables: { id: params.id },
-    // preview: context.preview
+    variables: { id: context.params.id },
+    preview: context.preview
   });
   return {
     props: { blog }
@@ -109,7 +109,7 @@ export default function BlogPost({ blog }) {
           }
         }}
       />
-      
+
     </Layout>
   );
 };

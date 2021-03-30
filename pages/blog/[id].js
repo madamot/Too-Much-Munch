@@ -103,7 +103,7 @@ export default function BlogPost({ blog }) {
         renderBlock={({ record }) => {
           switch (record.__typename) {
             case "ImageRecord":
-              return <img src={record.image.url} alt={record.image.alt} />;
+              return <img width='100%' src={record.image.url} alt={record.image.alt} />;
             default:
               return null;
           }

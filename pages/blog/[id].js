@@ -39,6 +39,7 @@ query MyQuery($id: ItemId) {
     title
     blogImage {
       url
+      alt
     }
     blogDate
     content {
@@ -82,6 +83,7 @@ export default function BlogPost({ blog }) {
   return (
     <Layout>
       <h1>{blog.blog.title}</h1>
+      <img width='100%' src={blog.blog.blogImage.url} alt={blog.blog.blogImage.alt} />
       <StructuredText
         data={blog.blog.content}
         renderInlineRecord={({ record }) => {

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Container = styled.div`
   flex: 1;
-  border: 0;
+  border-radius: 5%;
   ${'' /* max-width: 200px; */}
   overflow: hidden;
   position: relative;
@@ -38,8 +38,8 @@ const Container = styled.div`
     display === 'card'  &&
       css`
       margin: 1rem;
-      height: 25vh;
-      width: 20vw;
+      height: 15rem;
+      width: 15rem;
       border: solid 1px lightgrey;
       ${'' /* @media (max-width: 900px) {
         max-width: 200px;
@@ -84,6 +84,10 @@ const Details = styled.div`
 const Image = styled.img`
   border: 0;
   cursor: pointer;
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  object-fit: cover;
   color: ${props => props.primary ? "white" : "#333"};
 
   ${({ display }) =>
@@ -93,7 +97,15 @@ const Image = styled.img`
     `}
 `;
 
-const Card = ({ display, state, id, children}) => {
+const ImageContainer = styled.div`
+  object-fit: contain;
+  height: 15vh;
+`;
+
+const Card = ({ display, state, id, children, imagesrc}) => {
+  if (!imagesrc) {
+    const imagesrc = "https://via.placeholder.com/250";
+  }
     return (
       <Container display={display} state={state}>
         {
@@ -115,17 +127,18 @@ const Card = ({ display, state, id, children}) => {
             // </Link>
           )
           : (
-            <>
+            <div>
               {/* <Link href={`/dashboard/${state}/[id]`} as={`/dashboard/${state}/${id}`}>
               <a> */}
+              <ImageContainer>
+                <Image display={display} state={state} src={imagesrc} />
+              </ImageContainer>
               <Details display={display} state={state}>
                 {children}
-
               </Details>
-              <Image display={display} state={state} src="https://via.placeholder.com/250" />
               {/* </a>
               </Link> */}
-            </>
+            </div>
           )
 
         }

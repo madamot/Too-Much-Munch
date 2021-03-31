@@ -3,6 +3,7 @@ import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
+import Card from '../../components/Card/Card';
 // import styles from '../styles/Home.module.css'
 
 import { request } from "../../utils/datocms";
@@ -64,10 +65,15 @@ const Subsubtitle = styled.h5`
 `;
 
 const Grid = styled.div`
-  ${'' /* display: flex; */}
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  &:after {
+  content: "";
+  width: 250px;
+  margin: 1rem;
+}
 `;
 
 const BLOGPAGE_QUERY = `
@@ -80,6 +86,9 @@ const BLOGPAGE_QUERY = `
       title
       createdAt
       id
+      blogImage {
+        url
+      }
     }
   }
 `;
@@ -129,7 +138,9 @@ export default function Blog({data}) {
               <div key={blog.id}>
                 <Link href={`/blog/[id]`} as={`/blog/${blog.id}`}>
                   <a>
-                    <h1>{blog.title}</h1>
+                    <Card state='recipe' display='card' key={blog.id} id={blog.id} imagesrc={blog.blogImage.url}>
+                      <strong>{blog.title}</strong>
+                    </Card>
                   </a>
                 </Link>
               </div>

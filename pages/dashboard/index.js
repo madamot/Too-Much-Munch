@@ -17,7 +17,7 @@ import { graphQLClient } from '../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  ${'' /* display: flex; */}
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -117,7 +117,7 @@ const Dashboard = () => {
               <Grid>
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {
                   if (arr.length - 1 === i) {
-                    return <>
+                    return <div key={recipe._id}>
                       <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
                         <a>
                           <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
@@ -130,23 +130,23 @@ const Dashboard = () => {
                           <Card state='add' display={display} />
                         </a>
                       </Link>
-                        </>
-                        } else {
-                          return <>
-                            <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
-                              <a>
-                                <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
-                                  {recipe.name}
-                                </Card>
-                              </a>
-                            </Link>
-                          </>
-                        }
-                        })}
-                      </Grid>
-                    </>
-                    : <><p>You have no recipes</p><Link href="/dashboard/new"><a><Card state='add' display={display} /></a></Link></>
-                    )
+                    </div>
+                  } else {
+                    return <div key={recipe._id}>
+                      <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
+                        <a>
+                          <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                            {recipe.name}
+                          </Card>
+                        </a>
+                      </Link>
+                    </div>
+                  }
+                })}
+              </Grid>
+            </>
+          : <><p>You have no recipes</p><Link href="/dashboard/new"><a><Card state='add' display={display} /></a></Link></>
+          )
         ]: (
           <div>loading...</div>
         )}

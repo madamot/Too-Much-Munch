@@ -4,7 +4,6 @@ import Link from 'next/link';
 
 const Container = styled.div`
   flex: 1;
-  border-radius: 5%;
   ${'' /* max-width: 200px; */}
   overflow: hidden;
   position: relative;
@@ -37,14 +36,15 @@ const Container = styled.div`
     ${({ display }) =>
     display === 'card'  &&
       css`
+      border-radius: 5%;
       margin: 1rem;
       height: 15rem;
       width: 15rem;
       border: solid 1px lightgrey;
-      ${'' /* @media (max-width: 900px) {
+      @media (max-width: 588px) {
         max-width: 200px;
         min-width: 200px;
-      } */}
+      }
       `}
 
     ${({ display }) =>
@@ -100,6 +100,12 @@ const Image = styled.img`
 const ImageContainer = styled.div`
   object-fit: contain;
   height: 15vh;
+
+  ${({ display }) =>
+  display === 'list'  &&
+    css`
+      height: 0vh;
+    `}
 `;
 
 const Card = ({ display, state, id, children, imagesrc}) => {
@@ -130,7 +136,7 @@ const Card = ({ display, state, id, children, imagesrc}) => {
             <div>
               {/* <Link href={`/dashboard/${state}/[id]`} as={`/dashboard/${state}/${id}`}>
               <a> */}
-              <ImageContainer>
+              <ImageContainer display={display}>
                 <Image display={display} state={state} src={imagesrc} />
               </ImageContainer>
               <Details display={display} state={state}>

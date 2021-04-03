@@ -17,7 +17,7 @@ import { graphQLClient } from '../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  display: flex;
+  ${'' /* display: flex; */}
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;

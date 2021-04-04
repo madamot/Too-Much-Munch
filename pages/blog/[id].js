@@ -37,6 +37,7 @@ query MyQuery($id: ItemId) {
   blog(filter: {id: {eq: $id}}) {
     id
     title
+    subtitle
     blogImage {
       url
       alt
@@ -83,6 +84,9 @@ export default function BlogPost({ blog }) {
   return (
     <Layout>
       <h1>{blog.blog.title}</h1>
+      <h2 style={{
+        fontWeight: 200
+      }}>{blog.blog.subtitle}</h2>
       <img width='100%' src={blog.blog.blogImage.url} alt={blog.blog.blogImage.alt} />
       <StructuredText
         data={blog.blog.content}

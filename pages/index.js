@@ -3,7 +3,7 @@ import Layout from '../components/layout/layout'
 import Button from '../components/Button/Button';
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
-// import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 
 import { request } from "../utils/datocms";
 import { StructuredText } from "react-datocms";

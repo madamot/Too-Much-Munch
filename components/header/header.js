@@ -46,7 +46,7 @@ const DashNav = styled.ul`
   height: 100%;
   list-style-type: none;
   padding: 0;
-  width: 50%;
+  ${'' /* width: 50%; */}
   position: absolute;
   overflow: auto;
   align-items: center;
@@ -60,7 +60,7 @@ const NavItem = styled.li`
   align-items: center;
   display: flex;
   min-height: 100%;
-  padding: 0;
+  padding: 10px;
   border-bottom: ${props => props.router == props.location ? "solid 2px black" : "none"};
 
 `;

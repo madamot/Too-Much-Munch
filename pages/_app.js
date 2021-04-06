@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import '../static/style.css'
 import Head from 'next/head'
+import * as gtag from '../utils/gtag'
 import { Auth0Provider } from '@auth0/auth0-react';
 
 const App = ({ Component, pageProps }) => {

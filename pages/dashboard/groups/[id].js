@@ -122,7 +122,7 @@ const Group = () => {
   return (
     <Layout dashboard>
       <Head>
-        <title>{data.findGroupByID.name}</title>
+        {data ? <title>{data.findGroupByID.name}</title> : <title>Group Recipes</title>}
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {data ? (

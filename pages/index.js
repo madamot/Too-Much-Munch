@@ -106,7 +106,7 @@ export default function Home({data}) {
   return (
     <Layout>
       <Head>
-        <title>Dashboard</title>
+        <title>Too Much Munch</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

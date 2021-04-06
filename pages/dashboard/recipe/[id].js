@@ -54,6 +54,10 @@ const Recipe = () => {
 
   return (
     <Layout dashboard>
+      <Head>
+        {data ? <title>{data.findRecipeByID.name}</title> : <title>Recipe</title>}
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <h1>Edit Recipe</h1>
 
       {data ? (

@@ -87,7 +87,7 @@ const Dashboard = () => {
   return (
     <Layout dashboard>
       <Head>
-        <title>Too Much Munch</title>
+        <title>Dashboard</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

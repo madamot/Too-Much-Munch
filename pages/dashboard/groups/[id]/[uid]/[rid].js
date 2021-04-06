@@ -52,7 +52,10 @@ const UserRecipe = () => {
 
   return (
     <Layout dashboard>
-      
+      <Head>
+        <title>{data.findRecipeByID.name}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {data ? (
         <>
           <h1>{data.findRecipeByID.name}</h1>

@@ -63,7 +63,10 @@ const User = () => {
 
   return (
     <Layout dashboard>
-
+      <Head>
+        <title>{data.findUserByID.username}'s recipes</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
       {data ? (
         <>

@@ -155,7 +155,7 @@ export default function Home({data}) {
       <Main>
         <Subtitle>{data.homepage.featuretitle}</Subtitle>
         <Subsubtitle>{data.homepage.featuresubtitle}</Subsubtitle>
-        <img src={data.homepage.featureImage.url} />
+        <img width='100%' src={data.homepage.featureImage.url} />
         <StructuredText
           data={data.homepage.homepageBody}
           renderInlineRecord={({ record }) => {

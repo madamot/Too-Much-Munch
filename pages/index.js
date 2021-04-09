@@ -74,13 +74,49 @@ const Subsubtitle = styled.h5`
 
 
 const HOMEPAGE_QUERY = `
-  query MyQuery {
-    homepage {
-      title
-      featuretitle
-      featuresubtitle
+query MyQuery {
+  homepage {
+    title
+    heroDescription
+    featuretitle
+    featuresubtitle
+    featureImage {
+      url
+    }
+    homepageBody {
+      value
+      blocks {
+        __typename
+        ... on ImageRecord {
+          id
+          image {
+            url
+          }
+        }
+        __typename
+        ... on VideoRecord {
+          id
+          video {
+            url
+          }
+        }
+      }
+      links {
+        __typename
+        ... on BlogPageRecord {
+          id
+          blogPageTitle
+        }
+        __typename
+        ... on BlogRecord {
+          id
+          slug
+          title
+        }
+      }
     }
   }
+}
 `;
 export async function getStaticProps(context) {
   const data = await request({
@@ -103,6 +139,8 @@ export default function Home({data}) {
       logout,
     } = useAuth0();
 
+    console.log({data});
+
   return (
     <Layout>
       <Head>
@@ -111,13 +149,41 @@ export default function Home({data}) {
       </Head>
 
       <Hero>
-        {/* <StructuredText data={data.homepage} /> */}
         <Title>Too Much <Munch>Munch</Munch></Title>
-        {/* <Subtitle></Subtitle> */}
+        <p>{data.homepage.heroDescription}</p>
       </Hero>
       <Main>
         <Subtitle>{data.homepage.featuretitle}</Subtitle>
         <Subsubtitle>{data.homepage.featuresubtitle}</Subsubtitle>
+        <img src={data.homepage.featureImage.url} />
+        <StructuredText
+          data={data.homepage.homepageBody}
+          renderInlineRecord={({ record }) => {
+            switch (record.__typename) {
+              case "BlogRecord":
+                return <a target="_blank" href={`/blog/${record.id}`}>{record.title}</a>;
+              default:
+                return null;
+            }
+          }}
+          renderLinkToRecord={({ record, children }) => {
+            switch (record.__typename) {
+              case "BlogRecord":
+                return <a style={{color: "#848484", borderBottom: ".05em solid #848484", cursor: "pointer"}} target="_blank" href={`/blog/${record.slug}`}>{children}</a>;
+              default:
+                return null;
+            }
+          }}
+          renderBlock={({ record }) => {
+            switch (record.__typename) {
+              case "ImageRecord":
+                return <img width='100%' src={record.image.url} alt={record.image.alt} />;
+              default:
+                return null;
+            }
+          }}
+        />
+
       </Main>
     </Layout>
   )

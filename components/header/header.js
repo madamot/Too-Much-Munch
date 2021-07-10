@@ -66,6 +66,21 @@ const NavItem = styled.li`
 
 `;
 
+const Navrow = styled.div`
+  @media only screen and (max-width: 40em) {
+      width: 100vw;
+      height: 5em;;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: solid 1px lightgrey;
+    }
+
+`;
+
 const Nav = styled.div`
   display: flex;
   list-style-type: none;
@@ -74,6 +89,7 @@ const Nav = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100vw;
+  overflow: hidden;
 
   @media only screen and (max-width: 40em) {
       position: fixed;
@@ -171,39 +187,43 @@ const Header = ({dashboard}) => {
     <header>
       <Wrapper>
         <Nav ref={drawerRef} openDrawer={openDrawer}>
-          <div>
+          <Navrow>
             <Link href="/">
               <a>
                 <Title className="title">🍴 Too Much Munch</Title>
               </a>
             </Link>
-          </div>
-          <div>
+          </Navrow>
+          <Navrow>
             <Link href="/blog">
               <a>
                 Blog
               </a>
             </Link>
-          </div>
-          <div>
+          </Navrow>
+          <Navrow>
             {!isLoading && (
               isAuthenticated ? (
-                <div className="multiButtons">
-                  <Button size="small" onClick={() => logout({ returnTo: url })} label="Log out" />
-                  <Link href='/dashboard'>
-                    <Button primary size="small" label="Dashboard" />
-                  </Link>
-                </div>
+                <Navrow>
+                  <div className="multiButtons">
+                    <Button size="small" onClick={() => logout({ returnTo: url })} label="Log out" />
+                    <Link href='/dashboard'>
+                      <Button primary size="small" label="Dashboard" />
+                    </Link>
+                  </div>
+                </Navrow>
               ) : (
-                <div className="multiButtons">
-                  <Button size="small" onClick={loginWithRedirect} label="Log in" />
-                  <Button primary size="small" onClick={() => loginWithRedirect({
-                    screen_hint: "signup",
-                  })} label="Sign Up" />
-                </div>
+                <Navrow>
+                  <div className="multiButtons">
+                    <Button size="small" onClick={loginWithRedirect} label="Log in" />
+                    <Button primary size="small" onClick={() => loginWithRedirect({
+                      screen_hint: "signup",
+                    })} label="Sign Up" />
+                  </div>
+                </Navrow>
               )
             )}
-          </div>
+          </Navrow>
         </Nav>
         <HamburgerButton.Wrapper onClick={() => toggleChecked(true)}>
           <HamburgerButton.Lines />

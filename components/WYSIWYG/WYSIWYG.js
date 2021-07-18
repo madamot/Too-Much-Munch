@@ -83,13 +83,54 @@ let currentContentAsHTML = draftToHtml(convertToRaw(editorState.getCurrentConten
     );
   }
 
-  const uploadCallback = (file) => {
-  return new Promise(
-    (resolve, reject) => {
-      resolve({ data: { link: "http://dummy_image_src.com" } });
+
+function uploadImageCallBack(file) {
+        return new Promise(
+        (resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://api.cloudinary.com/v1_1/madamot/image/upload');
+            // xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
+            const data = new FormData();
+            data.append("file", file);
+            data.append("upload_preset", "toomuchmunch");
+            data.append("cloud_name", "madamot");
+            xhr.send(data);
+            xhr.addEventListener('load', () => {
+
+                var data = JSON.parse(xhr.responseText);
+
+                // Magic Happens Here
+
+                var response = {data:  {link: data.secure_url} }
+                // console.log(response)
+
+            resolve (response);
+            // console.log(response);
+            });
+            xhr.addEventListener('error', () => {
+            const error = JSON.parse(xhr.responseText);
+            reject(error);
+            });
+        }
+        );
     }
-  );
-}
+
+    const uploadImage = () => {
+    const data = new FormData()
+    data.append("file", image)
+    data.append("upload_preset", "toomuchmunch")
+    data.append("cloud_name","madamot")
+    fetch("https://api.cloudinary.com/v1_1/madamot/image/upload",{
+    method:"post",
+    body: data
+    })
+    .then(resp => resp.json())
+    .then(data => {
+    // setUrl(data.url)
+    })
+    .catch(err => console.log(err))
+    }
+
 
     return (
       <>
@@ -97,16 +138,21 @@ let currentContentAsHTML = draftToHtml(convertToRaw(editorState.getCurrentConten
         <Editor
           toolbar={{
             // options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'emoji', 'remove', 'history'],
-
+            image: {
+              urlEnabled: true,
+              uploadEnabled: true,
+              previewImage: true,
+              uploadCallback: uploadImageCallBack,
+            }
           }}
           editorState={editorState}
           onEditorStateChange={handleEditorChange}
         />
 
-        <textarea
+        {/* <textarea
           disabled
           value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-        />
+        /> */}
       </>
     );
   }

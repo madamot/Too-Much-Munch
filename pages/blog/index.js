@@ -66,6 +66,7 @@ const Subsubtitle = styled.h5`
 
 const Grid = styled.div`
   display: flex;
+  grid-template-columns: auto auto auto;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;

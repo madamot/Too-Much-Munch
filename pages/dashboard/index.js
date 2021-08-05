@@ -17,7 +17,8 @@ import { graphQLClient } from '../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  ${'' /* display: flex; */}
+  display: ${props => props.display == 'card' ? "flex" : "block"}; 
+  grid-template-columns: auto auto auto;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -39,7 +40,7 @@ const Dashboard = () => {
       logout,
     } = useAuth0();
 
-    const [ display, setDisplay ] = useDisplay();
+    const [ display, setDisplay ] = useDisplay('card');
 
     // const [display, setDisplay] = useState('list');
 
@@ -114,7 +115,7 @@ const Dashboard = () => {
         {data ? [
           (Object.keys(data.findUserByID.recipes.data).length > 0 ?
             <>
-              <Grid>
+              <Grid display={display}>
                 {data.findUserByID.recipes.data.map((recipe, i, arr) => {
                   if (arr.length - 1 === i) {
                     return <div key={recipe._id}>

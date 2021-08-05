@@ -1,19 +1,20 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
+import Image from 'next/image'
 import Link from 'next/link';
 
 const Container = styled.div`
   flex: 1;
-  ${'' /* max-width: 200px; */}
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  display: inline-block;
+  /* display: inline-block; */
   flex-basis: auto;
   text-align: left;
   color: inherit;
   text-decoration: none;
-  min-width: 0;
 
   ${({ state, display }) =>
   state === 'add' && display === 'card' &&
@@ -64,6 +65,9 @@ const Container = styled.div`
 `;
 
 const Details = styled.div`
+  min-height: 30%;
+  position: relative;
+  bottom: 0;
   cursor: pointer;
   color: ${props => props.primary ? "white" : "#333"};
 
@@ -81,11 +85,12 @@ const Details = styled.div`
     `}
 `;
 
-const Image = styled.img`
+const Img = styled(Image)`
   border: 0;
   cursor: pointer;
-  width: 100%;
-  max-height: 100%;
+  /* width: 100%; */
+  /* max-height: 100%; */
+  /* min-height: 80%; */
   overflow: hidden;
   object-fit: cover;
   color: ${props => props.primary ? "white" : "#333"};
@@ -98,8 +103,9 @@ const Image = styled.img`
 `;
 
 const ImageContainer = styled.div`
+  position: relative;
   object-fit: contain;
-  height: 15vh;
+  min-height: 70%;
 
   ${({ display }) =>
   display === 'list'  &&
@@ -133,18 +139,18 @@ const Card = ({ display, state, id, children, imagesrc}) => {
             // </Link>
           )
           : (
-            <div>
+            <Container>
               {/* <Link href={`/dashboard/${state}/[id]`} as={`/dashboard/${state}/${id}`}>
               <a> */}
               <ImageContainer display={display}>
-                <Image display={display} state={state} src={imagesrc} />
+                <Img display={display} state={state} src={!imagesrc ? 'https://via.placeholder.com/250' : imagesrc} layout='fill' />
               </ImageContainer>
               <Details display={display} state={state}>
                 {children}
               </Details>
               {/* </a>
               </Link> */}
-            </div>
+            </Container>
           )
 
         }

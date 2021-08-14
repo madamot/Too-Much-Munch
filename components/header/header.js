@@ -4,6 +4,10 @@ import Button from '../Button/Button';
 import Link from 'next/link';
 import { useRouter, withRouter } from 'next/router'
 
+import useSWR from 'swr';
+import { gql } from 'graphql-request';
+import { StrapiGQLClient } from '../../utils/strapi-gql-client';
+
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Wrapper = styled.div`
@@ -177,12 +181,53 @@ const Header = ({dashboard}) => {
   const toggleChecked = () => toggleDrawer(value => !value);
   const drawerRef = useRef(null);
 
-  console.log(router.pathname);
+  // console.log(router.pathname);
   let url = "";
   if (typeof window !== "undefined") {
     url = window.location.href;
     console.log(url);
   }
+
+  const fetcher = async (query) => await StrapiGQLClient({
+    query: query,
+    variables: {
+
+      },
+  });
+
+  const { data, error } = useSWR(
+    gql`
+      {
+        global {
+          navigation {
+            theme
+            ... on ComponentGlobalNavigation {
+              panels {
+                ... on ComponentGlobalNavigationPanel {
+                  id
+                  link {
+                    id
+                    href
+                    label
+                    target
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    fetcher
+  );
+
+
+   if (error) return <div>failed to load</div>;
+
+   console.log('error', error);
+
+   console.log('result', data);
+
   return (
     <header>
       <Wrapper>

@@ -4,6 +4,10 @@ import Button from '../Button/Button';
 import Link from 'next/link';
 import { useRouter, withRouter } from 'next/router'
 
+import useSWR from 'swr';
+import { gql } from 'graphql-request';
+import { StrapiGQLClient } from '../../utils/strapi-gql-client';
+
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Wrapper = styled.div`
@@ -49,6 +53,19 @@ const DashNav = styled.ul`
   padding: 0;
   ${'' /* width: 50%; */}
   position: absolute;
+  overflow: auto;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const NavSub = styled.ul`
+  display: flex;
+  margin: 0;
+  height: 100%;
+  list-style-type: none;
+  padding: 0;
+  ${'' /* width: 50%; */}
+  /* position: absolute; */
   overflow: auto;
   align-items: center;
   justify-content: space-between;
@@ -177,31 +194,75 @@ const Header = ({dashboard}) => {
   const toggleChecked = () => toggleDrawer(value => !value);
   const drawerRef = useRef(null);
 
-  console.log(router.pathname);
+  // console.log(router.pathname);
   let url = "";
   if (typeof window !== "undefined") {
     url = window.location.href;
     console.log(url);
   }
+
+  const fetcher = async (query) => await StrapiGQLClient({
+    query: query,
+    variables: {
+
+      },
+  });
+
+  const { data, error } = useSWR(
+    gql`
+      {
+        global {
+          navigation {
+            theme
+            ... on ComponentGlobalNavigation {
+              panels {
+                ... on ComponentGlobalNavigationPanel {
+                  id
+                  link {
+                    id
+                    href
+                    label
+                    target
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    fetcher
+  );
+
+   if (error) return <div>failed to load</div>;
+
+
   return (
     <header>
       <Wrapper>
         <Nav ref={drawerRef} openDrawer={openDrawer}>
-          <Navrow>
-            <Link href="/">
-              <a>
-                <Title className="title">🍴 Too Much Munch</Title>
-              </a>
-            </Link>
-          </Navrow>
-          <Navrow>
-            <Link href="/blog">
-              <a>
-                Blog
-              </a>
-            </Link>
-          </Navrow>
-          <Navrow>
+            
+            
+            <Navrow>
+              <Link href="/">
+                <a>
+                  <Title className="title">🍴 Too Much Munch</Title>
+                </a>
+              </Link>
+            </Navrow>
+            <NavSub>
+              {data?.global?.navigation?.panels && data.global.navigation.panels.map(item => (
+                <Navrow key={item.id} href={item.link.href}>
+                  <Link href="/blog">
+                    <a>
+                      {item.link.label}
+                    </a>
+                  </Link>
+                </Navrow>
+              ))}
+            </NavSub>
+              
+          {/* <Navrow> */}
             {!isLoading && (
               isAuthenticated ? (
                 <Navrow>
@@ -223,7 +284,7 @@ const Header = ({dashboard}) => {
                 </Navrow>
               )
             )}
-          </Navrow>
+          {/* </Navrow> */}
         </Nav>
         <HamburgerButton.Wrapper onClick={() => toggleChecked(true)}>
           <HamburgerButton.Lines />

@@ -58,6 +58,19 @@ const DashNav = styled.ul`
   justify-content: space-between;
 `;
 
+const NavSub = styled.ul`
+  display: flex;
+  margin: 0;
+  height: 100%;
+  list-style-type: none;
+  padding: 0;
+  ${'' /* width: 50%; */}
+  /* position: absolute; */
+  overflow: auto;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const NavItem = styled.li`
   display: inline-block;
   height: 100%;
@@ -221,32 +234,35 @@ const Header = ({dashboard}) => {
     fetcher
   );
 
-
    if (error) return <div>failed to load</div>;
 
-   console.log('error', error);
-
-   console.log('result', data);
 
   return (
     <header>
       <Wrapper>
         <Nav ref={drawerRef} openDrawer={openDrawer}>
-          <Navrow>
-            <Link href="/">
-              <a>
-                <Title className="title">🍴 Too Much Munch</Title>
-              </a>
-            </Link>
-          </Navrow>
-          <Navrow>
-            <Link href="/blog">
-              <a>
-                Blog
-              </a>
-            </Link>
-          </Navrow>
-          <Navrow>
+            
+            
+            <Navrow>
+              <Link href="/">
+                <a>
+                  <Title className="title">🍴 Too Much Munch</Title>
+                </a>
+              </Link>
+            </Navrow>
+            <NavSub>
+              {data?.global?.navigation?.panels && data.global.navigation.panels.map(item => (
+                <Navrow key={item.id} href={item.link.href}>
+                  <Link href="/blog">
+                    <a>
+                      {item.link.label}
+                    </a>
+                  </Link>
+                </Navrow>
+              ))}
+            </NavSub>
+              
+          {/* <Navrow> */}
             {!isLoading && (
               isAuthenticated ? (
                 <Navrow>
@@ -268,7 +284,7 @@ const Header = ({dashboard}) => {
                 </Navrow>
               )
             )}
-          </Navrow>
+          {/* </Navrow> */}
         </Nav>
         <HamburgerButton.Wrapper onClick={() => toggleChecked(true)}>
           <HamburgerButton.Lines />

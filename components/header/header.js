@@ -194,11 +194,9 @@ const Header = ({dashboard}) => {
   const toggleChecked = () => toggleDrawer(value => !value);
   const drawerRef = useRef(null);
 
-  // console.log(router.pathname);
   let url = "";
   if (typeof window !== "undefined") {
     url = window.location.href;
-    console.log(url);
   }
 
   const fetcher = async (query) => await StrapiGQLClient({

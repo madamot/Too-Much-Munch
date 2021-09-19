@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import '../static/style.css'
 import Head from 'next/head'
 import * as gtag from '../utils/gtag'
+import { Provider } from 'next-auth/client'
 import { Auth0Provider } from '@auth0/auth0-react';
 
 const App = ({ Component, pageProps }) => {
@@ -21,8 +22,9 @@ const App = ({ Component, pageProps }) => {
        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap" rel="stylesheet" />
        </Head>
-
-     <Component {...pageProps} />
+       <Provider session={pageProps.session}>
+        <Component {...pageProps} />
+        </Provider>
    </Auth0Provider>
   )
 }

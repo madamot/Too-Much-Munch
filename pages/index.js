@@ -10,6 +10,9 @@ import { StructuredText } from "react-datocms";
 
 import { useAuth0 } from '@auth0/auth0-react';
 
+import { useSession, signIn, signOut } from "next-auth/client"
+
+
 const Hero = styled.div`
   font-family: Bebas Neue;
   padding: 5rem;
@@ -140,6 +143,7 @@ export default function Home({data}) {
     } = useAuth0();
 
     console.log({data});
+    
 
   return (
     <Layout>
@@ -153,6 +157,7 @@ export default function Home({data}) {
         <p>{data.homepage.heroDescription}</p>
       </Hero>
       <Main>
+        
         <Subtitle>{data.homepage.featuretitle}</Subtitle>
         <Subsubtitle>{data.homepage.featuresubtitle}</Subsubtitle>
         <img width='100%' src={data.homepage.featureImage.url} />

@@ -10,6 +10,8 @@ import { StrapiGQLClient } from '../../utils/strapi-gql-client';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
+import { useSession, signIn, signOut } from "next-auth/client"
+
 const Wrapper = styled.div`
   font-family: Bebas Neue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -188,6 +190,7 @@ const HamburgerButton = {
 
 const Header = ({dashboard}) => {
   const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
+  const [session, loading] = useSession()
   const router = useRouter();
 
   const [openDrawer, toggleDrawer] = useState(false);
@@ -259,29 +262,27 @@ const Header = ({dashboard}) => {
                 </Navrow>
               ))}
             </NavSub>
-              
-          {/* <Navrow> */}
-            {!isLoading && (
-              isAuthenticated ? (
-                <Navrow>
+
+            { session ? (
+              <Navrow>
                   <div className="multiButtons">
-                    <Button size="small" onClick={() => logout({ returnTo: url })} label="Log out" />
+                    <Button size="small" onClick={() => signOut()} label="Log out" />
                     <Link href='/dashboard'>
                       <Button primary size="small" label="Dashboard" />
                     </Link>
                   </div>
                 </Navrow>
-              ) : (
-                <Navrow>
+            ) : (
+              <Navrow>
                   <div className="multiButtons">
-                    <Button size="small" onClick={loginWithRedirect} label="Log in" />
-                    <Button primary size="small" onClick={() => loginWithRedirect({
+                    <Button size="small" onClick={() => signIn()} label="Log in" />
+                    {/* <Button primary size="small" onClick={() => loginWithRedirect({
                       screen_hint: "signup",
-                    })} label="Sign Up" />
+                    })} label="Sign Up" /> */}
                   </div>
                 </Navrow>
-              )
             )}
+
           {/* </Navrow> */}
         </Nav>
         <HamburgerButton.Wrapper onClick={() => toggleChecked(true)}>

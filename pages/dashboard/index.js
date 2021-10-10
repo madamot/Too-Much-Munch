@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
+import { useSession, signIn, signOut } from "next-auth/client"
+
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
@@ -12,9 +14,9 @@ import { useDisplay } from "../../utils/hooks";
 
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
+import { StrapiGQLClient } from '../../utils/strapi-gql-client';
 import { graphQLClient } from '../../utils/graphql-client';
 
-import Cookie from "js-cookie";
 
 const Grid = styled.div`
   display: ${props => props.display == 'card' ? "flex" : "block"}; 
@@ -31,58 +33,36 @@ const Grid = styled.div`
 `;
 
 const Dashboard = () => {
-  const {
-      isLoading,
-      isAuthenticated,
-      error,
-      user,
-      loginWithRedirect,
-      logout,
-    } = useAuth0();
+  const [session, loading] = useSession()
+
 
     const [ display, setDisplay ] = useDisplay('card');
 
-    // const [display, setDisplay] = useState('list');
 
+    let id = session?.id;
 
-  let id = user.sub;
-  id = id.substring(6);
-
-  console.log(id);
-
-  const fetcher = async (query) => await graphQLClient.request(query, { id });
-
+  const fetcher = async (query) => await StrapiGQLClient({
+    query: query,
+    variables: {
+        id
+    },
+  });
   const query = gql`
-    query getRecipesByUser($id: String!) {
-      findUserByID(id: $id) {
-        _id
+    query getRecipesByUser {
+      user(id: 1) {
+        id
         recipes {
-          data {
-            _id
-            name
-            description
-          }
+          id
+          title
         }
       }
     }
   `;
 
-  const { data, faunaerror } = useSWR([query, id], fetcher);
-
-   if (faunaerror) return <div>failed to load</div>;
-
-   console.log(data);
+  const { data, error } = useSWR(() => id ? query : null, fetcher);
 
 
-
-   if (data) {
-     if (data.findUserByID) {
-       Cookie.set("FaunaID", data.findUserByID._id)
-       console.log(data.findUserByID._id);
-     }
-   }
-
-
+   if (error) return <div>failed to load</div>;
 
 
   return (
@@ -93,16 +73,12 @@ const Dashboard = () => {
       </Head>
 
 
-      {isLoading ? (
+      {loading ? (
         <div>Loading...</div>
       ) : (null)}
 
-      {error ? (
-        <div>Oops... {error.message}</div>
-      ) : (null)}
-
       <div>
-        {isAuthenticated ? (
+        {session ? (
           <h1>Your recipes 🍳</h1>
 
         ) : (null)}
@@ -112,43 +88,28 @@ const Dashboard = () => {
           <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
         </div><br />
 
-        {data ? [
-          (Object.keys(data.findUserByID.recipes.data).length > 0 ?
+        {data ? (
+
+          
+
             <>
               <Grid display={display}>
-                {data.findUserByID.recipes.data.map((recipe, i, arr) => {
-                  if (arr.length - 1 === i) {
-                    return <div key={recipe._id}>
-                      <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
-                        <a>
-                          <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
-                            {recipe.name}
-                          </Card>
-                        </a>
-                      </Link>
-                      <Link href="/dashboard/new">
-                        <a>
-                          <Card state='add' display={display} />
-                        </a>
-                      </Link>
-                    </div>
-                  } else {
-                    return <div key={recipe._id}>
-                      <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe._id}`}>
-                        <a>
-                          <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
-                            {recipe.name}
-                          </Card>
-                        </a>
-                      </Link>
-                    </div>
-                  }
-                })}
+              {data?.user?.recipes.map(recipe => (
+                <div key={recipe._id}>
+                <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe.id}`}>
+                  <a>
+                    <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                      {recipe.title}
+                    </Card>
+                  </a>
+                </Link>
+              </div>
+              ))}
+
               </Grid>
             </>
-          : <><p>You have no recipes</p><Link href="/dashboard/new"><a><Card state='add' display={display} /></a></Link></>
-          )
-        ]: (
+
+        ): (
           <div>loading...</div>
         )}
       </div>
@@ -157,7 +118,4 @@ const Dashboard = () => {
       );
     }
 
-      export default withAuthenticationRequired(Dashboard, {
-        // Show a message while the user waits to be redirected to the login page.
-        onRedirecting: () => <div>Redirecting you to the login page...</div>,
-      });
+      export default Dashboard;

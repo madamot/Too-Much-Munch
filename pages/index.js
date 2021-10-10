@@ -141,8 +141,6 @@ export default function Home({data}) {
       loginWithRedirect,
       logout,
     } = useAuth0();
-
-    console.log({data});
     
 
   return (

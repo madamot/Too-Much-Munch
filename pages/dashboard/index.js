@@ -95,10 +95,10 @@ const Dashboard = () => {
             <>
               <Grid display={display}>
               {data?.user?.recipes.map(recipe => (
-                <div key={recipe._id}>
+                <div key={recipe.id}>
                 <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe.id}`}>
                   <a>
-                    <Card state='recipe' display={display} key={recipe._id} id={recipe._id}>
+                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id}>
                       {recipe.title}
                     </Card>
                   </a>

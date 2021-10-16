@@ -62,7 +62,7 @@ const Recipe = () => {
     console.error(error);
   }
 };
-
+console.log(data);
   return (
     <Layout dashboard>
       <Head>

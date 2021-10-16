@@ -7,8 +7,7 @@ import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
-import { useAuth0 } from '@auth0/auth0-react';
-import { withAuthenticationRequired } from '@auth0/auth0-react';
+import { useSession, signIn, signOut } from "next-auth/client"
 
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
@@ -18,14 +17,7 @@ import Cookie from "js-cookie";
 
 
 const New = () => {
-  const {
-      isLoading,
-      isAuthenticated,
-      error,
-      user,
-      loginWithRedirect,
-      logout,
-    } = useAuth0();
+  const [session, loading] = useSession()
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -33,28 +25,26 @@ const New = () => {
     mode: "onChange"
   });
 
-  let faunaID = Cookie.get('FaunaID');
+  const id = session?.id
 
-  let sub = user.sub;
 
   const onSubmit = handleSubmit(async ({ name, description }) => {
     if (errorMessage) setErrorMessage('');
-    console.log(faunaID);
 
 
 
       const query = gql`
-        mutation CreateARecipe($faunaID: ID, $name: String!, $description: String!) {
-          createRecipe(data: {
-            author: { connect: $faunaID}
-            name: $name
-            description: $description
+        mutation CreateARecipe($id: ID!, $name: String) {
+          createRecipe(
+            input: {
+              data: {
+                user: $id
+                title: $name
+              }
           }) {
-            author {
+            recipe {
               id
             }
-            name
-            description
           }
         }
       `;
@@ -62,22 +52,19 @@ const New = () => {
 
 
     const variables = {
-          faunaID,
-          sub,
+          id,
           name,
-          description,
         };
 
     try {
-      await graphQLClient.request(query, variables);
-      Router.push('/dashboard');
+      const data = await graphQLClient.request(query, variables);
+      Router.push(`/dashboard/recipe/${data.createRecipe.recipe.id}`);
     } catch (error) {
       console.log(error);
       console.log(errorMessage);
       setErrorMessage(error.message);
     }
   });
-
 
   return (
     <Layout dashboard>
@@ -88,18 +75,14 @@ const New = () => {
 
       <h1>New Recipe +</h1>
 
-      {isLoading ? (
+      {loading ? (
         <div>Loading...</div>
       ) : (null)}
 
-      {error ? (
-        <div>Oops... {error.message}</div>
-      ) : (null)}
-
       <div>
-        {isAuthenticated ? (
+        {session ? (
           <div>
-            <h3>Hello, {user.nickname}</h3>
+            <h3>Hello, {session.user.name}</h3>
 
             <form onSubmit={onSubmit}>
               <div>
@@ -110,19 +93,8 @@ const New = () => {
                   placeholder="e.g. bolognese"
                   ref={register({ required: 'Name is required' })}
                 />
-                <label>Recipe description</label>
-                {/* <input
-                  type="text"
-                  name="description"
-                  placeholder="e.g. saucy"
-                  ref={register({ required: 'Description is required' })}
-                /> */}
-                <Controller
-                  as={<WYSIWYGEditor />}
-                  name="description"
-                  control={control}
-                  defaultValue=''
-                />
+ 
+  
                 {errors.name &&  (
                   <span role="alert">
                     {errors.name.message}
@@ -152,11 +124,4 @@ const New = () => {
       );
     }
 
-    New.getInitialProps = () => {
-
-    }
-
-    export default withAuthenticationRequired(New, {
-      // Show a message while the user waits to be redirected to the login page.
-      onRedirecting: () => <div>Redirecting you to the login page...</div>,
-    });
+    export default New;

@@ -107,6 +107,11 @@ const Dashboard = () => {
               ))}
 
               </Grid>
+              <Link href="/dashboard/new">
+                        <a>
+                          <Card state='add' display={display} />
+                        </a>
+                      </Link>
             </>
 
         ): (

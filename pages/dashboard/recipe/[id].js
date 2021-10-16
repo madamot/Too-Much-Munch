@@ -11,7 +11,7 @@ import Layout from '../../../components/layout/layout';
 import Button from '../../../components/Button/Button';
 import EditForm from '../../../components/EditForm/EditForm';
 import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
-// import { graphQLClient } from '../../../utils/graphql-client';
+import { graphQLClient } from '../../../utils/graphql-client';
 
 const Recipe = () => {
 
@@ -41,8 +41,16 @@ const Recipe = () => {
   const deleteARecipe = async (id) => {
     const query = gql`
       mutation DeleteARecipe($id: ID!) {
-        deleteRecipe(id: $id) {
-          _id
+        deleteRecipe(
+          input: {
+            where: {
+              id: $id
+            }
+          }
+        ) {
+          recipe {
+            id
+          }
         }
       }
     `;

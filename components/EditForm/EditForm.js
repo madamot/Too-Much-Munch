@@ -22,7 +22,7 @@ const EditForm = ({ defaultValues, id }) => {
   const methods = useForm({
     defaultValues: {
       ...defaultValues,
-      item: defaultValues?.ingredients,
+      ingredients: defaultValues?.ingredients,
     },
     mode: "onChange",
   });
@@ -30,16 +30,19 @@ const EditForm = ({ defaultValues, id }) => {
   useEffect(() => {
     reset({
       ...defaultValues,
-      item: defaultValues?.ingredients,
+      ingredients: defaultValues?.ingredients,
     });
   }, [reset, defaultValues]);
+
+  console.log('defaultValues', defaultValues?.ingredients);
 
   const [errorMessage, setErrorMessage] = useState('');
 
 const { register, control, handleSubmit, reset, formState, errors } = methods
 
-  const onSubmit = handleSubmit(async ({ title, item }) => {
-    const ingredients = item
+  const onSubmit = handleSubmit(async ({ title, ingredients }) => {
+
+    // const ingredients = item
 
     if (errorMessage) setErrorMessage('');
 
@@ -93,7 +96,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                 />
                 <label>Recipe description</label>
 
-        <Ingredients/>
+                <Ingredients/>
 
 
                 {/* <Controller

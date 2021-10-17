@@ -7,23 +7,26 @@ const Ingredients = () => {
         fields: ingredientsFields,
         append: ingredientsAppend,
         remove: ingredientsRemove
-    } = useFieldArray({ control, name: "item" });
-
-    const methods = useFormContext();
-
+    } = useFieldArray({ 
+        control, 
+        name: "ingredients"
+     });
 
     return (
         <div>
             Ingredients
             {ingredientsFields.map((item, index) => {
             return (
-              <div key={item.id}>
-                    <input
-                    // defaultValue={`${item.ingredient}`}
-                        {...methods.register(`item[${index}].ingredient`)}
+                <div key={item.id}>
+                    <Controller
+                        as={<input />}
+                        name={`ingredients.${index}.ingredient`}
+                        control={control}
+                        defaultValue={item.ingredient} // make sure to set up defaultValue
                     />
                     <button onClick={() => ingredientsRemove(index)}>Delete</button>
-              </div>
+                </div>
+               
           );
           })}
           <section>

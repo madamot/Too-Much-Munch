@@ -10,6 +10,7 @@ import { convertFromHTML } from 'draft-convert';
 import Layout from '../../../components/layout/layout';
 import Button from '../../../components/Button/Button';
 import EditForm from '../../../components/EditForm/EditForm';
+import Ingredients from '../../../components/Ingredients/Ingredients';
 import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
 import { graphQLClient } from '../../../utils/graphql-client';
 
@@ -30,6 +31,9 @@ const Recipe = () => {
     query FindARecipeByID($id: ID!) {
       recipe(id: $id) {
         title
+        ingredients {
+          ingredient
+        }
       }
     }
   `;
@@ -62,7 +66,7 @@ const Recipe = () => {
     console.error(error);
   }
 };
-console.log(data);
+
   return (
     <Layout dashboard>
       <Head>
@@ -77,8 +81,8 @@ console.log(data);
           <br />
           {/* <p>{data.findRecipeByID.description}</p> */}
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
+          <EditForm defaultValues={data.recipe} id={id} />
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
-          {/* <EditForm defaultValues={data.findRecipeByID} id={id} /> */}
         </>
 
       ) : (

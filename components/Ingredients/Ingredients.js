@@ -36,7 +36,7 @@ const Ingredients = () => {
                 ingredientsAppend({ });
               }}
               >
-              Add Another Investment
+              Add Another ingredient
               </button>
           </section>
         </div>

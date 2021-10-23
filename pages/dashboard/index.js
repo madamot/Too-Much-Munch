@@ -62,7 +62,11 @@ const Dashboard = () => {
   const { data, error } = useSWR(() => id ? query : null, fetcher);
 
 
-   if (error) return <div>failed to load</div>;
+   if (error) return <div>{`failed to load: ${error}`}</div>;
+
+   console.log(error);
+
+   console.log(data);
 
 
   return (

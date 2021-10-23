@@ -8,8 +8,6 @@ import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import { StrapiGQLClient } from '../../utils/strapi-gql-client';
 
-import { useAuth0 } from '@auth0/auth0-react';
-
 import { useSession, signIn, signOut } from "next-auth/client"
 
 const Wrapper = styled.div`
@@ -189,7 +187,6 @@ const HamburgerButton = {
 
 
 const Header = ({dashboard}) => {
-  const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
   const [session, loading] = useSession()
   const router = useRouter();
 

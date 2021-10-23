@@ -19,6 +19,32 @@ const Ingredients = () => {
             return (
                 <div key={item.id}>
                     <Controller
+                        as={<input type="number" />}
+                        name={`ingredients.${index}.quantity`}
+                        {...register(`ingredients.${index}.quantity`, { 
+                            valueAsNumber: true })}
+                        control={control}
+                        defaultValue={item.quantity} // make sure to set up defaultValue
+                    />
+                    <Controller
+                        as={<select name="measurement" id="measurement">
+                        <option value="quantity">quantity</option>
+                        <option value="ml">ml</option>
+                        <option value="g">g</option>
+                        <option value="tablespoon">tablespoon</option>
+                        <option value="teaspoon">teaspoon</option>
+                        <option value="pinch">pinch</option>
+                        <option value="dash">dash</option>
+                        <option value="cup">cup</option>
+                        <option value="pint">pint</option>
+                        <option value="gallon">gallon</option>
+                        <option value="oz">oz</option>
+                      </select>}
+                        name={`ingredients.${index}.measurement`}
+                        control={control}
+                        defaultValue={item.measurement} // make sure to set up defaultValue
+                    />
+                    <Controller
                         as={<input />}
                         name={`ingredients.${index}.ingredient`}
                         control={control}

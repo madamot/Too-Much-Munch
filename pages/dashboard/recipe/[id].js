@@ -33,6 +33,8 @@ const Recipe = () => {
         title
         ingredients {
           ingredient
+          quantity
+          measurement
         }
       }
     }

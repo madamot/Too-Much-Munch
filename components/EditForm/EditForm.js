@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Ingredients from '../Ingredients/Ingredients';
+import Method from '../Method/Method';
 import Button from '../../components/Button/Button';
 import { graphQLClient } from '../../utils/graphql-client';
 
@@ -23,6 +24,7 @@ const EditForm = ({ defaultValues, id }) => {
     defaultValues: {
       ...defaultValues,
       ingredients: defaultValues?.ingredients,
+      method: defaultValues?.method
     },
     mode: "onChange",
   });
@@ -31,6 +33,7 @@ const EditForm = ({ defaultValues, id }) => {
     reset({
       ...defaultValues,
       ingredients: defaultValues?.ingredients,
+      method: defaultValues?.method
     });
   }, [reset, defaultValues]);
 
@@ -40,20 +43,21 @@ const EditForm = ({ defaultValues, id }) => {
 
 const { register, control, handleSubmit, reset, formState, errors } = methods
 
-  const onSubmit = handleSubmit(async ({ title, ingredients }) => {
+  const onSubmit = handleSubmit(async ({ title, ingredients, method }) => {
 
     // const ingredients = item
 
     if (errorMessage) setErrorMessage('');
 
     const query = gql`
-      mutation UpdateARecipe($id: ID!, $title: String, $ingredients: [editComponentRecipeIngredientInput]) {
+      mutation UpdateARecipe($id: ID!, $title: String, $ingredients: [editComponentRecipeIngredientInput], $method: [editComponentRecipeMethodInput]) {
         updateRecipe(
           input: {
             where: { id: $id }
             data: {
               title: $title
               ingredients: $ingredients
+              method: $method
             }
           }
         ) {
@@ -68,6 +72,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
       id,
       title,
       ingredients,
+      method
     };
 
     try {
@@ -98,11 +103,13 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
 
                 <Ingredients/>
 
+                <Method />
 
                 {/* <Controller
-                  as={<WYSIWYGEditor convo={defaultValues.description} />}
-                  name="description"
+                  as={<WYSIWYGEditor convo={defaultValues.method} />}
+                  name="method"
                   control={control}
+                  defaultValue={defaultValues.method} 
                 /> */}
 
 

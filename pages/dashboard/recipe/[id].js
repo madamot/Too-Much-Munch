@@ -36,6 +36,9 @@ const Recipe = () => {
           quantity
           measurement
         }
+        method {
+            method
+          }
       }
     }
   `;

@@ -11,7 +11,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Ingredients from '../Ingredients/Ingredients';
 import Method from '../Method/Method';
 import Button from '../../components/Button/Button';
-import Select from 'react-select';
 import { graphQLClient } from '../../utils/graphql-client';
 
 const Editor = dynamic(

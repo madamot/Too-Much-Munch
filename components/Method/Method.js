@@ -23,9 +23,10 @@ const Method = () => {
                 <div key={item?.id}>
                     <Controller
                         as={<textarea />}
+                        {...register(`method.${index}.method`, { required: true })}
                         name={`method.${index}.method`}
                         control={control}
-                        defaultValue={item.method} 
+                        defaultValue={item?.method || ' '} 
                     />
                     <button onClick={() => methodRemove(index)}>Delete</button>
                 </div>

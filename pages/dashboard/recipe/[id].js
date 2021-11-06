@@ -31,6 +31,15 @@ const Recipe = () => {
     query FindARecipeByID($id: ID!) {
       recipe(id: $id) {
         title
+        course {
+          id
+        }
+        cuisine {
+          id
+        }
+        meal {
+          id
+        }
         ingredients {
           ingredient
           quantity
@@ -39,6 +48,21 @@ const Recipe = () => {
         method {
             method
           }
+      }
+      courses {
+        id
+        uid
+        name
+      }
+  		cuisines {
+        id
+        uid
+        name
+      }
+  		meals {
+        id
+        uid
+        name
       }
     }
   `;
@@ -86,7 +110,7 @@ const Recipe = () => {
           <br />
           {/* <p>{data.findRecipeByID.description}</p> */}
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
-          <EditForm defaultValues={data.recipe} id={id} />
+          <EditForm defaultValues={data.recipe} id={id} courses={data.courses} cuisines={data.cuisines} meals={data.meals} />
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
         </>
 

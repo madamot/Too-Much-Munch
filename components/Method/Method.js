@@ -22,20 +22,12 @@ const Method = () => {
             return (
                 <div key={item.id}>
                     <Controller
-                        as={<WYSIWYGEditor defaultValue={item.method}  />}
+                        as={<textarea />}
                         name={`method.${index}.method`}
                         control={control}
                         defaultValue={item.method} 
                     />
                     <button onClick={() => methodRemove(index)}>Delete</button>
-                    {/* <Controller
-                        as={<input type="number" />}
-                        name={`ingredients.${index}.quantity`}
-                        {...register(`ingredients.${index}.quantity`, { 
-                            valueAsNumber: true })}
-                        control={control}
-                        defaultValue={item.quantity} // make sure to set up defaultValue
-                    /> */}
                 </div>
                 
                

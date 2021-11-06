@@ -11,6 +11,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Ingredients from '../Ingredients/Ingredients';
 import Method from '../Method/Method';
 import Button from '../../components/Button/Button';
+import Select from 'react-select';
 import { graphQLClient } from '../../utils/graphql-client';
 
 const Editor = dynamic(
@@ -18,7 +19,7 @@ const Editor = dynamic(
   { ssr: false }
 )
 
-const EditForm = ({ defaultValues, id }) => {
+const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
 
   const methods = useForm({
     defaultValues: {
@@ -37,25 +38,28 @@ const EditForm = ({ defaultValues, id }) => {
     });
   }, [reset, defaultValues]);
 
-  console.log('defaultValues', defaultValues?.ingredients);
-
   const [errorMessage, setErrorMessage] = useState('');
 
 const { register, control, handleSubmit, reset, formState, errors } = methods
 
-  const onSubmit = handleSubmit(async ({ title, ingredients, method }) => {
+  const onSubmit = handleSubmit(async ({ title, course, cuisine, meal, ingredients, method }) => {
+
+    console.log(course);
 
     // const ingredients = item
 
     if (errorMessage) setErrorMessage('');
 
     const query = gql`
-      mutation UpdateARecipe($id: ID!, $title: String, $ingredients: [editComponentRecipeIngredientInput], $method: [editComponentRecipeMethodInput]) {
+      mutation UpdateARecipe($id: ID!, $title: String, $course: ID!, $cuisine: ID!, $meal: ID!, $ingredients: [editComponentRecipeIngredientInput], $method: [editComponentRecipeMethodInput]) {
         updateRecipe(
           input: {
             where: { id: $id }
             data: {
               title: $title
+              course: $course
+              cuisine: $cuisine
+              meal: $meal
               ingredients: $ingredients
               method: $method
             }
@@ -71,6 +75,9 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
     const variables = {
       id,
       title,
+      course,
+      cuisine,
+      meal,
       ingredients,
       method
     };
@@ -99,7 +106,48 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                   placeholder="e.g. bolognese"
                   ref={register({ required: 'Name is required' })}
                 />
-                <label>Recipe description</label>
+
+                <select name="course" defaultValue={defaultValues.course.id} ref={register({ required: 'Name is required' })}>
+                {courses.map((course, index) => {
+                  console.log('yes', defaultValues.course.id);
+                  console.log('no', course.id);
+                  return (
+                    <>
+                    {/* {defaultValues.course.id === course.id ? (
+                      <option value={parseInt(course.id)} selected>{course.name}</option>
+                     ) : (
+                      <option value={parseInt(course.id)}>{course.name}</option>
+                     )} */}
+                     <option value={parseInt(course.id)}>{course.name}</option>
+                     </>
+                );
+                })}
+                </select>
+
+                {/* <Controller
+                        as={<Select
+                          value={defaultValues.course.id}
+                          options={courses}
+                        />}
+                        name="course"
+                        control={control}
+                    /> */}
+
+                <select name="cuisine" ref={register({ required: 'Name is required' })}>
+                {cuisines.map((course, index) => {
+                  return (
+                    <option value={parseInt(course.id)}>{course.name}</option>
+                );
+                })}
+                </select>
+
+                <select name="meal" ref={register({ required: 'Name is required' })}>
+                {meals.map((course, index) => {
+                  return (
+                    <option value={parseInt(course.id)}>{course.name}</option>
+                );
+                })}
+                </select>
 
                 <Ingredients/>
 

@@ -42,7 +42,7 @@ if (props.convo) {
 
   const handleEditorChange = (state) => {
     setEditorState(state);
-    convertContentToHTML();
+    // convertContentToHTML();
     // setConvertedContent(state)
   }
 

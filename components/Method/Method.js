@@ -20,7 +20,7 @@ const Method = () => {
             Method
             {methodFields.map((item, index) => {
             return (
-                <div key={item.id}>
+                <div key={item?.id}>
                     <Controller
                         as={<textarea />}
                         name={`method.${index}.method`}

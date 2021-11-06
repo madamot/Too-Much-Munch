@@ -106,10 +106,10 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                   ref={register({ required: 'Name is required' })}
                 />
 
-                <select name="course" defaultValue={defaultValues.course.id} ref={register({ required: 'Name is required' })}>
+                <select name="course" defaultValue={defaultValues?.course?.id} ref={register({ required: 'Name is required' })}>
                 {courses.map((course, index) => {
-                  console.log('yes', defaultValues.course.id);
-                  console.log('no', course.id);
+                  console.log('yes', defaultValues?.course?.id);
+                  console.log('no', course?.id);
                   return (
                     <>
                     {/* {defaultValues.course.id === course.id ? (
@@ -117,7 +117,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                      ) : (
                       <option value={parseInt(course.id)}>{course.name}</option>
                      )} */}
-                     <option value={parseInt(course.id)}>{course.name}</option>
+                     <option value={parseInt(course?.id)}>{course?.name}</option>
                      </>
                 );
                 })}
@@ -135,7 +135,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                 <select name="cuisine" ref={register({ required: 'Name is required' })}>
                 {cuisines.map((course, index) => {
                   return (
-                    <option value={parseInt(course.id)}>{course.name}</option>
+                    <option value={parseInt(course?.id)}>{course?.name}</option>
                 );
                 })}
                 </select>
@@ -143,7 +143,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                 <select name="meal" ref={register({ required: 'Name is required' })}>
                 {meals.map((course, index) => {
                   return (
-                    <option value={parseInt(course.id)}>{course.name}</option>
+                    <option value={parseInt(course?.id)}>{course?.name}</option>
                 );
                 })}
                 </select>

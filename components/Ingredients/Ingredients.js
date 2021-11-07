@@ -25,7 +25,7 @@ const Ingredients = () => {
                         {...register(`ingredients.${index}.quantity`, { 
                             valueAsNumber: true })}
                         control={control}
-                        defaultValue={item?.quantity || ''} // make sure to set up defaultValue
+                        defaultValue={item.quantity} // make sure to set up defaultValue
                     />
                     <Controller
                         as={<select name="measurement" id="measurement">
@@ -43,15 +43,14 @@ const Ingredients = () => {
                       </select>}
                         name={`ingredients.${index}.measurement`}
                         control={control}
-                        defaultValue={item?.measurement || ''} // make sure to set up defaultValue
+                        defaultValue={item.measurement} // make sure to set up defaultValue
                     />
                     <Controller
                         as={<input />}
-                        {...register(`ingredients.${index}.ingredient`, { 
-                            valueAsNumber: true })}
+                        {...register(`ingredients.${index}.ingredient`)}
                         name={`ingredients.${index}.ingredient`}
                         control={control}
-                        defaultValue={item?.ingredient || ''} // make sure to set up defaultValue
+                        defaultValue={item.ingredient} // make sure to set up defaultValue
                     />
                     <button onClick={() => ingredientsRemove(index)}>Delete</button>
                 </div>

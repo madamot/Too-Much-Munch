@@ -43,7 +43,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
 
   const onSubmit = handleSubmit(async ({ title, course, cuisine, meal, ingredients, method }) => {
 
-    console.log(course);
+    console.log(ingredients);
 
     // const ingredients = item
 

@@ -64,11 +64,6 @@ const Dashboard = () => {
 
    if (error) return <div>{`failed to load: ${error}`}</div>;
 
-   console.log(error);
-
-   console.log(data);
-
-
   return (
     <Layout dashboard>
       <Head>

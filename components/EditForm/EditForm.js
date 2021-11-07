@@ -41,9 +41,9 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
 
 const { register, control, handleSubmit, reset, formState, errors } = methods
 
-  const onSubmit = handleSubmit(async ({ title, course, cuisine, meal, ingredients, method }) => {
+  const onSubmit = handleSubmit(async ({ title, course, cuisine, meal, ingredients, method }, data) => {
 
-    console.log(ingredients);
+    console.log('submit', ingredients);
 
     // const ingredients = item
 
@@ -109,14 +109,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                 <select name="course" value={defaultValues?.course?.id} ref={register({ required: 'Name is required' })}>
                 {courses.map((course, index) => {
                   return (
-                    <>
-                    {/* {defaultValues.course.id === course.id ? (
-                      <option value={parseInt(course.id)} selected>{course.name}</option>
-                     ) : (
-                      <option value={parseInt(course.id)}>{course.name}</option>
-                     )} */}
-                     <option value={parseInt(course?.id)}>{course?.name}</option>
-                     </>
+                     <option key={course?.id} value={parseInt(course?.id)}>{course?.name}</option>
                 );
                 })}
                 </select>
@@ -133,7 +126,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                 <select name="cuisine" value={defaultValues?.cuisine?.id} ref={register({ required: 'Name is required' })}>
                 {cuisines.map((course, index) => {
                   return (
-                    <option value={parseInt(course?.id)}>{course?.name}</option>
+                    <option key={course?.id} value={parseInt(course?.id)}>{course?.name}</option>
                 );
                 })}
                 </select>
@@ -141,7 +134,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                 <select name="meal" value={defaultValues?.meal?.id} ref={register({ required: 'Name is required' })}>
                 {meals.map((course, index) => {
                   return (
-                    <option value={parseInt(course?.id)}>{course?.name}</option>
+                    <option key={course?.id} value={parseInt(course?.id)}>{course?.name}</option>
                 );
                 })}
                 </select>

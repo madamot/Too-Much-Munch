@@ -10,10 +10,13 @@ import Card from '../../../components/Card/Card';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
+import { useSession, signIn, signOut } from "next-auth/client"
+
 import { useDisplay } from "../../../utils/hooks";
 
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
+import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
 import { graphQLClient } from '../../../utils/graphql-client';
 
 import Cookie from "js-cookie";
@@ -32,69 +35,60 @@ const Grid = styled.div`
 `;
 
 
-const Groups = () => {
-  const {
-      isLoading,
-      isAuthenticated,
-      error,
-      user,
-      loginWithRedirect,
-      logout,
-    } = useAuth0();
+const Following = () => {
+    const [session, loading] = useSession()
 
     const [ display, setDisplay ] = useDisplay();
 
-    let id = user.sub;
-    id = id.substring(6);
+    let id = session?.id;
+    // id = id.substring(6);
 
     console.log(id);
 
     const fetcher = async (query) => await graphQLClient.request(query, { id });
 
     const query = gql`
-      query getGroupsByUser($id: String!) {
-        findUserByID(id: $id) {
-          _id
-          groups {
-            data {
-              _id
-              name
+      query Following($id: ID!) {
+        user(id: $id) {
+          following {
+            id
+            username
+            email
+            recipes {
+              id
+              title
             }
           }
         }
       }
     `;
 
-    const { data, faunaerror } = useSWR([query, id], fetcher);
+    const { data, error } = useSWR(() => id ? query : null, fetcher);
 
-     if (faunaerror) return <div>failed to load</div>;
+    if (error) return <div>{`failed to load: ${error}`}</div>;
 
      console.log(data);
 
 
 
-     if (data) {
-       if (data.findUserByID) {
-         Cookie.set("FaunaID", data.findUserByID._id)
-         console.log(data.findUserByID._id);
-       }
-     }
+    //  if (data) {
+    //    if (data.findUserByID) {
+    //      Cookie.set("FaunaID", data.findUserByID._id)
+    //      console.log(data.findUserByID._id);
+    //    }
+    //  }
 
   return (
     <Layout dashboard>
       <Head>
-        <title>Groups</title>
+        <title>Following</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Groups 🥰</h1>
+      <h1>Following 🥰</h1>
 
-      {isLoading ? (
+      {loading ? (
         <div>Loading...</div>
-      ) : (null)}
-
-      {error ? (
-        <div>Oops... {error.message}</div>
       ) : (null)}
 
       <div>
@@ -105,16 +99,16 @@ const Groups = () => {
         </div><br />
 
         {data ? [
-          (Object.keys(data.findUserByID.groups.data).length > 0 ?
+          (Object.keys(data.user.following).length > 0 ?
             <>
               <Grid>
-                {data.findUserByID.groups.data.map((group, i, arr) => {
+                {data.user.following.map((following, i, arr) => {
                   if (arr.length - 1 === i) {
-                    return <>
-                      <Link href={`/dashboard/groups/[id]`} as={`/dashboard/groups/${group._id}`}>
+                    return <div key={following.id}>
+                      <Link href={`/dashboard/following/[id]`} as={`/dashboard/following/${following.id}`}>
                         <a>
-                          <Card state='groups' display={display} key={group._id} id={group._id}>
-                            {group.name}
+                          <Card state='groups' display={display} key={following.id} id={following.id}>
+                            {following.username}
                           </Card>
                         </a>
                       </Link>
@@ -132,23 +126,23 @@ const Groups = () => {
                       </Link>
                       <br />
                       <br />
-                    </>
+                    </div>
                   } else {
-                    return <>
-                      <Link href={`/dashboard/groups/[id]`} as={`/dashboard/groups/${group._id}`}>
+                    return <div key={following.id}>
+                      <Link href={`/dashboard/following/[id]`} as={`/dashboard/following/${following.id}`}>
                         <a>
-                          <Card state='groups' display={display} key={group._id} id={group._id}>
-                            {group.name}
+                          <Card state='groups' display={display} key={following.id} id={following.id}>
+                            {following.username}
                           </Card>
                         </a>
                       </Link>
-                    </>
+                    </div>
                   }
                 })}
               </Grid>
             </>
           : <>
-            <p>You have no Groups</p>
+            <p>You aren't following anyone</p>
             <Link href="/dashboard/groups/new">
               <a>
                 <Button primary size='medium' label='Create a Group +' />
@@ -171,11 +165,5 @@ const Groups = () => {
       );
     }
 
-    Groups.getInitialProps = () => {
 
-    }
-
-    export default withAuthenticationRequired(Groups, {
-      // Show a message while the user waits to be redirected to the login page.
-      onRedirecting: () => <div>Redirecting you to the login page...</div>,
-    });
+    export default Following

@@ -294,7 +294,7 @@ const Header = ({dashboard}) => {
       <DashNavWrapper>
         <DashNav>
           <NavItem router={router.pathname} location='/dashboard'><Link href='/dashboard'>Recipes</Link></NavItem>
-          <NavItem router={router.pathname} location='/dashboard/groups'><Link href='/dashboard/groups'>Groups</Link></NavItem>
+          <NavItem router={router.pathname} location='/dashboard/following'><Link href='/dashboard/following'>Following</Link></NavItem>
           <NavItem router={router.pathname}>Coming soon...</NavItem>
         </DashNav>
       </DashNavWrapper>

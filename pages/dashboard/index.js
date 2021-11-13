@@ -48,8 +48,8 @@ const Dashboard = () => {
     },
   });
   const query = gql`
-    query getRecipesByUser {
-      user(id: 1) {
+    query getRecipesByUser($id: ID!) {
+      user(id: $id) {
         id
         recipes {
           id

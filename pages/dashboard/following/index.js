@@ -7,8 +7,7 @@ import { useForm } from 'react-hook-form';
 import Layout from '../../../components/layout/layout'
 import Button from '../../../components/Button/Button';
 import Card from '../../../components/Card/Card';
-import { useAuth0 } from '@auth0/auth0-react';
-import { withAuthenticationRequired } from '@auth0/auth0-react';
+import Search from '../../../components/Search/Search';
 
 import { useSession, signIn, signOut } from "next-auth/client"
 
@@ -40,6 +39,7 @@ const Following = () => {
 
     const [ display, setDisplay ] = useDisplay();
 
+  
     let id = session?.id;
     // id = id.substring(6);
 
@@ -57,6 +57,9 @@ const Following = () => {
               title
             }
           }
+        }
+        users {
+          username
         }
       }
     `;
@@ -86,6 +89,12 @@ const Following = () => {
       ) : (null)}
 
       <div>
+
+      {data?.users && <Search
+        users={data?.users}
+      >
+        Follow someone
+      </Search>}
 
         <div>
           <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>

@@ -43,8 +43,6 @@ const Following = () => {
     let id = session?.id;
     // id = id.substring(6);
 
-    console.log(id);
-
     const fetcher = async (query) => await graphQLClient.request(query, { id });
 
     const query = gql`
@@ -66,10 +64,6 @@ const Following = () => {
     const { data, error } = useSWR(() => id ? query : null, fetcher);
 
     if (error) return <div>{`failed to load: ${error}`}</div>;
-
-     console.log(data);
-
-
 
     //  if (data) {
     //    if (data.findUserByID) {

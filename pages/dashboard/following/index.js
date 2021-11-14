@@ -41,6 +41,7 @@ const Following = () => {
     const [ display, setDisplay ] = useDisplay();
 
     let id = session?.id;
+
     // id = id.substring(6);
 
     const fetcher = async (query) => await graphQLClient.request(query, { id });

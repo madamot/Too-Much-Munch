@@ -25,6 +25,7 @@
     "js-cookie": "^2.2.1",
     "next": "10.0.5",
     "next-auth": "^3.29.0",
+    "pg": "^8.7.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",
     "react": "17.0.1",

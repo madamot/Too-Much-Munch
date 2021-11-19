@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head'
 import Link from 'next/link';
 import Card from '../../components/Card/Card';
+import Button from '../../components/Button/Button';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import useSWR from 'swr';
@@ -55,7 +56,76 @@ const User = () => {
     `;
   
   const { data, error } = useSWR(() => you ? query : null, fetcher);
-    console.log(data);
+
+
+  const following = data?.UserFollowing?.following.map(function (obj) {
+    return parseInt(obj.id);
+  });
+
+  console.log(following);
+
+  const FollowUser = async (id, you, following) => {
+    const newFollow = [
+      ...following,
+      id,
+    ];
+    console.log('newFollow', newFollow);
+    const query = gql`
+      mutation FollowUser($you: ID!, $newFollow: [ID]) {
+        updateUser(
+          input: {
+            where: {
+              id: $you
+            }
+            data: {
+              following: $newFollow
+            }
+          }
+        ) {
+          user {
+            id
+          }
+        }
+      }
+    `;
+
+  try {
+    await graphQLClient.request(query, {you,  newFollow});
+    console.log('you', you);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const UnFollowUser = async (id, you, following) => {
+  const newFollow = following.filter(num => num != id);
+  console.log('newFollow', newFollow);
+  const query = gql`
+    mutation FollowUser($you: ID!, $newFollow: [ID]) {
+      updateUser(
+        input: {
+          where: {
+            id: $you
+          }
+          data: {
+            following: $newFollow
+          }
+        }
+      ) {
+        user {
+          id
+        }
+      }
+    }
+  `;
+
+try {
+  await graphQLClient.request(query, {you,  newFollow});
+  console.log('you', you);
+} catch (error) {
+  console.error(error);
+}
+};
 
     return (
         <Layout dashboard>
@@ -63,6 +133,14 @@ const User = () => {
           {data ? <title>{id}</title> : <title>User Recipes</title>}
           <link rel="icon" href="/favicon.ico" />
         </Head>
+
+        {data?.UserFollowing?.following.some(person => person.id == id) ? (
+          <Button size='small' label='Following' onClick={() => UnFollowUser(id, you, following)} />
+        ) : (
+          <Button size='small' label='+ Follow' onClick={() => FollowUser(id, you, following)} />
+        )}
+        
+        
         {data ? (
           <>
             {/* <div>

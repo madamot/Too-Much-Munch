@@ -59,6 +59,7 @@ const Following = () => {
           }
         }
         users {
+          id
           username
         }
       }

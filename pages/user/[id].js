@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
 import Layout from '../../components/layout/layout';
+import { useSession, signIn, signOut } from "next-auth/client"
 import { graphQLClient } from '../../utils/graphql-client';
 
 import { useDisplay } from '../../utils/hooks';
@@ -26,16 +27,17 @@ const Grid = styled.div`
 `;
 
 const User = () => {
-
+  const [session, loading] = useSession()
   const [ display, setDisplay ] = useDisplay();
 
     const router = useRouter();
     const { id } = router.query;
+    let you = session?.id;
 
-    const fetcher = async (query) => await graphQLClient.request(query, { id });
+    const fetcher = async (query) => await graphQLClient.request(query, {id, you});
 
     const query = gql`
-        query getRecipesByUser($id: ID!) {
+        query getRecipesByUser($id: ID!, $you: ID!) {
             user(id: $id) {
                 id
                 username
@@ -44,10 +46,16 @@ const User = () => {
                     title
                 }
             }
+            UserFollowing: user(id: $you) {
+                following {
+                  id
+                }
+            }
         }
     `;
   
-    const { data, error } = useSWR([query, id], fetcher);
+  const { data, error } = useSWR(() => you ? query : null, fetcher);
+    console.log(data);
 
     return (
         <Layout dashboard>

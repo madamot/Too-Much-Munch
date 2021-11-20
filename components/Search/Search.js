@@ -13,6 +13,8 @@ const Search = ({ value, children, users }) => {
 
     const [searchTerm, changeSearchTerm] = useState('')
     const [allUsers, updateUsers] = useState(users)
+    const [focus, setFocus] = useState(false) 
+    const toggleFocus = () => setFocus(value => !value);
 
     const onSearchChange = (event) => {
         changeSearchTerm(event.target.value)
@@ -25,9 +27,11 @@ const Search = ({ value, children, users }) => {
                     type="text"
                     value={searchTerm}
                     onChange={onSearchChange}
+                    onFocus={toggleFocus}
+                    onBlur={toggleFocus}
                             />
                 </form>
-                { allUsers
+                { focus
                     ? <Table
                         list={allUsers}
                         pattern={searchTerm}

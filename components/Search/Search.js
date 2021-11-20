@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 function isSearched(searchTerm) {
     return function (item) {
@@ -7,6 +8,8 @@ function isSearched(searchTerm) {
   }
 
 const Search = ({ value, children, users }) => {
+
+  console.log(users);
 
     const [searchTerm, changeSearchTerm] = useState('')
     const [allUsers, updateUsers] = useState(users)
@@ -40,7 +43,9 @@ const Table = ({ list, pattern, onDismiss }) =>
     {list.filter(isSearched(pattern)).map(item =>
       <div key={item.username} className="table-row">
         <span style={{ width: '40%' }}>
-          <a href={`/${item.username}`}>{item.username}</a>
+          <Link href={`/user/[id]`} as={`/user/${item.id}`}>
+            <a>{item.username}</a>
+          </Link>
         </span>
       </div>
     )}

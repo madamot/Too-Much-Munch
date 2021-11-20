@@ -35,9 +35,7 @@ const Grid = styled.div`
 const Dashboard = () => {
   const [session, loading] = useSession()
 
-
     const [ display, setDisplay ] = useDisplay('card');
-
 
     let id = session?.id;
 

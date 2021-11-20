@@ -31,7 +31,7 @@ const Search = ({ value, children, users }) => {
                     onBlur={toggleFocus}
                             />
                 </form>
-                { focus
+                { allUsers && focus
                     ? <Table
                         list={allUsers}
                         pattern={searchTerm}

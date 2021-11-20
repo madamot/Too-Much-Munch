@@ -20,6 +20,8 @@ import { useDisplay } from "../../../utils/hooks";
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
+import { useSession, signIn, signOut } from "next-auth/client"
+
 import Cookie from "js-cookie";
 
 
@@ -39,9 +41,9 @@ const Grid = styled.div`
 
 const Group = () => {
 
-  let faunaID = Cookie.get('FaunaID');
+  // let faunaID = Cookie.get('FaunaID');
 
-  const { user } = useAuth0();
+  const [session, loading] = useSession()
 
   const router = useRouter();
   const { id } = router.query;
@@ -54,20 +56,13 @@ const Group = () => {
   const fetcher = async (query) => await graphQLClient.request(query, { id });
 
   const query = gql`
-    query FindAGroupByID($id: ID!) {
-      findGroupByID(id: $id) {
-        _id
-        name
-        admin {
-          username
+    query getRecipesByUser($id: ID!) {
+      user(id: $id) {
+        id
+        username
+        recipes {
           id
-          email
-        }
-        users {
-          data {
-            username
-            id
-          }
+          title
         }
       }
     }
@@ -116,18 +111,17 @@ const Group = () => {
   };
 
 
-  console.log(user.sub);
 
 
   return (
     <Layout dashboard>
       <Head>
-        {data ? <title>{data.findGroupByID.name}</title> : <title>Group Recipes</title>}
+        {data ? <title>{data.user.username}</title> : <title>Group Recipes</title>}
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {data ? (
         <>
-          <div>
+          {/* <div>
             {data.findGroupByID.admin.email == user.email ? (
               <GroupEditForm defaultValues={data.findGroupByID} id={data.findGroupByID._id} />
             ) : ( <h1>{data.findGroupByID.name}</h1>
@@ -135,30 +129,30 @@ const Group = () => {
             <h2>{`Code: ${data.findGroupByID._id}`}</h2>
             <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
             <h5>{`Admin: ${data.findGroupByID.admin.username}`}</h5>
-          </div>
+          </div> */}
           <br />
           <div>
             <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
             <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
           </div><br />
           <Grid>
-            {data.findGroupByID.users.data.map((user, i, arr) => {
+            {data.user.recipes.map((recipe, i, arr) => {
               if (arr.length - 1 === i) {
                 return <>
-                  <Link href={`/dashboard/groups/${id}/[uid]`} as={`/dashboard/groups/${id}/${user.id}`}>
+                  <Link href={`/dashboard/following/${id}/[rid]`} as={`/dashboard/following/${id}/${recipe.id}`}>
                     <a>
-                      <Card state='groups' display={display} key={user.id} id={user.id}>
-                        {user.username}
+                      <Card state='groups' display={display} key={recipe.id} id={recipe.id}>
+                        {recipe.title}
                       </Card>
                     </a>
                   </Link>
                 </>
               } else {
                 return <>
-                  <Link href={`/dashboard/groups/${id}/[uid]`} as={`/dashboard/groups/${id}/${user.id}`}>
+                  <Link href={`/dashboard/following/${id}/[rid]`} as={`/dashboard/following/${id}/${recipe.id}`}>
                     <a>
-                      <Card state='groups' display={display} key={user.id} id={user.id}>
-                        {user.username}
+                      <Card state='groups' display={display} key={recipe.id} id={recipe.id}>
+                        {recipe.title}
                       </Card>
                     </a>
                   </Link>
@@ -167,10 +161,10 @@ const Group = () => {
             })}
           </Grid>
           <br />
-          {data.findGroupByID.admin.email === user.email ? (
+          {/* {data.findGroupByID.admin.email === user.email ? (
           null ) : (
             <Button size='small' label='Leave group' onClick={() => leaveAGroup(data.findGroupByID._id)}/>
-          )}
+          )} */}
           <br />
           <br />
         </>
@@ -184,7 +178,4 @@ const Group = () => {
 };
 
 
-export default withAuthenticationRequired(Group, {
-  // Show a message while the user waits to be redirected to the login page.
-  onRedirecting: () => <div>Redirecting you to the login page...</div>,
-});
+export default Group

@@ -9,6 +9,10 @@ const Editor = dynamic(
   () => import('react-draft-wysiwyg').then(mod => mod.Editor),
   { ssr: false }
 )
+const draftToMarkdown = dynamic(
+  () => import('draftjs-to-markdown'),
+  { ssr: false }
+)
 
 
 const WYSIWYGEditor = props => {
@@ -38,7 +42,8 @@ if (props.convo) {
 
   const handleEditorChange = (state) => {
     setEditorState(state);
-    convertContentToHTML();
+    // convertContentToHTML();
+    // setConvertedContent(state)
   }
 
   const convertContentToHTML = () => {
@@ -66,7 +71,7 @@ if (props.convo) {
      //   }
      // },
 })(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
+    setConvertedContent(editorState);
     console.log("PROPS ==> ", props);
     return props.onChange(
       convertedContent

@@ -4,7 +4,11 @@ import Button from '../Button/Button';
 import Link from 'next/link';
 import { useRouter, withRouter } from 'next/router'
 
-import { useAuth0 } from '@auth0/auth0-react';
+import useSWR from 'swr';
+import { gql } from 'graphql-request';
+import { StrapiGQLClient } from '../../utils/strapi-gql-client';
+
+import { useSession, signIn, signOut } from "next-auth/client"
 
 const Wrapper = styled.div`
   font-family: Bebas Neue, 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -49,6 +53,19 @@ const DashNav = styled.ul`
   padding: 0;
   ${'' /* width: 50%; */}
   position: absolute;
+  overflow: auto;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const NavSub = styled.ul`
+  display: flex;
+  margin: 0;
+  height: 100%;
+  list-style-type: none;
+  padding: 0;
+  ${'' /* width: 50%; */}
+  /* position: absolute; */
   overflow: auto;
   align-items: center;
   justify-content: space-between;
@@ -170,60 +187,100 @@ const HamburgerButton = {
 
 
 const Header = ({dashboard}) => {
-  const { isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
+  const [session, loading] = useSession()
   const router = useRouter();
 
   const [openDrawer, toggleDrawer] = useState(false);
   const toggleChecked = () => toggleDrawer(value => !value);
   const drawerRef = useRef(null);
 
-  console.log(router.pathname);
   let url = "";
   if (typeof window !== "undefined") {
     url = window.location.href;
-    console.log(url);
   }
+
+  const fetcher = async (query) => await StrapiGQLClient({
+    query: query,
+    variables: {
+
+      },
+  });
+
+  const { data, error } = useSWR(
+    gql`
+      {
+        global {
+          navigation {
+            theme
+            ... on ComponentGlobalNavigation {
+              panels {
+                ... on ComponentGlobalNavigationPanel {
+                  id
+                  link {
+                    id
+                    href
+                    label
+                    target
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    fetcher
+  );
+
+   if (error) return <div>failed to load</div>;
+
+
   return (
     <header>
       <Wrapper>
         <Nav ref={drawerRef} openDrawer={openDrawer}>
-          <Navrow>
-            <Link href="/">
-              <a>
-                <Title className="title">🍴 Too Much Munch</Title>
-              </a>
-            </Link>
-          </Navrow>
-          <Navrow>
-            <Link href="/blog">
-              <a>
-                Blog
-              </a>
-            </Link>
-          </Navrow>
-          <Navrow>
-            {!isLoading && (
-              isAuthenticated ? (
-                <Navrow>
+            
+            
+            <Navrow>
+              <Link href="/">
+                <a>
+                  <Title className="title">🍴 Too Much Munch</Title>
+                </a>
+              </Link>
+            </Navrow>
+            <NavSub>
+              {data?.global?.navigation?.panels && data.global.navigation.panels.map(item => (
+                <Navrow key={item.id} href={item.link.href}>
+                  <Link href="/blog">
+                    <a>
+                      {item.link.label}
+                    </a>
+                  </Link>
+                </Navrow>
+              ))}
+            </NavSub>
+
+            { session ? (
+              <Navrow>
                   <div className="multiButtons">
-                    <Button size="small" onClick={() => logout({ returnTo: url })} label="Log out" />
+                    <Button size="small" onClick={() => signOut()} label="Log out" />
                     <Link href='/dashboard'>
                       <Button primary size="small" label="Dashboard" />
                     </Link>
                   </div>
                 </Navrow>
-              ) : (
-                <Navrow>
+            ) : (
+              <Navrow>
                   <div className="multiButtons">
-                    <Button size="small" onClick={loginWithRedirect} label="Log in" />
-                    <Button primary size="small" onClick={() => loginWithRedirect({
+                    <Button size="small" onClick={() => signIn()} label="Log in" />
+                    {/* <Button primary size="small" onClick={() => loginWithRedirect({
                       screen_hint: "signup",
-                    })} label="Sign Up" />
+                    })} label="Sign Up" /> */}
                   </div>
                 </Navrow>
-              )
             )}
-          </Navrow>
+
+          {/* </Navrow> */}
         </Nav>
         <HamburgerButton.Wrapper onClick={() => toggleChecked(true)}>
           <HamburgerButton.Lines />
@@ -237,7 +294,7 @@ const Header = ({dashboard}) => {
       <DashNavWrapper>
         <DashNav>
           <NavItem router={router.pathname} location='/dashboard'><Link href='/dashboard'>Recipes</Link></NavItem>
-          <NavItem router={router.pathname} location='/dashboard/groups'><Link href='/dashboard/groups'>Groups</Link></NavItem>
+          <NavItem router={router.pathname} location='/dashboard/following'><Link href='/dashboard/following'>Following</Link></NavItem>
           <NavItem router={router.pathname}>Coming soon...</NavItem>
         </DashNav>
       </DashNavWrapper>

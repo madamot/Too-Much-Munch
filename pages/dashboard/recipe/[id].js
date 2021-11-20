@@ -10,9 +10,9 @@ import { convertFromHTML } from 'draft-convert';
 import Layout from '../../../components/layout/layout';
 import Button from '../../../components/Button/Button';
 import EditForm from '../../../components/EditForm/EditForm';
+import Ingredients from '../../../components/Ingredients/Ingredients';
+import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
 import { graphQLClient } from '../../../utils/graphql-client';
-
-import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Recipe = () => {
 
@@ -20,26 +20,70 @@ const Recipe = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const fetcher = async (query) => await graphQLClient.request(query, { id });
+  const fetcher = async (query) => await StrapiGQLClient({
+    query: query,
+    variables: {
+        id
+    },
+  });
 
   const query = gql`
     query FindARecipeByID($id: ID!) {
-      findRecipeByID(id: $id) {
+      recipe(id: $id) {
+        title
+        course {
+          id
+        }
+        cuisine {
+          id
+        }
+        meal {
+          id
+        }
+        ingredients {
+          ingredient
+          quantity
+          measurement
+        }
+        method {
+            method
+          }
+      }
+      courses {
+        id
+        uid
         name
-        description
+      }
+  		cuisines {
+        id
+        uid
+        name
+      }
+  		meals {
+        id
+        uid
+        name
       }
     }
   `;
 
-  const { data, error } = useSWR([query, id], fetcher);
+  const { data, error } = useSWR(() => id ? query : null, fetcher);
 
   if (error) return <div>failed to load</div>;
 
   const deleteARecipe = async (id) => {
     const query = gql`
       mutation DeleteARecipe($id: ID!) {
-        deleteRecipe(id: $id) {
-          _id
+        deleteRecipe(
+          input: {
+            where: {
+              id: $id
+            }
+          }
+        ) {
+          recipe {
+            id
+          }
         }
       }
     `;
@@ -55,19 +99,19 @@ const Recipe = () => {
   return (
     <Layout dashboard>
       <Head>
-        {data ? <title>{data.findRecipeByID.name}</title> : <title>Recipe</title>}
+        {data ? <title>{data.recipe.title}</title> : <title>Recipe</title>}
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Edit Recipe</h1>
 
       {data ? (
         <>
-          {/* <h2>{data.findRecipeByID.name}</h2>
-          <br /> */}
+          <h2>{data.recipe.title}</h2>
+          <br />
           {/* <p>{data.findRecipeByID.description}</p> */}
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
+          <EditForm defaultValues={data.recipe} id={id} courses={data.courses} cuisines={data.cuisines} meals={data.meals} />
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
-          {/* <EditForm defaultValues={data.findRecipeByID} id={id} /> */}
         </>
 
       ) : (
@@ -75,16 +119,13 @@ const Recipe = () => {
       )}
 
 
-      {data ? (
+      {/* {data ? (
         <EditForm defaultValues={data.findRecipeByID} id={id} />
       ) : (
         <div>loading...</div>
-      )}
+      )} */}
     </Layout>
   );
 };
 
-export default withAuthenticationRequired(Recipe, {
-  // Show a message while the user waits to be redirected to the login page.
-  onRedirecting: () => <div>Redirecting you to the login page...</div>,
-});
+export default Recipe;

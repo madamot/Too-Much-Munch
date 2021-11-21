@@ -5,6 +5,7 @@ import axios from 'axios';
 const ImageUpload = ({ changeRecipeImage, logo }) => {
 
     const [files, setFiles] = useState()
+    const [uploaded, setUploaded] = useState()
 
     useEffect(() => {
 
@@ -13,8 +14,6 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
             uploadImage()
         }
     }, [logo, files]);
-
-    console.log(files);
 
     const uploadImage = async () => {
     
@@ -25,6 +24,7 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
         axios.post(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/upload`, formData)
         .then((response)=>{
             changeRecipeImage(response.data[0].id)
+            setUploaded(true)
             //after success
         }).catch((error)=>{
             //handle error
@@ -43,6 +43,7 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
             />
             <br />
             {logo && <img src={logo} width="100" />}
+            {uploaded && <p>Uploaded!</p>}
         </div>
     )
 }

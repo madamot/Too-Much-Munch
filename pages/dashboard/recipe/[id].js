@@ -95,7 +95,7 @@ const Recipe = () => {
     await graphQLClient.request(query, { id });
     Router.push('/dashboard');
   } catch (error) {
-    console.error(error);
+    // console.error(error);
   }
 };
 

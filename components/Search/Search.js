@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+import useOutsideClick from '../../utils/useOutsideClick';
 
 function isSearched(searchTerm) {
     return function (item) {
@@ -8,6 +9,8 @@ function isSearched(searchTerm) {
   }
 
 const Search = ({ value, children, users }) => {
+
+  const ref = useRef();
 
   console.log(users);
 
@@ -20,24 +23,25 @@ const Search = ({ value, children, users }) => {
         changeSearchTerm(event.target.value)
       }
 
+    useOutsideClick(ref, () => {
+      setFocus(value => !value)
+    });
+
+
     return (
-        <div>
+        <div ref={ref} onFocus={() => setFocus(true)}>
             <form>
                 {children} <input
                     type="text"
                     value={searchTerm}
                     onChange={onSearchChange}
-                    onFocus={toggleFocus}
-                    onBlur={toggleFocus}
                             />
                 </form>
-                { allUsers && focus
-                    ? <Table
+                { focus &&
+                    <Table
                         list={allUsers}
                         pattern={searchTerm}
-                    />
-                    : null
-                }
+                    />}
         </div>
     )
 }
@@ -46,7 +50,7 @@ const Table = ({ list, pattern, onDismiss }) =>
   <div className="table">
     {list.filter(isSearched(pattern)).map(item =>
       <div key={item.username} className="table-row">
-        <span style={{ width: '40%' }}>
+        <span style={{ width: '40%', backgroundColor: 'green' }}>
           <Link href={`/user/[id]`} as={`/user/${item.id}`}>
             <a>{item.username}</a>
           </Link>

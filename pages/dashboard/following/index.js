@@ -119,7 +119,7 @@ const Following = () => {
                       </Link>
                       <br />
                       <br />
-                      <Link href="/dashboard/groups/new">
+                      {/* <Link href="/dashboard/groups/new">
                         <a>
                           <Button primary size='medium' label='Create a Group +' />
                         </a>
@@ -128,7 +128,7 @@ const Following = () => {
                         <a>
                           <Button primary size='medium' label='Join a Group +' />
                         </a>
-                      </Link>
+                      </Link> */}
                       <br />
                       <br />
                     </div>
@@ -148,7 +148,7 @@ const Following = () => {
             </>
           : <>
             <p>You aren't following anyone</p>
-            <Link href="/dashboard/groups/new">
+            {/* <Link href="/dashboard/groups/new">
               <a>
                 <Button primary size='medium' label='Create a Group +' />
               </a>
@@ -157,7 +157,7 @@ const Following = () => {
               <a>
                 <Button primary size='medium' label='Join a Group +' />
               </a>
-            </Link>
+            </Link> */}
           </>
           )
         ]: (

@@ -22,7 +22,7 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
     
         formData.append('files', files[0])
     
-        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/upload`, formData)
+        axios.post(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/upload`, formData)
         .then((response)=>{
             changeRecipeImage(response.data[0].id)
             //after success

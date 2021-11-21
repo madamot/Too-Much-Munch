@@ -42,7 +42,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
 
   const [recipeImage, changeRecipeImage] = useState();
 
-const { register, control, handleSubmit, reset, formState, errors } = methods
+  const { register, control, handleSubmit, reset, formState, errors } = methods
 
   const onSubmit = handleSubmit(async ({ title, image, course, cuisine, meal, ingredients, method }, data) => {
 

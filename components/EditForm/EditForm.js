@@ -11,6 +11,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Ingredients from '../Ingredients/Ingredients';
 import Method from '../Method/Method';
 import Button from '../../components/Button/Button';
+import ImageUpload from '../ImageUpload/ImageUpload';
 import { graphQLClient } from '../../utils/graphql-client';
 
 const Editor = dynamic(
@@ -39,23 +40,28 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
+  const [recipeImage, changeRecipeImage] = useState();
+
 const { register, control, handleSubmit, reset, formState, errors } = methods
 
-  const onSubmit = handleSubmit(async ({ title, course, cuisine, meal, ingredients, method }, data) => {
+  const onSubmit = handleSubmit(async ({ title, image, course, cuisine, meal, ingredients, method }, data) => {
 
-    console.log('submit', ingredients);
+    console.log(recipeImage);
+
+    console.log('submit', recipeImage);
 
     // const ingredients = item
 
     if (errorMessage) setErrorMessage('');
 
     const query = gql`
-      mutation UpdateARecipe($id: ID!, $title: String, $course: ID!, $cuisine: ID!, $meal: ID!, $ingredients: [editComponentRecipeIngredientInput], $method: [editComponentRecipeMethodInput]) {
+      mutation UpdateARecipe($id: ID!, $title: String, $recipeImage: ID, $course: ID!, $cuisine: ID!, $meal: ID!, $ingredients: [editComponentRecipeIngredientInput], $method: [editComponentRecipeMethodInput]) {
         updateRecipe(
           input: {
             where: { id: $id }
             data: {
               title: $title
+              image: $recipeImage
               course: $course
               cuisine: $cuisine
               meal: $meal
@@ -74,6 +80,7 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
     const variables = {
       id,
       title,
+      recipeImage,
       course,
       cuisine,
       meal,
@@ -105,6 +112,8 @@ const { register, control, handleSubmit, reset, formState, errors } = methods
                   placeholder="e.g. bolognese"
                   ref={register({ required: 'Name is required' })}
                 />
+
+                <ImageUpload changeRecipeImage={changeRecipeImage} logo={defaultValues?.image?.url} />
 
                 <select name="course" value={defaultValues?.course?.id} ref={register({ required: 'Name is required' })}>
                 {courses.map((course, index) => {

@@ -4,6 +4,7 @@ module.exports = {
     domains: [
       'www.datocms-assets.com',
       'via.placeholder.com',
+      'res.cloudinary.com'
     ]
   },
 

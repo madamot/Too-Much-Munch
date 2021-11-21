@@ -31,6 +31,9 @@ const Recipe = () => {
     query FindARecipeByID($id: ID!) {
       recipe(id: $id) {
         title
+        image {
+          url
+        }
         course {
           id
         }

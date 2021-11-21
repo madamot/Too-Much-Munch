@@ -98,7 +98,7 @@ const Dashboard = () => {
                 <div key={recipe.id}>
                 <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe.id}`}>
                   <a>
-                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe.image.url}>
+                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
                       {recipe.title}
                     </Card>
                   </a>

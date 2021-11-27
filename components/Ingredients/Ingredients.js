@@ -20,7 +20,7 @@ const Ingredients = () => {
             return (
                 <div key={item.id}>
                     <Controller
-                        as={<input type="number" />}
+                        as={<input type="number" step="any" />}
                         name={`ingredients.[${index}].quantity`}
                         {...register(`ingredients.[${index}].quantity`, { 
                             valueAsNumber: true })}

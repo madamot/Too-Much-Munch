@@ -77,7 +77,7 @@ const UserRecipe = () => {
         <>
           <h1>{data.recipe.title}</h1>
           <br />
-          <p>{data.recipe.meal.name} | {data.recipe.course.name} | {data.recipe.cuisine.name}</p>
+          <p>{data?.recipe?.meal?.name} | {data?.recipe?.course?.name} | {data?.recipe?.cuisine?.name}</p>
           <br />
           <h3>Ingredients</h3>
           {data.recipe.ingredients.map((ingredient, index) => (

@@ -94,24 +94,25 @@ const Dashboard = () => {
 
             <>
               <Grid display={display}>
-              {data?.user?.recipes.map(recipe => (
-                <div key={recipe.id}>
-                <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe.id}`}>
+                {data?.user?.recipes.map(recipe => (
+                  <div key={recipe.id}>
+                  <Link href={`/dashboard/recipe/[id]`} as={`/dashboard/recipe/${recipe.id}`}>
+                    <a>
+                      <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
+                        {recipe.title}
+                      </Card>
+                    </a>
+                  </Link>
+                </div>
+                ))}
+              </Grid>
+              <div style={{ float: 'right', padding: '1em' }}>
+                <Link href="/dashboard/new">
                   <a>
-                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
-                      {recipe.title}
-                    </Card>
+                    <Button size='large' primary label='+ New recipe' />
                   </a>
                 </Link>
               </div>
-              ))}
-
-              </Grid>
-              <Link href="/dashboard/new">
-                        <a>
-                          <Card state='add' display={display} />
-                        </a>
-                      </Link>
             </>
 
         ): (

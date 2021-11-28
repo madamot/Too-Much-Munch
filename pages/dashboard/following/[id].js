@@ -47,16 +47,17 @@ const Group = () => {
 
   const router = useRouter();
   const { id } = router.query;
+  let you = session?.id;
 
   const [ display, setDisplay ] = useDisplay();
 
   const { handleSubmit, errors } = useForm();
 
 
-  const fetcher = async (query) => await graphQLClient.request(query, { id });
+  const fetcher = async (query) => await graphQLClient.request(query, { id, you });
 
   const query = gql`
-    query getRecipesByUser($id: ID!) {
+    query getRecipesByUser($id: ID!, $you: ID!) {
       user(id: $id) {
         id
         username
@@ -65,52 +66,52 @@ const Group = () => {
           title
         }
       }
+      UserFollowing: user(id: $you) {
+          following {
+            id
+          }
+      }
     }
   `;
 
-  const { data, error } = useSWR([query, id], fetcher);
+  const { data, error } = useSWR(() => you ? query : null, fetcher);
+
+  const following = data?.UserFollowing?.following.map(function (obj) {
+    return parseInt(obj.id);
+  });
 
   if (error) return <div>failed to load</div>;
 
-  const deleteAGroup = async (id) => {
-      const query = gql`
-        mutation DeleteAGroup($id: ID!, $faunaID: [ID]) {
-          partialUpdateGroup(id: $id, data: {
-            users: { disconnect: $faunaID}
-          }) {
-            _id
+
+  const UnFollowUser = async (id, you, following) => {
+    const newFollow = following.filter(num => num != id);
+    console.log('newFollow', newFollow);
+    const query = gql`
+      mutation FollowUser($you: ID!, $newFollow: [ID]) {
+        updateUser(
+          input: {
+            where: {
+              id: $you
+            }
+            data: {
+              following: $newFollow
+            }
+          }
+        ) {
+          user {
+            id
           }
         }
-      `;
-
-    try {
-      await graphQLClient.request(query, { id });
-      Router.push('/dashboard/groups');
-    } catch (error) {
-      console.error(error);
-    }
+      }
+    `;
+  
+  try {
+    await graphQLClient.request(query, {you,  newFollow});
+    Router.push(`/dashboard/following`);
+  } catch (error) {
+    console.error(error);
+  }
   };
-
-  const leaveAGroup = async (id) => {
-      const query = gql`
-        mutation LeaveGroup($id: ID!, $faunaID: [ID]) {
-          partialUpdateGroup(id: $id, data: {
-            users: { disconnect: $faunaID}
-          }) {
-            _id
-          }
-        }
-      `;
-
-    try {
-      await graphQLClient.request(query, { id });
-      Router.push('/dashboard/groups');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-
 
 
   return (
@@ -119,6 +120,7 @@ const Group = () => {
         {data ? <title>{data.user.username}</title> : <title>Group Recipes</title>}
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       {data ? (
         <>
           {/* <div>
@@ -130,10 +132,19 @@ const Group = () => {
             <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
             <h5>{`Admin: ${data.findGroupByID.admin.username}`}</h5>
           </div> */}
+          {data && <h2>{data.user.username}</h2>}
           <br />
-          <div>
-            <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
-            <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}>
+            <div>
+              <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+              <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+            </div>
+            <div>
+              <Button size='small' label='Unfollow' onClick={() => UnFollowUser(id, you, following)} />
+            </div>
           </div><br />
           <Grid>
             {data.user.recipes.map((recipe, i, arr) => {

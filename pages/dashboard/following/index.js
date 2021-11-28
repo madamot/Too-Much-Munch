@@ -21,7 +21,8 @@ import { graphQLClient } from '../../../utils/graphql-client';
 import Cookie from "js-cookie";
 
 const Grid = styled.div`
-  ${'' /* display: flex; */}
+  display: ${props => props.display == 'card' ? "flex" : "block"}; 
+  grid-template-columns: auto auto auto;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -37,7 +38,7 @@ const Grid = styled.div`
 const Following = () => {
     const [session, loading] = useSession()
 
-    const [ display, setDisplay ] = useDisplay();
+    const [ display, setDisplay ] = useDisplay('card');
 
   
     let id = session?.id;
@@ -106,44 +107,18 @@ const Following = () => {
         {data ? [
           (Object.keys(data.user.following).length > 0 ?
             <>
-              <Grid>
-                {data.user.following.map((following, i, arr) => {
-                  if (arr.length - 1 === i) {
-                    return <div key={following.id}>
-                      <Link href={`/dashboard/following/[id]`} as={`/dashboard/following/${following.id}`}>
-                        <a>
-                          <Card state='groups' display={display} key={following.id} id={following.id}>
-                            {following.username}
-                          </Card>
-                        </a>
-                      </Link>
-                      <br />
-                      <br />
-                      {/* <Link href="/dashboard/groups/new">
-                        <a>
-                          <Button primary size='medium' label='Create a Group +' />
-                        </a>
-                      </Link>
-                      <Link href="/dashboard/groups/join">
-                        <a>
-                          <Button primary size='medium' label='Join a Group +' />
-                        </a>
-                      </Link> */}
-                      <br />
-                      <br />
-                    </div>
-                  } else {
-                    return <div key={following.id}>
-                      <Link href={`/dashboard/following/[id]`} as={`/dashboard/following/${following.id}`}>
-                        <a>
-                          <Card state='groups' display={display} key={following.id} id={following.id}>
-                            {following.username}
-                          </Card>
-                        </a>
-                      </Link>
-                    </div>
-                  }
-                })}
+              <Grid display={display}>
+                {data?.user?.following.map(following => (
+                  <div key={following.id}>
+                  <Link href={`/dashboard/following/[id]`} as={`/dashboard/following/${following.id}`}>
+                    <a>
+                      <Card state='recipe' display={display} key={following.id} id={following.id} imagesrc={following?.image?.url}>
+                        {following.username}
+                      </Card>
+                    </a>
+                  </Link>
+                </div>
+                ))}
               </Grid>
             </>
           : <>

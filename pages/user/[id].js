@@ -15,7 +15,8 @@ import { useDisplay } from '../../utils/hooks';
 
 
 const Grid = styled.div`
-  ${'' /* display: flex; */}
+  display: ${props => props.display == 'card' ? "flex" : "block"}; 
+  grid-template-columns: auto auto auto;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -45,6 +46,9 @@ const User = () => {
                 recipes {
                     id
                     title
+                    image {
+                    url
+                  }
                 }
             }
             UserFollowing: user(id: $you) {
@@ -152,31 +156,20 @@ try {
               <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
               <h5>{`Admin: ${data.findGroupByID.admin.username}`}</h5>
             </div> */}
+            <h2>{data.user.username}</h2>
             <br />
-            <Grid>
-              {data.user.recipes.map((recipe, i, arr) => {
-                if (arr.length - 1 === i) {
-                  return <>
-                    <Link href={`/dashboard/following/${id}/[rid]`} as={`/dashboard/following/${id}/${recipe.id}`}>
-                      <a>
-                        <Card state='groups' display={display} key={recipe.id} id={recipe.id}>
-                          {recipe.title}
-                        </Card>
-                      </a>
-                    </Link>
-                  </>
-                } else {
-                  return <>
-                    <Link href={`/dashboard/following/${id}/[rid]`} as={`/dashboard/following/${id}/${recipe.id}`}>
-                      <a>
-                        <Card state='groups' display={display} key={recipe.id} id={recipe.id}>
-                          {recipe.title}
-                        </Card>
-                      </a>
-                    </Link>
-                  </>
-                }
-              })}
+            <Grid display={display}>
+              {data?.user?.recipes.map(recipe => (
+                <div key={recipe.id}>
+                <Link href={`/dashboard/following/${id}/[rid]`} as={`/dashboard/following/${id}/${recipe.id}`}>
+                  <a>
+                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
+                      {recipe.title}
+                    </Card>
+                  </a>
+                </Link>
+                </div>
+              ))}
             </Grid>
             <br />
             {/* {data.findGroupByID.admin.email === user.email ? (

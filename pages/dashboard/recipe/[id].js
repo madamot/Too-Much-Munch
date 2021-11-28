@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
+import styled, { css } from 'styled-components';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { convertFromHTML } from 'draft-convert';
@@ -14,8 +16,13 @@ import Ingredients from '../../../components/Ingredients/Ingredients';
 import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
 import { graphQLClient } from '../../../utils/graphql-client';
 
-const Recipe = () => {
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 25em;
+  position: relative;
+`;
 
+const Recipe = () => {
 
   const router = useRouter();
   const { id } = router.query;
@@ -110,6 +117,10 @@ const Recipe = () => {
       {data ? (
         <>
           <h2>{data.recipe.title}</h2>
+          <br />
+          <ImageContainer>
+            <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
+          </ImageContainer>
           <br />
           {/* <p>{data.findRecipeByID.description}</p> */}
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}

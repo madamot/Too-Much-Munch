@@ -73,7 +73,6 @@ const User = () => {
       ...following,
       id,
     ];
-    console.log('newFollow', newFollow);
     const query = gql`
       mutation FollowUser($you: ID!, $newFollow: [ID]) {
         updateUser(
@@ -161,7 +160,7 @@ try {
             <Grid display={display}>
               {data?.user?.recipes.map(recipe => (
                 <div key={recipe.id}>
-                <Link href={`/dashboard/user/${id}/[rid]`} as={`/dashboard/user/${id}/${recipe.id}`}>
+                <Link href={`/user/${id}/[rid]`} as={`/user/${id}/${recipe.id}`}>
                   <a>
                     <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
                       {recipe.title}

@@ -161,7 +161,7 @@ try {
             <Grid display={display}>
               {data?.user?.recipes.map(recipe => (
                 <div key={recipe.id}>
-                <Link href={`/dashboard/following/${id}/[rid]`} as={`/dashboard/following/${id}/${recipe.id}`}>
+                <Link href={`/dashboard/user/${id}/[rid]`} as={`/dashboard/user/${id}/${recipe.id}`}>
                   <a>
                     <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
                       {recipe.title}

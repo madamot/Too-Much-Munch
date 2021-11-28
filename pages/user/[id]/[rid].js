@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
@@ -9,23 +10,20 @@ import { gql } from 'graphql-request';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { convertFromHTML } from 'draft-convert';
-import Layout from '../../../../components/layout/layout';
-import Button from '../../../../components/Button/Button';
-import Card from '../../../../components/Card/Card';
-import { graphQLClient } from '../../../../utils/graphql-client';
+import Layout from '../../../components/layout/layout';
+import Button from '../../../components/Button/Button';
+import Card from '../../../components/Card/Card';
+import { graphQLClient } from '../../../utils/graphql-client';
 
-import { useDisplay } from "../../../../utils/hooks";
+import { useDisplay } from "../../../utils/hooks";
 
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 
-
-// const Grid = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   flex-wrap: wrap;
-// }
-// `;
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 25em;
+  position: relative;
+`;
 
 
 const UserRecipe = () => {
@@ -39,6 +37,9 @@ const UserRecipe = () => {
     query FindARecipeByID($rid: ID!) {
       recipe(id: $rid) {
         title
+        image {
+          url
+        }
         course {
           id
           name
@@ -76,6 +77,10 @@ const UserRecipe = () => {
       {data ? (
         <>
           <h1>{data.recipe.title}</h1>
+          <br />
+          <ImageContainer>
+            <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
+          </ImageContainer>
           <br />
           <p>{data?.recipe?.meal?.name} | {data?.recipe?.course?.name} | {data?.recipe?.cuisine?.name}</p>
           <br />

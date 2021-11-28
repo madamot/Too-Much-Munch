@@ -39,7 +39,6 @@ const Main = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
 `;
 
 const Title = styled.h1`
@@ -48,14 +47,12 @@ const Title = styled.h1`
   font-size: 4.5rem;
   color: #0d1c72;
   font-family: Bebas Neue;
-}
 `;
 
 const Munch = styled.span`
   text-align: center;
   font-size: 6.4rem;
   display: block;
-}
 `;
 
 const Subtitle = styled.h5`
@@ -63,7 +60,6 @@ const Subtitle = styled.h5`
   font-weight: 300;
   color: #0d1c72;
   font-size: 2rem;
-}
 `;
 
 const Subsubtitle = styled.h5`
@@ -71,7 +67,6 @@ const Subsubtitle = styled.h5`
   font-weight: 100;
   font-size: 1.5rem;
   margin: 0;
-}
 `;
 
 

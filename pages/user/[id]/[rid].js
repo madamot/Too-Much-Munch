@@ -68,6 +68,8 @@ const UserRecipe = () => {
 
   if (error) return <div>{`failed to load: ${error}`}</div>;
 
+  console.log(error);
+
   return (
     <Layout dashboard>
       <Head>

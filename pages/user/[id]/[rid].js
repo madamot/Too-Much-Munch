@@ -78,9 +78,9 @@ const UserRecipe = () => {
         <>
           <h1>{data.recipe.title}</h1>
           <br />
-          <ImageContainer>
+          {data?.recipe?.image?.url && <ImageContainer>
             <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
-          </ImageContainer>
+          </ImageContainer>}
           <br />
           <p>{data?.recipe?.meal?.name} | {data?.recipe?.course?.name} | {data?.recipe?.cuisine?.name}</p>
           <br />

@@ -50,7 +50,7 @@ const Table = ({ list, pattern, onDismiss }) =>
   <div className="table">
     {list.filter(isSearched(pattern)).map(item =>
       <div key={item.username} className="table-row">
-        <span style={{ width: '40%', backgroundColor: 'green' }}>
+        <span style={{ width: '40%' }}>
           <Link href={`/user/[id]`} as={`/user/${item.id}`}>
             <a>{item.username}</a>
           </Link>

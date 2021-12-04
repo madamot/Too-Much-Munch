@@ -36,10 +36,10 @@ const User = () => {
     const { id } = router.query;
     let you = session?.id;
 
-    const fetcher = async (query) => await graphQLClient.request(query, {id, you});
+    const fetcher = async (query) => await graphQLClient.request(query, {id});
 
     const query = gql`
-        query getRecipesByUser($id: ID!, $you: ID!) {
+        query getRecipesByUser($id: ID!) {
             user(id: $id) {
                 id
                 username
@@ -51,16 +51,95 @@ const User = () => {
                   }
                 }
             }
+        }
+    `;
+  
+  const { data, error } = useSWR(() => id ? query : null, fetcher);
+
+  console.log(error);
+
+
+
+
+    return (
+        <Layout dashboard>
+        <Head>
+          {data ? <title>{id}</title> : <title>User Recipes</title>}
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <FollowHandler
+          client={graphQLClient}
+          you={you}
+          id={id}
+        />
+        
+        
+        {data ? (
+          <>
+            {/* <div>
+              {data.findGroupByID.admin.email == user.email ? (
+                <GroupEditForm defaultValues={data.findGroupByID} id={data.findGroupByID._id} />
+              ) : ( <h1>{data.findGroupByID.name}</h1>
+              )}
+              <h2>{`Code: ${data.findGroupByID._id}`}</h2>
+              <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
+              <h5>{`Admin: ${data.findGroupByID.admin.username}`}</h5>
+            </div> */}
+            <h2>{data.user.username}</h2>
+            <br />
+            <Grid display={display}>
+              {data?.user?.recipes.map(recipe => (
+                <div key={recipe.id}>
+                <Link href={`/user/${id}/[rid]`} as={`/user/${id}/${recipe.id}`}>
+                  <a>
+                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
+                      {recipe.title}
+                    </Card>
+                  </a>
+                </Link>
+                </div>
+              ))}
+            </Grid>
+            <br />
+            {/* {data.findGroupByID.admin.email === user.email ? (
+            null ) : (
+              <Button size='small' label='Leave group' onClick={() => leaveAGroup(data.findGroupByID._id)}/>
+            )} */}
+            <br />
+            <br />
+          </>
+  
+        ) : (
+          <div>loading...</div>
+        )}
+  
+      </Layout>
+    )
+}
+
+const FollowHandler = ({ client, you, id }) => {
+
+  const fetcher = async (query) => await client.request(query, {you});
+
+  const query = gql`
+    query getUserFollowing($you: ID!) {
             UserFollowing: user(id: $you) {
                 following {
                   id
                 }
             }
         }
-    `;
-  
-  const { data, error } = useSWR(() => you ? query : null, fetcher);
+  `;
 
+const { data, error } = useSWR(() => you ? query : null, fetcher);
+
+  if (error) {
+    console.log(error)
+    return null
+  }
+
+  console.log('call', data);
 
   const following = data?.UserFollowing?.following.map(function (obj) {
     return parseInt(obj.id);
@@ -130,61 +209,15 @@ try {
 }
 };
 
-    return (
-        <Layout dashboard>
-        <Head>
-          {data ? <title>{id}</title> : <title>User Recipes</title>}
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
+  return (
+    <>
         {data?.UserFollowing?.following.some(person => person.id == id) ? (
           <Button size='small' label='Following' onClick={() => UnFollowUser(id, you, following)} />
         ) : (
-          <Button size='small' label='+ Follow' onClick={() => FollowUser(id, you, following)} />
+          <Button size='small' label='+ Follow' onClick={() => you ? FollowUser(id, you, following) : signIn() } />
         )}
-        
-        
-        {data ? (
-          <>
-            {/* <div>
-              {data.findGroupByID.admin.email == user.email ? (
-                <GroupEditForm defaultValues={data.findGroupByID} id={data.findGroupByID._id} />
-              ) : ( <h1>{data.findGroupByID.name}</h1>
-              )}
-              <h2>{`Code: ${data.findGroupByID._id}`}</h2>
-              <h3>Invite your friends or family to the group to share your recipes with eachother!</h3>
-              <h5>{`Admin: ${data.findGroupByID.admin.username}`}</h5>
-            </div> */}
-            <h2>{data.user.username}</h2>
-            <br />
-            <Grid display={display}>
-              {data?.user?.recipes.map(recipe => (
-                <div key={recipe.id}>
-                <Link href={`/user/${id}/[rid]`} as={`/user/${id}/${recipe.id}`}>
-                  <a>
-                    <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
-                      {recipe.title}
-                    </Card>
-                  </a>
-                </Link>
-                </div>
-              ))}
-            </Grid>
-            <br />
-            {/* {data.findGroupByID.admin.email === user.email ? (
-            null ) : (
-              <Button size='small' label='Leave group' onClick={() => leaveAGroup(data.findGroupByID._id)}/>
-            )} */}
-            <br />
-            <br />
-          </>
-  
-        ) : (
-          <div>loading...</div>
-        )}
-  
-      </Layout>
-    )
+    </>
+  )
 }
 
 export default User

@@ -42,9 +42,22 @@ const Container = styled.div`
       height: 15rem;
       width: 15rem;
       border: solid 1px lightgrey;
+
+      @media (max-width: 850px) {
+        border-radius: 0;
+        margin: 0;
+        /* height: 25rem; */
+        width: 45vw;
+        /* max-width: 200px;
+        min-width: 200px; */
+      }
       @media (max-width: 588px) {
-        max-width: 200px;
-        min-width: 200px;
+        border-radius: 0;
+        margin: 1rem;
+        height: 25rem;
+        width: 100vw;
+        /* max-width: 200px;
+        min-width: 200px; */
       }
       `}
 

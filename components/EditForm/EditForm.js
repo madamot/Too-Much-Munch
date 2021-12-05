@@ -6,6 +6,7 @@ import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
 import { EditorState, convertFromHTML, ContentState } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import dynamic from 'next/dynamic';
+import styled, { css } from 'styled-components';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Ingredients from '../Ingredients/Ingredients';
@@ -18,6 +19,12 @@ const Editor = dynamic(
   () => import('react-draft-wysiwyg').then(mod => mod.Editor),
   { ssr: false }
 )
+
+const Name = styled.input`
+  width: 100%;
+  border: none;
+  font-size: 2em;
+`;
 
 const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
 
@@ -102,11 +109,10 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
           <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
               <div>
-                <label>Recipe name</label>
-                <input
+                <Name
                   type="text"
                   name="title"
-                  placeholder="e.g. bolognese"
+                  placeholder="Recipe name"
                   ref={register({ required: 'Name is required' })}
                 />
 

@@ -1,6 +1,11 @@
 import React from 'react'
+import styled, { css } from 'styled-components';
 import { useForm, useFormContext, Controller, useFieldArray, useWatch } from "react-hook-form";
 import WYSIWYGEditor from '../WYSIWYG/WYSIWYG';
+
+const MethodText = styled.textarea`
+    width: 100%;
+`;
 
 const Method = () => {
     const { register, control } = useFormContext();
@@ -22,7 +27,7 @@ const Method = () => {
             return (
                 <div key={item.id}>
                     <Controller
-                        as={<textarea />}
+                        as={<MethodText />}
                         {...register(`method.${index}.method`, { required: true })}
                         name={`method.${index}.method`}
                         control={control}

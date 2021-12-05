@@ -118,9 +118,9 @@ const Recipe = () => {
         <>
           <h2>{data.recipe.title}</h2>
           <br />
-          <ImageContainer>
+          {data?.recipe?.image?.url && <ImageContainer>
             <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
-          </ImageContainer>
+          </ImageContainer>}
           <br />
           {/* <p>{data.findRecipeByID.description}</p> */}
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}

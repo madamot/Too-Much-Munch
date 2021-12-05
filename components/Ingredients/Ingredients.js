@@ -1,5 +1,12 @@
 import React from 'react'
+import styled, { css } from 'styled-components';
 import { useForm, useFormContext, Controller, useFieldArray, useWatch } from "react-hook-form";
+
+const Value = styled.input`
+    /* position: relative;
+    width: 5em;
+    font-size: 1.5em; */
+`;
 
 const Ingredients = () => {
     const { register, control } = useFormContext();
@@ -15,12 +22,13 @@ const Ingredients = () => {
 
     return (
         <div>
-            Ingredients
+            <h3>Ingredients</h3>
             {ingredientsFields.map((item, index) => {
             return (
                 <div key={item.id}>
+                    <>{`${index + 1}. `}</>
                     <Controller
-                        as={<input type="number" step="any" />}
+                        as={<Value type="number" step="any" placeholder="3" />}
                         name={`ingredients.[${index}].quantity`}
                         {...register(`ingredients.[${index}].quantity`, { 
                             valueAsNumber: true })}
@@ -46,7 +54,7 @@ const Ingredients = () => {
                         defaultValue={item.measurement || "quantity"} // make sure to set up defaultValue
                     />
                     <Controller
-                        as={<input />}
+                        as={<input placeholder="Onions" />}
                         {...register(`ingredients.[${index}].ingredient`)}
                         name={`ingredients.[${index}].ingredient`}
                         control={control}

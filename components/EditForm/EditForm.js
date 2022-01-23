@@ -26,7 +26,8 @@ const Name = styled.input`
   font-size: 2em;
 `;
 
-const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
+const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements }) => {
+  console.log(defaultValues);
 
   const methods = useForm({
     defaultValues: {
@@ -41,18 +42,68 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
     reset({
       ...defaultValues,
       ingredients: defaultValues?.ingredients,
-      method: defaultValues?.method
+      method: defaultValues?.method,
+      course: defaultValues?.course?.id,
+      cuisine: defaultValues?.cuisine?.id,
+      meal: defaultValues?.meal?.id,
     });
   }, [reset, defaultValues]);
 
   const [errorMessage, setErrorMessage] = useState('');
-
   const [recipeImage, changeRecipeImage] = useState();
+  // const [course, setCourse] = useState(defaultValues?.course?.id);
+  // const [cuisine, setCuisine] = useState(defaultValues?.cuisine?.id);
+  // const [meal, setMeal] = useState(defaultValues?.meal?.id);
+
+  const flattenObject = (ingredients) => {
+    // const flattened = {}
+  
+    // Object.keys(obj).forEach((key) => {
+    //   const value = obj[key]
+  
+    //   if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    //     Object.assign(flattened, flattenObject(value))
+    //   } else {
+    //     flattened[key] = value
+    //   }
+    // })
+  
+    // return flattened
+
+
+    return ingredients.map(i => {
+
+      i.measurement = i.measurement.id
+
+    })
+  }
 
   const { register, control, handleSubmit, reset, formState, errors } = methods
 
   const onSubmit = handleSubmit(async ({ title, image, course, cuisine, meal, ingredients, method }, data) => {
 
+    // course = course.id
+    // cuisine = cuisine.id
+    // meal = meal.id
+
+    console.log('ingredients', ingredients);
+
+  //   const ingredientsSubmit = ingredients.map(measurement => Object.keys(measurement).reduce(function (r, k) {
+  //     return r.concat(measurement[k]);
+  // }, []));
+
+  // const ingredientsSubmit = ingredients.map(({measurement}) => flattenObject(measurement));
+
+  // const ingredientsSubmit = ingredients.map(( measurement: id, { ...rest }) => ({
+  //   measurement,
+  //   ...rest}
+  // ));
+
+    // const ingredientsSubmit = flattenObject(ingredients);
+
+    // const ingredientsSubmit = ingredients.map(a => a.measurement = a.measurement.id);
+    
+    // console.log('ingredientsSubmit', ingredientsSubmit);
 
     // const ingredients = item
 
@@ -96,7 +147,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
       await graphQLClient.request(query, variables);
       Router.push('/dashboard');
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       setErrorMessage(error.message);
     }
   });
@@ -118,13 +169,48 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
 
                 <ImageUpload changeRecipeImage={changeRecipeImage} logo={defaultValues?.image?.url} />
 
-                <select name="course" value={defaultValues?.course?.id} ref={register({ required: 'Name is required' })}>
-                {courses.map((course, index) => {
-                  return (
-                     <option key={course?.id} value={parseInt(course?.id)}>{course?.name}</option>
-                );
-                })}
-                </select>
+                <Controller
+                        as={<select name="course" ref={register({ required: 'Name is required' })}>
+                        {courses.map((course, index) => {
+                          return (
+                             <option key={course?.id} value={parseInt(course.id)}>{course?.name}</option>
+                        );
+                        })}
+                        </select>}
+                        name='course'
+                        control={control}
+                        defaultValue={parseInt(defaultValues?.course?.id)} // make sure to set up defaultValue
+                    />
+
+                <Controller
+                        as={<select name="cuisine" ref={register({ required: 'Name is required' })}>
+                        {cuisines.map((cuisine, index) => {
+                          return (
+                            <option key={cuisine?.id} value={parseInt(cuisine.id)}>{cuisine?.name}</option>
+                        );
+                        })}
+                        </select>}
+                        name='cuisine'
+                        control={control}
+                        defaultValue={parseInt(defaultValues?.cuisine?.id)} // make sure to set up defaultValue
+                    />
+
+                <Controller
+                        as={<select name="meal" ref={register({ required: 'Name is required' })}>
+                        {meals.map((meal, index) => {
+                          return (
+                            <option key={meal?.id} value={parseInt(meal.id)}>{meal?.name}</option>
+                        );
+                        })}
+                        </select>}
+                        name='meal'
+                        control={control}
+                        defaultValue={parseInt(defaultValues?.meal?.id)} // make sure to set up defaultValue
+                    />
+
+                  
+
+                
 
                 {/* <Controller
                         as={<Select
@@ -135,23 +221,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals }) => {
                         control={control}
                     /> */}
 
-                <select name="cuisine" value={defaultValues?.cuisine?.id} ref={register({ required: 'Name is required' })}>
-                {cuisines.map((course, index) => {
-                  return (
-                    <option key={course?.id} value={parseInt(course?.id)}>{course?.name}</option>
-                );
-                })}
-                </select>
-
-                <select name="meal" value={defaultValues?.meal?.id} ref={register({ required: 'Name is required' })}>
-                {meals.map((course, index) => {
-                  return (
-                    <option key={course?.id} value={parseInt(course?.id)}>{course?.name}</option>
-                );
-                })}
-                </select>
-
-                <Ingredients/>
+                <Ingredients measurements={measurements} />
 
                 <Method />
 

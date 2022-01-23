@@ -54,8 +54,6 @@ const UserRecipe = () => {
         }
         ingredients {
           ingredient
-          quantity
-          measurement
         }
         method {
             method
@@ -89,7 +87,7 @@ const UserRecipe = () => {
           <h3>Ingredients</h3>
           {data.recipe.ingredients.map((ingredient, index) => (
             <div>
-              {index + 1}. {ingredient.quantity}{ingredient.measurement === 'quantity' ? null : ingredient.measurement} {ingredient.ingredient}
+              {index + 1}. {ingredient.ingredient}
             </div>
           ))}
           <h3>Method</h3>

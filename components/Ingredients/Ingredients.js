@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components';
+import Select from "react-select";
 import { useForm, useFormContext, Controller, useFieldArray, useWatch } from "react-hook-form";
 
 const Value = styled.input`
@@ -8,7 +9,7 @@ const Value = styled.input`
     font-size: 1.5em; */
 `;
 
-const Ingredients = () => {
+const Ingredients = ({ measurements }) => {
     const { register, control } = useFormContext();
 
     const {
@@ -20,14 +21,18 @@ const Ingredients = () => {
         name: "ingredients"
      });
 
+     console.log('ingredientsFields', ingredientsFields);
+
+
     return (
         <div>
             <h3>Ingredients</h3>
             {ingredientsFields.map((item, index) => {
+                console.log('item', item);
             return (
                 <div key={item.id}>
                     <>{`${index + 1}. `}</>
-                    <Controller
+                    {/* <Controller
                         as={<Value type="number" step="any" placeholder="3" />}
                         name={`ingredients.[${index}].quantity`}
                         {...register(`ingredients.[${index}].quantity`, { 
@@ -37,22 +42,19 @@ const Ingredients = () => {
                     />
                     <Controller
                         as={<select name="measurement" id="measurement">
-                        <option value="quantity">quantity</option>
-                        <option value="ml">ml</option>
-                        <option value="g">g</option>
-                        <option value="tablespoon">tablespoon</option>
-                        <option value="teaspoon">teaspoon</option>
-                        <option value="pinch">pinch</option>
-                        <option value="dash">dash</option>
-                        <option value="cup">cup</option>
-                        <option value="pint">pint</option>
-                        <option value="gallon">gallon</option>
-                        <option value="oz">oz</option>
+                        {measurements.map((measurement, index) => {
+                        return (
+                            <option key={measurement?.id} value={measurement?.id}>{measurement?.name} ({measurement?.unit})</option>
+                        );
+                        })}
                       </select>}
                         name={`ingredients.[${index}].measurement`}
+                        {...register(`ingredients.[${index}].measurement`)}
                         control={control}
-                        defaultValue={item.measurement || "quantity"} // make sure to set up defaultValue
-                    />
+                        defaultValue={item?.measurement.id} // make sure to set up defaultValue
+                    /> */}
+
+                    {/* for some reason i think the register in the controller above passes the measurement if in an object. The gql query doesnt accept this and it is therefore breaking  */}
                     <Controller
                         as={<input placeholder="Onions" />}
                         {...register(`ingredients.[${index}].ingredient`)}

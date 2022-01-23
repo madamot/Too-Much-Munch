@@ -44,14 +44,14 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
 
     return (
         <div>
-            <ImageUploaderLabel for="file-upload">
+            <ImageUploaderLabel htmlFor="file-upload">
                 Custom Upload
             </ImageUploaderLabel>
             <ImageUploader
                 id="file-upload"
                 type="file"
                 name="files"
-                onChange={(e)=>setFiles(e.target.files)}
+                onChange={(e) => setFiles(e.target.files)}
                 alt="image"
             />
 

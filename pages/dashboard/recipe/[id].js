@@ -52,8 +52,6 @@ const Recipe = () => {
         }
         ingredients {
           ingredient
-          quantity
-          measurement
         }
         method {
             method
@@ -80,6 +78,7 @@ const Recipe = () => {
   const { data, error } = useSWR(() => id ? query : null, fetcher);
 
   if (error) return <div>failed to load</div>;
+  console.log(error);
 
   const deleteARecipe = async (id) => {
     const query = gql`
@@ -102,7 +101,7 @@ const Recipe = () => {
     await graphQLClient.request(query, { id });
     Router.push('/dashboard');
   } catch (error) {
-    // console.error(error);
+    console.error(error);
   }
 };
 
@@ -124,7 +123,7 @@ const Recipe = () => {
           <br />
           {/* <p>{data.findRecipeByID.description}</p> */}
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
-          <EditForm defaultValues={data.recipe} id={id} courses={data.courses} cuisines={data.cuisines} meals={data.meals} />
+          <EditForm defaultValues={data.recipe} id={id} courses={data.courses} cuisines={data.cuisines} meals={data.meals} measurements={data.measurements} />
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
         </>
 

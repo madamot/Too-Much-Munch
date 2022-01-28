@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components';
 import styles from '../styles/Home.module.css'
 
 import { request } from "../utils/datocms";
-import { StructuredText } from "react-datocms";
+// import { StructuredText } from "react-datocms";
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -147,11 +147,11 @@ export default function Home({data}) {
 
       <Hero>
         <Title>Too Much <Munch>Munch</Munch></Title>
-        <p>{data.homepage.heroDescription}</p>
+        {/* <p>{data.homepage.heroDescription}</p> */}
       </Hero>
       <Main>
         
-        <Subtitle>{data.homepage.featuretitle}</Subtitle>
+        {/* <Subtitle>{data.homepage.featuretitle}</Subtitle>
         <Subsubtitle>{data.homepage.featuresubtitle}</Subsubtitle>
         <img width='100%' src={data.homepage.featureImage.url} />
         <StructuredText
@@ -180,7 +180,7 @@ export default function Home({data}) {
                 return null;
             }
           }}
-        />
+        /> */}
 
       </Main>
     </Layout>

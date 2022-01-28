@@ -9,7 +9,7 @@ import { graphQLClient } from '../../utils/graphql-client';
 
 import { useRouter } from 'next/router'
 
-import { StructuredText } from "react-datocms";
+// import { StructuredText } from "react-datocms";
 
 import { request } from "../../utils/datocms";
 
@@ -115,7 +115,7 @@ const router = useRouter()
         fontWeight: 200
       }}>{blog.blog.subtitle}</h2>
       <img width='100%' src={blog.blog.blogImage.url} alt={blog.blog.blogImage.alt} />
-      <StructuredText
+      {/* <StructuredText
         data={blog.blog.content}
         renderInlineRecord={({ record }) => {
           switch (record.__typename) {
@@ -141,7 +141,7 @@ const router = useRouter()
               return null;
           }
         }}
-      />
+      /> */}
 
     </Layout>
   );

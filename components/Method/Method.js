@@ -4,8 +4,17 @@ import { useForm, useFormContext, Controller, useFieldArray, useWatch } from "re
 import WYSIWYGEditor from '../WYSIWYG/WYSIWYG';
 import axios from 'axios';
 
+const MethodContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
 const MethodText = styled.textarea`
     width: 100%;
+    border: none;
+    font-size: 1.25em;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 `;
 
 const Add = styled.button`
@@ -54,15 +63,17 @@ const Method = () => {
             {methodFields.map((item, index) => {
             return (
                 <div key={item.id}>
-                    <Controller
-                        as={<MethodText />}
-                        {...register(`method.${index}.method`, { required: true })}
-                        name={`method.${index}.method`}
-                        control={control}
-                        defaultValue={item?.method || ''} 
-                    />
+                    <MethodContainer>
+                        <Controller
+                            as={<MethodText />}
+                            {...register(`method.${index}.method`, { required: true })}
+                            name={`method.${index}.method`}
+                            control={control}
+                            defaultValue={item?.method || ''} 
+                        />
+                        <button onClick={() => methodRemove(index)}>&#x1F5D1;</button>
+                    </MethodContainer>
                     <input {...register(`method.${index}.image`)} onChange={(e) => uploadImage(e.target.files)} type="file" />
-                    <button onClick={() => methodRemove(index)}>Delete</button>
                 </div>
                 
                

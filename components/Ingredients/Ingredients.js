@@ -42,14 +42,11 @@ const Ingredients = ({ measurements }) => {
         name: "ingredients"
      });
 
-     console.log('ingredientsFields', ingredientsFields);
-
 
     return (
         <div>
             <h3>Ingredients</h3>
             {ingredientsFields.map((item, index) => {
-                console.log('item', item);
             return (
                 <IngredientContainer key={item.id}>
                     <Number>{`${index + 1}. `}</Number>

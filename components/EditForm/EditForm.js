@@ -58,7 +58,6 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
 
   const onSubmit = handleSubmit(async ({ title, image, course, cuisine, meal, ingredients, method }, data) => {
 
-    console.log(method);
 
     if (errorMessage) setErrorMessage('');
 
@@ -100,7 +99,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
       await graphQLClient.request(query, variables);
       Router.push('/dashboard');
     } catch (error) {
-      console.error(error);
+      console.error('error', error);
       setErrorMessage(error.message);
     }
   });

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components';
+import TextareaAutosize from 'react-textarea-autosize';
 import { useForm, useFormContext, Controller, useFieldArray, useWatch } from "react-hook-form";
 import WYSIWYGEditor from '../WYSIWYG/WYSIWYG';
 import axios from 'axios';
@@ -9,12 +10,13 @@ const MethodContainer = styled.div`
     justify-content: space-between;
 `;
 
-const MethodText = styled.textarea`
+const MethodText = styled(TextareaAutosize)`
     width: 100%;
     border: none;
     font-size: 1.25em;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    resize: none;
 `;
 
 const Add = styled.button`
@@ -71,7 +73,9 @@ const Method = () => {
                             control={control}
                             defaultValue={item?.method || ''} 
                         />
-                        <button onClick={() => methodRemove(index)}>&#x1F5D1;</button>
+                        <div>
+                            <button onClick={() => methodRemove(index)}>&#x1F5D1;</button>
+                        </div>
                     </MethodContainer>
                     <input {...register(`method.${index}.image`)} onChange={(e) => uploadImage(e.target.files)} type="file" />
                 </div>

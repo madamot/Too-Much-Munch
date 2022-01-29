@@ -3,10 +3,31 @@ import styled, { css } from 'styled-components';
 import Select from "react-select";
 import { useForm, useFormContext, Controller, useFieldArray, useWatch } from "react-hook-form";
 
-const Value = styled.input`
-    /* position: relative;
-    width: 5em;
-    font-size: 1.5em; */
+const IngredientContainer = styled.div`
+    display: flex;
+    padding: .5em 0;
+`;
+
+const Number = styled.div`
+  font-size: 1.25em;
+
+`;
+
+const Ingredient = styled.input`
+  width: 100%;
+  border: none;
+  font-size: 1.25em;
+`;
+
+const Add = styled.button`
+  padding: .5em;
+  font-size: 1em;
+  background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
 `;
 
 const Ingredients = ({ measurements }) => {
@@ -30,52 +51,29 @@ const Ingredients = ({ measurements }) => {
             {ingredientsFields.map((item, index) => {
                 console.log('item', item);
             return (
-                <div key={item.id}>
-                    <>{`${index + 1}. `}</>
-                    {/* <Controller
-                        as={<Value type="number" step="any" placeholder="3" />}
-                        name={`ingredients.[${index}].quantity`}
-                        {...register(`ingredients.[${index}].quantity`, { 
-                            valueAsNumber: true })}
-                        control={control}
-                        defaultValue={item.quantity || ""} // make sure to set up defaultValue
-                    />
+                <IngredientContainer key={item.id}>
+                    <Number>{`${index + 1}. `}</Number>
                     <Controller
-                        as={<select name="measurement" id="measurement">
-                        {measurements.map((measurement, index) => {
-                        return (
-                            <option key={measurement?.id} value={measurement?.id}>{measurement?.name} ({measurement?.unit})</option>
-                        );
-                        })}
-                      </select>}
-                        name={`ingredients.[${index}].measurement`}
-                        {...register(`ingredients.[${index}].measurement`)}
-                        control={control}
-                        defaultValue={item?.measurement.id} // make sure to set up defaultValue
-                    /> */}
-
-                    {/* for some reason i think the register in the controller above passes the measurement if in an object. The gql query doesnt accept this and it is therefore breaking  */}
-                    <Controller
-                        as={<input placeholder="Onions" />}
+                        as={<Ingredient placeholder="Onions" />}
                         {...register(`ingredients.[${index}].ingredient`)}
                         name={`ingredients.[${index}].ingredient`}
                         control={control}
                         defaultValue={item.ingredient || ""} // make sure to set up defaultValue
                     />
-                    <button onClick={() => ingredientsRemove(index)}>Delete</button>
-                </div>
+                    <button onClick={() => ingredientsRemove(index)}>&#x1F5D1;</button>
+                </IngredientContainer>
                
           );
           })}
           <section>
-              <button
-              type="button"
-              onClick={() => {
-                ingredientsAppend({ });
-              }}
+              <Add
+                type="button"
+                onClick={() => {
+                    ingredientsAppend({ });
+                }}
               >
-              Add Another ingredient
-              </button>
+                &#x2795; ingredient
+              </Add>
           </section>
         </div>
     )

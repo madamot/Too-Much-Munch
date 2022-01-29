@@ -12,7 +12,7 @@ import { convertFromHTML } from 'draft-convert';
 import Layout from '../../../components/layout/layout';
 import Button from '../../../components/Button/Button';
 import EditForm from '../../../components/EditForm/EditForm';
-import Ingredients from '../../../components/Ingredients/Ingredients';
+import { Container, Row, Col } from 'react-grid-system';
 import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
 import { graphQLClient } from '../../../utils/graphql-client';
 
@@ -55,6 +55,9 @@ const Recipe = () => {
         }
         method {
             method
+            image {
+              url
+            }
           }
       }
       courses {
@@ -109,14 +112,9 @@ const Recipe = () => {
     <Layout dashboard>
       <Head>
         {data ? <title>{data.recipe.title}</title> : <title>Recipe</title>}
-        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Edit Recipe</h1>
-
       {data ? (
-        <>
-          <h2>{data.recipe.title}</h2>
-          <br />
+        <Container>
           {data?.recipe?.image?.url && <ImageContainer>
             <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
           </ImageContainer>}
@@ -125,7 +123,7 @@ const Recipe = () => {
           {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
           <EditForm defaultValues={data.recipe} id={id} courses={data.courses} cuisines={data.cuisines} meals={data.meals} measurements={data.measurements} />
           <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
-        </>
+        </Container>
 
       ) : (
         <div>loading...</div>

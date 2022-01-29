@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import Header from "../header/header"
 import Footer from "../footer/footer"
+import { Container, Row, Col } from 'react-grid-system';
 
 const Wrapper = styled.div`
   margin: 0 auto;

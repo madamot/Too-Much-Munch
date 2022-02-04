@@ -50,10 +50,12 @@ const Method = () => {
     
         axios.post(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/upload`, formData)
         .then((response)=>{
-            changeRecipeImage(response.data[0].id)
-            setUploaded(true)
+            // changeRecipeImage(response.data[0].id)
+            // setUploaded(true)
+            console.log("done", response);
             //after success
         }).catch((error)=>{
+            console.log("error", error);
             //handle error
         })
     }
@@ -77,7 +79,7 @@ const Method = () => {
                             <button onClick={() => methodRemove(index)}>&#x1F5D1;</button>
                         </div>
                     </MethodContainer>
-                    <input {...register(`method.${index}.image`)} onChange={(e) => uploadImage(e.target.files)} type="file" />
+                    {/* <input {...register(`method.${index}.image`)} control={control} name={`method.${index}.image`} onChange={(e) => uploadImage(e.target.files)} type="file" /> */}
                 </div>
                 
                

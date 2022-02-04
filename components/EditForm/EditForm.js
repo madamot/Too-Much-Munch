@@ -58,7 +58,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
 
   const onSubmit = handleSubmit(async ({ title, image, course, cuisine, meal, ingredients, method }, data) => {
 
-
+    console.log("method", method);
     if (errorMessage) setErrorMessage('');
 
     const query = gql`

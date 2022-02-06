@@ -98,7 +98,7 @@ const Following = () => {
       >
         Follow someone
       </Search>}
-
+      <br />
         <div>
           <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
           <Button size='small' label='List View' onClick={() => setDisplay('list')}/>

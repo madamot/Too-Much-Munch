@@ -9,12 +9,14 @@ import styled, { css } from 'styled-components';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { convertFromHTML } from 'draft-convert';
-import Layout from '../../../components/layout/layout';
-import Button from '../../../components/Button/Button';
-import EditForm from '../../../components/EditForm/EditForm';
+import Layout from '../../components/layout/layout';
+import Button from '../../components/Button/Button';
+import EditForm from '../../components/EditForm/EditForm';
+import ViewRecipe from '../../components/ViewRecipe/ViewRecipe';
+import { useSession, signIn, signOut } from "next-auth/client"
 import { Container, Row, Col } from 'react-grid-system';
-import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
-import { graphQLClient } from '../../../utils/graphql-client';
+import { StrapiGQLClient } from '../../utils/strapi-gql-client';
+import { graphQLClient } from '../../utils/graphql-client';
 
 const ImageContainer = styled.div`
   width: 100%;
@@ -24,19 +26,24 @@ const ImageContainer = styled.div`
 
 const Recipe = () => {
 
+  const [session, loading] = useSession()
+
+  let you = session?.id;
+
   const router = useRouter();
-  const { id } = router.query;
+
+  const { id, rid } = router.query;
 
   const fetcher = async (query) => await StrapiGQLClient({
     query: query,
     variables: {
-        id
+      rid
     },
   });
 
   const query = gql`
-    query FindARecipeByID($id: ID!) {
-      recipe(id: $id) {
+    query FindARecipeByID($rid: ID!) {
+      recipe(id: $rid) {
         title
         image {
           url
@@ -78,18 +85,18 @@ const Recipe = () => {
     }
   `;
 
-  const { data, error } = useSWR(() => id ? query : null, fetcher);
+  const { data, error } = useSWR(() => rid ? query : null, fetcher);
 
-  if (error) return <div>failed to load</div>;
+  // if (error) return <div>failed to load</div>;
   console.log(error);
 
   const deleteARecipe = async (id) => {
     const query = gql`
-      mutation DeleteARecipe($id: ID!) {
+      mutation DeleteARecipe($rid: ID!) {
         deleteRecipe(
           input: {
             where: {
-              id: $id
+              id: $rid
             }
           }
         ) {
@@ -101,8 +108,8 @@ const Recipe = () => {
     `;
 
   try {
-    await graphQLClient.request(query, { id });
-    Router.push('/dashboard');
+    await graphQLClient.request(query, { rid });
+    Router.push('/');
   } catch (error) {
     console.error(error);
   }
@@ -111,18 +118,22 @@ const Recipe = () => {
   return (
     <Layout dashboard>
       <Head>
-        {data ? <title>{data.recipe.title}</title> : <title>Recipe</title>}
+        {data ? <title>{data?.recipe?.title}</title> : <title>Recipe</title>}
       </Head>
       {data ? (
         <Container>
-          {data?.recipe?.image?.url && <ImageContainer>
-            <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
-          </ImageContainer>}
-          <br />
-          {/* <p>{data.findRecipeByID.description}</p> */}
-          {/* <div dangerouslySetInnerHTML={{ __html: data.findRecipeByID.description }}></div> */}
-          <EditForm defaultValues={data.recipe} id={id} courses={data.courses} cuisines={data.cuisines} meals={data.meals} measurements={data.measurements} />
-          <Button size="small" onClick={() => deleteARecipe(id)} label="Delete" />
+          
+          {you == id ?
+            <div>
+              {data?.recipe?.image?.url && <ImageContainer>
+                <Image src={data?.recipe?.image?.url} layout='fill' objectFit='cover' />
+              </ImageContainer>}
+              <br />
+              <EditForm defaultValues={data.recipe} id={rid} courses={data.courses} cuisines={data.cuisines} meals={data.meals} measurements={data.measurements} />
+              <Button size="small" onClick={() => deleteARecipe(rid)} label="Delete" />
+            </div>  
+            : <ViewRecipe data={data} />
+          }
         </Container>
 
       ) : (

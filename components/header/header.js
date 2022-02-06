@@ -264,7 +264,7 @@ const Header = ({dashboard}) => {
               <Navrow>
                   <div className="multiButtons">
                     <Button size="small" onClick={() => signOut()} label="Log out" />
-                    <Link href='/dashboard'>
+                    <Link href={`/[id]`} as={`/${session?.id}`}>
                       <Button primary size="small" label="Dashboard" />
                     </Link>
                   </div>
@@ -293,8 +293,8 @@ const Header = ({dashboard}) => {
       ) :
       <DashNavWrapper>
         <DashNav>
-          <NavItem router={router.pathname} location='/dashboard'><Link href='/dashboard'>Recipes</Link></NavItem>
-          <NavItem router={router.pathname} location='/dashboard/following'><Link href='/dashboard/following'>Following</Link></NavItem>
+          <NavItem router={router.pathname} location={`/${session?.id}`}><Link href={`/${session?.id}`}>Recipes</Link></NavItem>
+          <NavItem router={router.pathname} location='/following'><Link href='/following'>Following</Link></NavItem>
           <NavItem router={router.pathname}>Coming soon...</NavItem>
         </DashNav>
       </DashNavWrapper>

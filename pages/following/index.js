@@ -4,19 +4,19 @@ import Link from 'next/link';
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
 import { useForm } from 'react-hook-form';
-import Layout from '../../../components/layout/layout'
-import Button from '../../../components/Button/Button';
-import Card from '../../../components/Card/Card';
-import Search from '../../../components/Search/Search';
+import Layout from '../../components/layout/layout'
+import Button from '../../components/Button/Button';
+import Card from '../../components/Card/Card';
+import Search from '../../components/Search/Search';
 
 import { useSession, signIn, signOut } from "next-auth/client"
 
-import { useDisplay } from "../../../utils/hooks";
+import { useDisplay } from "../../utils/hooks";
 
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
-import { StrapiGQLClient } from '../../../utils/strapi-gql-client';
-import { graphQLClient } from '../../../utils/graphql-client';
+import { StrapiGQLClient } from '../../utils/strapi-gql-client';
+import { graphQLClient } from '../../utils/graphql-client';
 
 import Cookie from "js-cookie";
 
@@ -110,7 +110,7 @@ const Following = () => {
               <Grid display={display}>
                 {data?.user?.following.map(following => (
                   <div key={following.id}>
-                  <Link href={`/dashboard/following/[id]`} as={`/dashboard/following/${following.id}`}>
+                  <Link href={`/[id]`} as={`/${following.id}`}>
                     <a>
                       <Card state='recipe' display={display} key={following.id} id={following.id} imagesrc={following?.image?.url}>
                         {following.username}

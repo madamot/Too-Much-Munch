@@ -97,7 +97,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
 
     try {
       await graphQLClient.request(query, variables);
-      Router.push('/dashboard');
+      Router.push('/');
     } catch (error) {
       console.error('error', error);
       setErrorMessage(error.message);

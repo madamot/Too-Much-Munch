@@ -3,15 +3,15 @@ import Head from 'next/head'
 import Router from 'next/router';
 import styled, { css } from 'styled-components';
 import { useForm, Controller } from 'react-hook-form';
-import WYSIWYGEditor from '../../components/WYSIWYG/WYSIWYG';
-import Layout from '../../components/layout/layout'
-import Button from '../../components/Button/Button';
-import Card from '../../components/Card/Card';
+import WYSIWYGEditor from '../components/WYSIWYG/WYSIWYG';
+import Layout from '../components/layout/layout'
+import Button from '../components/Button/Button';
+import Card from '../components/Card/Card';
 import { useSession, signIn, signOut } from "next-auth/client"
 
 import useSWR from 'swr';
 import { gql } from 'graphql-request';
-import { graphQLClient } from '../../utils/graphql-client';
+import { graphQLClient } from '../utils/graphql-client';
 
 import Cookie from "js-cookie";
 
@@ -58,7 +58,7 @@ const New = () => {
 
     try {
       const data = await graphQLClient.request(query, variables);
-      Router.push(`/dashboard/recipe/${data.createRecipe.recipe.id}`);
+      Router.push(`/${id}/${data.createRecipe.recipe.id}`);
     } catch (error) {
       console.log(error);
       console.log(errorMessage);

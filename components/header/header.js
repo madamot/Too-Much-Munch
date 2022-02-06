@@ -293,7 +293,7 @@ const Header = ({dashboard}) => {
       ) :
       <DashNavWrapper>
         <DashNav>
-          <NavItem router={router.pathname} location={`/${session?.id}`}><Link href={`/${session?.id}`}>Recipes</Link></NavItem>
+          <NavItem router={router.pathname} location={`/[id]`}><Link href={`/`}>Recipes</Link></NavItem>
           <NavItem router={router.pathname} location='/following'><Link href='/following'>Following</Link></NavItem>
           <NavItem router={router.pathname}>Coming soon...</NavItem>
         </DashNav>

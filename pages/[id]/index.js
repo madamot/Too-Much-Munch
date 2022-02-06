@@ -68,7 +68,7 @@ const Dashboard = () => {
     },
   });
   const query = gql`
-    query getRecipesByUser($id: ID!, $you: ID!) {
+    query getRecipesByUser($id: ID!) {
       user(id: $id) {
         id
         username
@@ -80,15 +80,10 @@ const Dashboard = () => {
           }
         }
       }
-      UserFollowing: user(id: $you) {
-          following {
-            id
-          }
-      }
     }
   `;
 
-  const { data, error } = useSWR(() => you ? query : null, fetcher);
+  const { data, error } = useSWR(() => id ? query : null, fetcher);
 
     const following = data?.UserFollowing?.following.map(function (obj) {
       return parseInt(obj.id);

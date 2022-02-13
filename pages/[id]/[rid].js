@@ -126,14 +126,14 @@ const Recipe = () => {
             {/* <meta name='description' content={seo?.metaDescription || 'We are a passionate and experienced creative design agency based in Basingstoke, Hampshire. We combine design, digital and strategic thinking for some of the worlds most beautiful brands.'} /> */}
             <meta property='og:title' content={data?.recipe?.title} />
             <meta property='og:description' content={data?.recipe?.title} />
-            <meta property="og:image" content={data?.recipe?.image?.url} />
-            <meta property="og:image:width" content={data?.recipe?.image?.width} />
-            <meta property="og:image:height" content={data?.recipe?.image?.height} />
+            <meta property="og:image" content='/image.png'/>
+            {/* <meta property="og:image:width" content={data?.recipe?.image?.width} />
+            <meta property="og:image:height" content={data?.recipe?.image?.height} /> */}
             <meta name='twitter:title' content={data?.recipe?.title} />
             <meta name='twitter:description' content={data?.recipe?.title} />
-            <meta name="twitter:image" content={data?.recipe?.image?.url} />
-            <meta property="twitter:image:width" content={data?.recipe?.image?.width} />
-            <meta property="twitter:image:height" content={data?.recipe?.image?.height} />
+            <meta name="twitter:image" content='/image.png' />
+            {/* <meta property="twitter:image:width" content={data?.recipe?.image?.width} />
+            <meta property="twitter:image:height" content={data?.recipe?.image?.height} /> */}
           </Head>}
       {data ? (
         <Container>

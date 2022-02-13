@@ -96,7 +96,8 @@ const Dashboard = () => {
     <Layout dashboard>
       <Head>
         <title>Dashboard</title>
-        <link rel="icon" href="/favicon.ico" />
+        <meta property="og:image" content='/image.PNG' />
+        <meta name="twitter:image" content='/image.PNG' />
       </Head>
 
 

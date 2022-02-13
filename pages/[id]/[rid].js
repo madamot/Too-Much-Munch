@@ -119,22 +119,29 @@ const Recipe = () => {
 
   return (
     <Layout dashboard>
-        {data && 
+        {data ? (
           <Head>
             <title>{data?.recipe?.title}</title>
             {/* <meta name='keywords' content={seo?.metaKeyword || 'Designlab, design agency, creative agency, digital agency, creative agency, branding, promotional materials, packaging, art direction, photography, video, website design, website development, ecommerce, app design, iconography, user experience, UX, social, email, SEO, search engine optimisation, digital marketing, strategy, copywriting, analytics, Google Analytics, Basingstoke, Hampshire, London, South East'} /> */}
             {/* <meta name='description' content={seo?.metaDescription || 'We are a passionate and experienced creative design agency based in Basingstoke, Hampshire. We combine design, digital and strategic thinking for some of the worlds most beautiful brands.'} /> */}
             <meta property='og:title' content={data?.recipe?.title} />
             <meta property='og:description' content={data?.recipe?.title} />
-            <meta property="og:image" content='/image.png'/>
-            {/* <meta property="og:image:width" content={data?.recipe?.image?.width} />
-            <meta property="og:image:height" content={data?.recipe?.image?.height} /> */}
+            <meta property="og:image" content={data?.recipe?.image?.url} />
+            <meta property="og:image:width" content={data?.recipe?.image?.width} />
+            <meta property="og:image:height" content={data?.recipe?.image?.height} />
             <meta name='twitter:title' content={data?.recipe?.title} />
             <meta name='twitter:description' content={data?.recipe?.title} />
+            <meta name="twitter:image" content={data?.recipe?.image?.url} />
+            <meta property="twitter:image:width" content={data?.recipe?.image?.width} />
+            <meta property="twitter:image:height" content={data?.recipe?.image?.height} />
+          </Head>
+        ) : (
+          <Head>
+            <title>Recipe</title>
+            <meta property="og:image" content='/image.png' />
             <meta name="twitter:image" content='/image.png' />
-            {/* <meta property="twitter:image:width" content={data?.recipe?.image?.width} />
-            <meta property="twitter:image:height" content={data?.recipe?.image?.height} /> */}
-          </Head>}
+          </Head>
+        )}
       {data ? (
         <Container>
           

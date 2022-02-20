@@ -17,7 +17,9 @@ const ImageUploaderLabel = styled.label`
 const ImageUpload = ({ changeRecipeImage, logo }) => {
 
     const [files, setFiles] = useState()
-    const [uploaded, setUploaded] = useState()
+    const [uploading, setUploading] = useState(false)
+    const [uploaded, setUploaded] = useState(false)
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         if (files) {
@@ -26,18 +28,21 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
     }, [logo, files]);
 
     const uploadImage = async () => {
-    
+        setUploading(true)
         const formData = new FormData()
     
         formData.append('files', files[0])
     
         axios.post(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/upload`, formData)
+
         .then((response)=>{
             changeRecipeImage(response.data[0].id)
             setUploaded(true)
+            setUploading(false)
             //after success
         }).catch((error)=>{
             //handle error
+            setError(true)
         })
     }
 
@@ -45,7 +50,7 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
     return (
         <div>
             <ImageUploaderLabel htmlFor="file-upload">
-                Custom Upload
+                Upload recipe image
             </ImageUploaderLabel>
             <ImageUploader
                 id="file-upload"
@@ -58,6 +63,8 @@ const ImageUpload = ({ changeRecipeImage, logo }) => {
             <br />
             {logo && <img src={logo} width="100" />}
             {uploaded && <p>Uploaded!</p>}
+            {uploading && <p>Uploading...</p>}
+            {error && <p>An error occured, please try again</p>}
         </div>
     )
 }

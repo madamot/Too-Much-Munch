@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Layout from '../../components/layout/layout'
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
+import Filter from '../../components/Filter/Filter';
 import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from "next-auth/client"
 
@@ -78,6 +79,21 @@ const Dashboard = () => {
           image {
             url
           }
+          course {
+            id
+            uid
+            name
+          }
+          cuisine {
+            id
+            uid
+            name
+          }
+          meal {
+            id
+            uid
+            name
+          }
         }
       }
     }
@@ -85,11 +101,44 @@ const Dashboard = () => {
 
   const { data, error } = useSWR(() => id ? query : null, fetcher);
 
+  const [recipes, setRecipes] = useState(data?.user?.recipes)
+
+  useEffect(() => {
+    setRecipes(data?.user?.recipes);
+}, [data]);
+
+  console.log("recipes", data?.user?.recipes);
+
     const following = data?.UserFollowing?.following.map(function (obj) {
       return parseInt(obj.id);
     });
 
    if (error) return <div>{`failed to load: ${error}`}</div>;
+
+   const filterCuisine = (category, displaying) => {
+    const result = displaying?.filter(item => !category.includes(item.cuisine.uid));
+    return result
+  }
+
+  const filterCourse = (category, displaying) => {
+    const result = displaying?.filter(item => !category.includes(item.course.uid));
+    return result
+  }
+
+  const filterMeal = (category, displaying) => {
+    const result = displaying?.filter(item => !category.includes(item.meal.uid));
+    return result
+  }
+
+  const filterAction = (category) => {
+
+    let cuisine = filterCuisine(category, data?.user?.recipes)
+
+    let course = filterCourse(category, cuisine)
+    let meal = filterMeal(category, course)
+
+    setRecipes(meal)
+  }
 
 
   return (
@@ -114,6 +163,7 @@ const Dashboard = () => {
           <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
           <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
         </div><br />
+        <Filter filterAction={filterAction} />
         {you != id && <div>
           <FollowHandler
             client={graphQLClient}
@@ -125,12 +175,13 @@ const Dashboard = () => {
         {data ? (
             <>
               <Grid display={display}>
-                {data?.user?.recipes.map(recipe => (
+                {recipes?.map(recipe => (
                   <div key={recipe.id}>
                   <Link href={`/[id]/[rid]`} as={`/${id}/${recipe.id}`}>
                     <a>
                       <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
-                        {recipe.title}
+                        {recipe.title} <br />
+                        {recipe.course.name} | {recipe.cuisine.name} | {recipe.meal.name} 
                       </Card>
                     </a>
                   </Link>

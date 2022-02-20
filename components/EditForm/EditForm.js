@@ -123,7 +123,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
               </Col>
               <Col md={2}>
                 <Controller
-                  as={<select name="course" ref={register({ required: 'Name is required' })}>
+                  as={<select name="course" ref={register}>
                   {courses.map((course, index) => {
                     return (
                         <option key={course?.id} value={parseInt(course.id)}>{course?.name}</option>
@@ -135,7 +135,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
                   defaultValue={parseInt(defaultValues?.course?.id)} // make sure to set up defaultValue
                 />
                 <Controller
-                  as={<select name="cuisine" ref={register({ required: 'Name is required' })}>
+                  as={<select name="cuisine" ref={register}>
                   {cuisines.map((cuisine, index) => {
                     return (
                       <option key={cuisine?.id} value={parseInt(cuisine.id)}>{cuisine?.name}</option>
@@ -147,7 +147,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
                   defaultValue={parseInt(defaultValues?.cuisine?.id)} // make sure to set up defaultValue
                 />
                 <Controller
-                  as={<select name="meal" ref={register({ required: 'Name is required' })}>
+                  as={<select name="meal" ref={register}>
                   {meals.map((meal, index) => {
                     return (
                       <option key={meal?.id} value={parseInt(meal.id)}>{meal?.name}</option>

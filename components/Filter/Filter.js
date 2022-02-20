@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { gql } from 'graphql-request';
 import useSWR from 'swr';
+import styled, { css } from 'styled-components';
 import Button from '../Button/Button';
 import { StrapiGQLClient } from '../../utils/strapi-gql-client';
+
+const FilterContainer = styled.div`
+    padding: .5em;
+    margin: .5em 0;
+    box-shadow: gba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+    border: solid .5px grey;
+    border-radius: .3em;
+`;
+
+const FilterList = styled.ul`
+  padding: 0 0 1em 0;
+`;
+
+const FilterButton = styled.li`
+  list-style-type: none;
+  display: inline;
+`;
 
 const Filter = ({ filterAction }) => {
 
@@ -70,31 +88,30 @@ const Filter = ({ filterAction }) => {
   
     return (
       <div>
-          <Button size='small' label='Filter &darr;' onClick={() => setShow(value => !value)}/>
-        {show && <div>
-          <ul>
+          <Button size='small' primary label='Filter &darr;' onClick={() => setShow(value => !value)}/>
+        {show && <FilterContainer>
+          <FilterList>
             {data?.courses.map( courses => (
-              <li onClick={() => filterHandler(courses.uid)} key={courses.id}>
-                {courses.name} {filters.includes(courses.uid) ? cross : tick}
-              </li>
+              <FilterButton onClick={() => filterHandler(courses.uid)} key={courses.id}>
+                <Button size='medium' label={`${courses.name} ${filters.includes(courses.uid) ? cross : tick}`} />
+              </FilterButton>
             ))}
-          </ul>
-          <ul>
+          </FilterList>
+          <FilterList>
             {data?.cuisines.map( cuisines => (
-              <li onClick={() => filterHandler(cuisines.uid)} key={cuisines.id}>
-                {cuisines.name} {filters.includes(cuisines.uid) ? cross : tick}
-              </li>
+              <FilterButton onClick={() => filterHandler(cuisines.uid)} key={cuisines.id}>
+                <Button size='medium' label={`${cuisines.name} ${filters.includes(cuisines.uid) ? cross : tick}`} />
+              </FilterButton>
             ))}
-          </ul>
-          <ul>
+          </FilterList>
+          <FilterList>
             {data?.meals.map( meals => (
-              <li onClick={() => filterHandler(meals.uid)} key={meals.id}>
-                {meals.name} {filters.includes(meals.uid) ? cross : tick}
-              </li>
+              <FilterButton onClick={() => filterHandler(meals.uid)} key={meals.id}>
+                <Button size='medium' label={`${meals.name} ${filters.includes(meals.uid) ? cross : tick}`} />
+              </FilterButton>
             ))}
-          </ul>
-        <hr />
-        </div>}
+          </FilterList>
+        </FilterContainer>}
       </div>
     )
   }

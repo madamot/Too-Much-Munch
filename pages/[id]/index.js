@@ -50,6 +50,12 @@ const Grid = styled.div`
 }
 `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+`;
+
 const Dashboard = () => {
   const [session, loading] = useSession()
 
@@ -116,17 +122,17 @@ const Dashboard = () => {
    if (error) return <div>{`failed to load: ${error}`}</div>;
 
    const filterCuisine = (category, displaying) => {
-    const result = displaying?.filter(item => !category.includes(item.cuisine.uid));
+    const result = displaying?.filter(item => !category.includes(item?.cuisine?.uid));
     return result
   }
 
   const filterCourse = (category, displaying) => {
-    const result = displaying?.filter(item => !category.includes(item.course.uid));
+    const result = displaying?.filter(item => !category.includes(item?.course?.uid));
     return result
   }
 
   const filterMeal = (category, displaying) => {
-    const result = displaying?.filter(item => !category.includes(item.meal.uid));
+    const result = displaying?.filter(item => !category.includes(item?.meal?.uid));
     return result
   }
 
@@ -159,18 +165,22 @@ const Dashboard = () => {
           <h1>Your recipes 🍳</h1>
         ) : (<h1>{data?.user?.username}</h1>)}
 
-        <div>
-          <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
-          <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
-        </div><br />
-        <Filter filterAction={filterAction} />
-        {you != id && <div>
-          <FollowHandler
-            client={graphQLClient}
-            you={you}
-            id={id}
-          />
-        </div>}
+        <ActionButtons>
+          <div style={{flexGrow: '1'}}>
+            <Button size='small' label='Card View' onClick={() => setDisplay('card')}/>
+            <Button size='small' label='List View' onClick={() => setDisplay('list')}/>
+            <br />
+            <br />
+          <Filter filterAction={filterAction} />
+          </div>
+          {you != id && <div>
+            <FollowHandler
+              client={graphQLClient}
+              you={you}
+              id={id}
+            />
+          </div>}
+        </ActionButtons>
 
         {data ? (
             <>
@@ -181,7 +191,7 @@ const Dashboard = () => {
                     <a>
                       <Card state='recipe' display={display} key={recipe.id} id={recipe.id} imagesrc={recipe?.image?.url}>
                         {recipe.title} <br />
-                        {recipe.course.name} | {recipe.cuisine.name} | {recipe.meal.name} 
+                        {recipe?.course?.name} | {recipe?.cuisine?.name} | {recipe?.meal?.name} 
                       </Card>
                     </a>
                   </Link>

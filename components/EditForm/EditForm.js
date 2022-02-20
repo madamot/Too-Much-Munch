@@ -57,7 +57,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
   const { register, control, handleSubmit, reset, formState, errors } = methods
 
   const onSubmit = handleSubmit(async ({ title, image, course, cuisine, meal, ingredients, method }, data) => {
-
+    console.log("course", course);
     console.log("method", method);
     if (errorMessage) setErrorMessage('');
 
@@ -132,7 +132,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
                   </select>}
                   name='course'
                   control={control}
-                  defaultValue={parseInt(defaultValues?.course?.id)} // make sure to set up defaultValue
+                  defaultValue={parseInt(defaultValues?.course?.id) || '1'} // make sure to set up defaultValue
                 />
                 <Controller
                   as={<select name="cuisine" ref={register}>
@@ -144,7 +144,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
                   </select>}
                   name='cuisine'
                   control={control}
-                  defaultValue={parseInt(defaultValues?.cuisine?.id)} // make sure to set up defaultValue
+                  defaultValue={parseInt(defaultValues?.cuisine?.id) || '1'} // make sure to set up defaultValue
                 />
                 <Controller
                   as={<select name="meal" ref={register}>
@@ -156,7 +156,7 @@ const EditForm = ({ defaultValues, id, courses, cuisines, meals, measurements })
                   </select>}
                   name='meal'
                   control={control}
-                  defaultValue={parseInt(defaultValues?.meal?.id)} // make sure to set up defaultValue
+                  defaultValue={parseInt(defaultValues?.meal?.id) || '1'} // make sure to set up defaultValue
                 />
               </Col>
             </Row>

@@ -8,6 +8,7 @@ import axios from 'axios';
 const MethodContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: .5em 0;
 `;
 
 const MethodText = styled(TextareaAutosize)`
@@ -17,6 +18,11 @@ const MethodText = styled(TextareaAutosize)`
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     resize: none;
+`;
+
+const Number = styled.div`
+  font-size: 1.25em;
+
 `;
 
 const Add = styled.button`
@@ -68,6 +74,7 @@ const Method = () => {
             return (
                 <div key={item.id}>
                     <MethodContainer>
+                        <Number>{`${index + 1}. `}</Number>
                         <Controller
                             as={<MethodText />}
                             {...register(`method.${index}.method`, { required: true })}

@@ -127,7 +127,7 @@ const ImageContainer = styled.div`
     `}
 `;
 
-const Card = ({ display, state, id, children, imagesrc}) => {
+const Card = ({ display, state, id, recipe, children, imagesrc}) => {
   if (!imagesrc) {
     const imagesrc = "https://via.placeholder.com/250";
   }
@@ -159,6 +159,7 @@ const Card = ({ display, state, id, children, imagesrc}) => {
                 <Img display={display} state={state} src={!imagesrc ? 'https://via.placeholder.com/250' : imagesrc} layout='fill' />
               </ImageContainer>
               <Details display={display} state={state}>
+                <p>{recipe?.title}</p>
                 {children}
               </Details>
               {/* </a>
